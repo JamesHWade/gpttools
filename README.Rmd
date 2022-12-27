@@ -17,39 +17,48 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/gpttools)](https://CRAN.R-project.org/package=gpttools)
+[![Codecov test coverage](https://codecov.io/gh/JamesHWade/gpttools/branch/master/graph/badge.svg)](https://app.codecov.io/gh/JamesHWade/gpttools?branch=master)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/JamesHWade/gpttools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JamesHWade/gpttools/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of gpttools is to ...
+The goal of gpttools is extend gptstudio for R package developers to easily incorporate use of large language models (LLMs) into their project workflows. These models appear to be a step change in our use of text for knowledge work, but you should carefully consider ethical implications of using these models. Ethics of LLMs (also called [Foundation Models](https://arxiv.org/abs/2108.07258)) is an area of very active discussion.
 
-## Installation
+**Read the privacy note at the bottom, this is alpha software there is no warranty for anything.**
 
-You can install the development version of gpttools like so:
+## Prerequisites
 
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+1. Make an OpenAI account. As of now, the free one will do.
+
+2. [Create an OpenAI API key](https://beta.openai.com/account/api-keys) to use `{openai}` package within Rstudio
+
+3. Set the API key up in Rstudio in one of two ways:
+  - By default, functions of `{openai}` will look for `OPENAI_API_KEY` environment variable. If you want to set a global environment variable, you can use the following command, where `"<APIKEY>"` should be replaced with your actual key:
+
+```{r}
+#| eval: false
+Sys.setenv(OPENAI_API_KEY = "<OPENAI_API_KEY>")
 ```
 
-## Example
+  - Alternatively, you can set the key in your .Renviron file.
 
-This is a basic example which shows you how to solve a common problem:
+Otherwise, you can add the key to the .Renviron file of the project. The following commands will open .Renviron for editing:
 
-```{r example}
-library(gpttools)
-## basic example code
+```{r}
+#| eval: false
+require(usethis)
+edit_r_environ(scope = "project")
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+You can add the following line to the file (again, replace xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx with your actual key):
 
-```{r cars}
-summary(cars)
+```{.bash}
+OPENAI_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+This now set the API key every time you start up this particular project. Note: If you are using GitHub/Gitlab, do not forget to add .Renviron to .gitignore!
 
-You can also embed plots, for example:
+**Privacy note:** these functions work by taking the text or code you have highlighted/selected with the cursor and send these to OpenAI as part of a prompt, they fall under their privacy notice/rules/exceptions you agreed to with OpenAI when making an account. I do not know how secure these are when sent to OpenAI, I also don't know what OpenAI does with them. The code is designed to ONLY share the highlighted/selected text and no other elements of your R environment (i.e. data) unless you have highlighted it when running the addin. This may limit usability for now, but I do not want people to accidentally share sensitive data with OpenAI.
 
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+DO NOT HIGHLIGHT, AND THEREFORE UPLOAD, DATA/CODE/TEXT THAT SHOULD REMAIN PRIVATE

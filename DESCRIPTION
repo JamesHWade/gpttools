@@ -10,7 +10,15 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
+    covr,
+    mockr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://github.com/JamesHWade/gpttools
+URL: https://github.com/JamesHWade/gpttools,
+    https://jameshwade.github.io/gpttools/
 BugReports: https://github.com/JamesHWade/gpttools/issues
+Imports: 
+    cli,
+    httr,
+    openai,
+    shiny
