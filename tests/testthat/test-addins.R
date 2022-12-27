@@ -7,19 +7,19 @@ test_that("Commenting code works", {
     top_p = 1) {
       list("text" = "new text")
     })
-  expect_type(comAddin(), "list")
+  expect_type(comment_code_addin(), "list")
 })
 
 test_that("Inserting roxygen works", {
   mockr::local_mock(
-    gpt_edit = function(
+    gpt_insert = function(
     model = "code-davinci-edit-001",
-    instruction = "insert roxygen to document this function",
+    prompt = "insert roxygen to document this function",
     temperature = 0.1,
     top_p = 1) {
       list("text" = "new text")
     })
-  expect_type(roxygenAddin(), "list")
+  expect_type(add_roxygen_addin(), "list")
 })
 
 

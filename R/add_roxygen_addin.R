@@ -7,10 +7,10 @@
 #' @return NULL (nothing is returned; the generated roxygen skeleton is inserted into the document).
 #' @export
 #'
-roxygenAddin <- function() {
-  gpt_edit(
-    model = "code-davinci-edit-001",
-    instruction = "insert roxygen to document this function",
+add_roxygen_addin <- function() {
+  gpt_insert(
+    model = "text-davinci-003",
+    prompt = "insert roxygen skeleton to document this function",
     temperature = 0.1,
     top_p = 1
   )
