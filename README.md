@@ -12,10 +12,11 @@ coverage](https://codecov.io/gh/JamesHWade/gpttools/branch/master/graph/badge.sv
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/JamesHWade/gpttools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JamesHWade/gpttools/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
-The goal of gpttools is extend gptstudio for R package developers to
-easily incorporate use of large language models (LLMs) into their
+The goal of gpttools is to extend gptstudio for R package developers to
+more easily incorporate use of large language models (LLMs) into their
 project workflows. These models appear to be a step change in our use of
 text for knowledge work, but you should carefully consider ethical
 implications of using these models. Ethics of LLMs (also called
@@ -67,7 +68,21 @@ project. Note: If you are using GitHub/Gitlab, do not forget to add
 
 ## Usage
 
-Examples coming soon!
+The package has four addinss: - Comment code: uses code-davinci-edit-001
+model from OpenAI to add comments to your code with the prompt: “add
+comments to each line of code, explaining what the code does” - Add
+roxygen: uses text-davinci-003 model from OpenAI to add and fill out a
+roxygen skeleton to your highlight code (should be a function) wiht the
+prompt: “insert roxygen skeleton to document this function” - Convert
+script to function: uses code-davinci-edit-001 model from OpenAI to
+convert a highlighted script into a function with the prompt: “convert
+this R code into an R function” - A freeform addins that let’s you
+specify the prompt using the “edit” functionality of chat-gpt
+
+You can access these addins through the addin toolbar or use the command
+pallet: `CMD/CTRL+SHIFT+P`.
+
+![](images/image-1429395462.png)
 
 ## Privacy Notice
 
