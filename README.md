@@ -65,6 +65,12 @@ This now set the API key every time you start up this particular
 project. Note: If you are using GitHub/Gitlab, do not forget to add
 .Renviron to .gitignore!
 
+## Usage
+
+Examples coming soon!
+
+## Privacy Notice
+
 **Privacy note:** these functions work by taking the text or code you
 have highlighted/selected with the cursor and send these to OpenAI as
 part of a prompt, they fall under their privacy notice/rules/exceptions
