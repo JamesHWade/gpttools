@@ -16,6 +16,9 @@
     <loc>https://jameshwade.github.io/gpttools/index.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/add_roxygen_addin.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/check_api.html</loc>
   </url>
   <url>
@@ -25,7 +28,7 @@
     <loc>https://jameshwade.github.io/gpttools/reference/check_api_key.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/comAddin.html</loc>
+    <loc>https://jameshwade.github.io/gpttools/reference/comment_code_addin.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gptAddin.html</loc>
@@ -37,9 +40,12 @@
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_edit.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/gpt_insert.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/roxygenAddin.html</loc>
+    <loc>https://jameshwade.github.io/gpttools/reference/script_to_function_addin.html</loc>
   </url>
 </urlset>
