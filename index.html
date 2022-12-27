@@ -62,7 +62,8 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of gpttools is extend gptstudio for R package developers to easily incorporate use of large language models (LLMs) into their project workflows. These models appear to be a step change in our use of text for knowledge work, but you should carefully consider ethical implications of using these models. Ethics of LLMs (also called <a href="https://arxiv.org/abs/2108.07258" class="external-link">Foundation Models</a>) is an area of very active discussion.</p>
+<!-- badges: end -->
+<p>The goal of gpttools is to extend gptstudio for R package developers to more easily incorporate use of large language models (LLMs) into their project workflows. These models appear to be a step change in our use of text for knowledge work, but you should carefully consider ethical implications of using these models. Ethics of LLMs (also called <a href="https://arxiv.org/abs/2108.07258" class="external-link">Foundation Models</a>) is an area of very active discussion.</p>
 <p><strong>Read the privacy note at the bottom, this is alpha software there is no warranty for anything.</strong></p>
 <div class="section level2">
 <h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
@@ -91,7 +92,9 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Examples coming soon!</p>
+<p>The package has four addinss: - Comment code: uses code-davinci-edit-001 model from OpenAI to add comments to your code with the prompt: “add comments to each line of code, explaining what the code does” - Add roxygen: uses text-davinci-003 model from OpenAI to add and fill out a roxygen skeleton to your highlight code (should be a function) wiht the prompt: “insert roxygen skeleton to document this function” - Convert script to function: uses code-davinci-edit-001 model from OpenAI to convert a highlighted script into a function with the prompt: “convert this R code into an R function” - A freeform addins that let’s you specify the prompt using the “edit” functionality of chat-gpt</p>
+<p>You can access these addins through the addin toolbar or use the command pallet: <code>CMD/CTRL+SHIFT+P</code>.</p>
+<p><img src="images/image-1429395462.png"></p>
 </div>
 <div class="section level2">
 <h2 id="privacy-notice">Privacy Notice<a class="anchor" aria-label="anchor" href="#privacy-notice"></a>
