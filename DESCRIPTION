@@ -4,11 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9740-1905"))
-Description: gpttools is an R package that extends gptstudio to provide 
-devtools-like functionality using the latest natural language processing (NLP) 
-models. It is designed to make package development easier by providing a range 
-of tools and functions that can be used to improve the quality of your package's
-documentation, testing, and maybe even functionality.
+Description: gpttools is an R package that extends gptstudio to provide devtools-like functionality using the latest natural language processing (NLP) models. It is designed to make package development easier by providing a range of tools and functions that can be used to improve the quality of your package's documentation, testing, and maybe even functionality.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
