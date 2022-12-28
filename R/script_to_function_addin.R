@@ -1,6 +1,6 @@
 #' Convert Script to Function Addin
 #'
-#' This function converts a script into a function
+#' "convert this R code into an R function"
 #'
 #' @export
 #'

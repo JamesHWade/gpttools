@@ -2,7 +2,7 @@
 #'
 #' This function uses the OpenAI API to generate a roxygen skeleton for the
 #' current selection in RStudio. The roxygen skeleton is then inserted into the
-#'  document.
+#'  document using the prompt: "insert roxygen skeleton to document this function"
 #'
 #' @return NULL (nothing is returned; the generated roxygen skeleton is inserted into the document).
 #' @export

@@ -99,7 +99,7 @@ specify the prompt using the "edit" functionality of chat-gpt
 You can access these addins through the addin toolbar or use the command
 pallet: `CMD/CTRL+SHIFT+P`.
 
-![](images/image-1429395462.png)
+![](man/figures/image-1429395462.png)
 
 ## Privacy Notice
 

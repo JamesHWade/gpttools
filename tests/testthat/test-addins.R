@@ -21,3 +21,11 @@ test_that("Script to function works", {
     })
   expect_type(script_to_function_addin(), "list")
 })
+
+test_that("Suggesting a unit test works", {
+  mockr::local_mock(
+    gpt_insert = function(model, prompt, temperature, top_p, append_text) {
+      list("text" = "new text")
+    })
+  expect_type(suggest_unit_test_addin(), "list")
+})

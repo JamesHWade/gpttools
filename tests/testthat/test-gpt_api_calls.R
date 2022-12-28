@@ -68,7 +68,17 @@ test_that("gpt_create and gpt_insert can replace & append text", {
                temperature = 0.1,
                max_tokens = 500,
                top_p = 1,
-               openai_api_key = sample_key)
+               openai_api_key = sample_key,
+               append_text = FALSE)
   expect_equal(text_to_insert, c("here are completions openai returns",
                                  "here is some selected text"))
+  text_to_append <-
+    gpt_insert(model = "code-davinci-edit-001",
+               temperature = 0.1,
+               max_tokens = 500,
+               top_p = 1,
+               openai_api_key = sample_key,
+               append_text = TRUE)
+  expect_equal(text_to_append, c("here is some selected text",
+                                 "here are completions openai returns"))
 })

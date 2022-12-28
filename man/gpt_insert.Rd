@@ -11,7 +11,8 @@ gpt_insert(
   max_tokens = 1000,
   top_p,
   openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-  openai_organization = NULL
+  openai_organization = NULL,
+  append_text = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ gpt_insert(
 \item{openai_api_key}{An API key for the OpenAI API.}
 
 \item{openai_organization}{An optional organization ID for the OpenAI API.}
+
+\item{append_text}{Add text to selection rather than replace, defaults to FALSE}
 }
 \value{
 Nothing is returned. The improved text is inserted into the current RStudio session.

@@ -136,6 +136,7 @@ openai_create_completion <- function(model, prompt, temperature, max_tokens,
 #' @param top_p A parameter for controlling the probability of the GPT model's output.
 #' @param openai_api_key An API key for the OpenAI API.
 #' @param openai_organization An optional organization ID for the OpenAI API.
+#' @param append_text Add text to selection rather than replace, defaults to FALSE
 #'
 #' @return Nothing is returned. The improved text is inserted into the current RStudio session.
 #' @export
@@ -145,7 +146,8 @@ gpt_insert <- function(model,
                        max_tokens = 1000,
                        top_p,
                        openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-                       openai_organization = NULL) {
+                       openai_organization = NULL,
+                       append_text = FALSE) {
   check_api()
   selection <- get_selection()
   cli::cli_progress_step("Asking GPT for help...")
@@ -163,7 +165,12 @@ gpt_insert <- function(model,
 
   cli::cli_progress_step("Inserting text from GPT...")
 
-  improved_text <- c(edit$choices$text, selection$value)
+  if (append_text) {
+    improved_text <- c(selection$value, edit$choices$text)
+  } else {
+    improved_text <- c(edit$choices$text, selection$value)
+  }
+
   insert_text(improved_text)
 }
 
