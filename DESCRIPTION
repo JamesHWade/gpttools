@@ -22,6 +22,6 @@ Suggests:
     withr,
     uuid
 Config/testthat/edition: 3
-URL: https://github.com/JamesHWade/gpttools,
-    https://jameshwade.github.io/gpttools/
-BugReports: https://github.com/JamesHWade/gpttools/issues
+URL: https://github.com/MichelNivard/gptstudio,
+    https://michelnivard.github.io/gptstudio/
+BugReports: https://github.com/MichelNivard/gptstudio/issues
