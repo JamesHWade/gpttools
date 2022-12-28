@@ -1,6 +1,6 @@
 Package: gpttools
 Title: gpttools extends gptstudio to be a devtools-like package using the latest NLP models to make package development easier
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9740-1905"))
