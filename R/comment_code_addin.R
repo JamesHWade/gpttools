@@ -7,7 +7,6 @@ comment_code_addin <- function() {
   gpt_edit(
     model = "code-davinci-edit-001",
     instruction = "add comments to each line of code, explaining what the code does",
-    temperature = 0.1,
-    top_p = 1
+    temperature = 0.1
   )
 }

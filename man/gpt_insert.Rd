@@ -7,9 +7,8 @@
 gpt_insert(
   model,
   prompt,
-  temperature,
-  max_tokens = 1000,
-  top_p,
+  temperature = 0.1,
+  max_tokens = 100,
   openai_api_key = Sys.getenv("OPENAI_API_KEY"),
   openai_organization = NULL,
   append_text = FALSE
@@ -22,9 +21,7 @@ gpt_insert(
 
 \item{temperature}{A parameter for controlling the randomness of the GPT model's output.}
 
-\item{max_tokens}{Maximum number of tokens to return (related to length of response), defaults to 500}
-
-\item{top_p}{A parameter for controlling the probability of the GPT model's output.}
+\item{max_tokens}{Maximum number of tokens to return (related to length of response), defaults to 100}
 
 \item{openai_api_key}{An API key for the OpenAI API.}
 

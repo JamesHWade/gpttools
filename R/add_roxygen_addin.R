@@ -10,8 +10,7 @@
 add_roxygen_addin <- function() {
   gpt_insert(
     model = "text-davinci-003",
-    prompt = "insert roxygen skeleton to document this function",
-    temperature = 0.1,
-    top_p = 1
+    prompt = "Insert a roxygen skeleton to document this function:\n\n",
+    temperature = 0.5
   )
 }
