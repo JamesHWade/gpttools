@@ -13,17 +13,17 @@
 #' @return Nothing is returned. The improved text is inserted into the current RStudio session.
 #' @export
 gpt_edit <- function(model,
-                      instruction,
-                      temperature,
-                      top_p,
-                      openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-                      openai_organization = NULL,
-                      append_text = FALSE) {
+                     instruction,
+                     temperature,
+                     top_p,
+                     openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+                     openai_organization = NULL,
+                     append_text = FALSE) {
   check_api()
-  selection <- rstudioapi::selectionGet()
+  selection <- get_selection()
   cli::cli_progress_step("Asking GPT for help...")
 
-  edit <- openai::create_edit(
+  edit <- openai_create_edit(
     model = model,
     input = selection$value,
     instruction = instruction,
@@ -42,9 +42,23 @@ gpt_edit <- function(model,
     improved_text <- edit$choices$text
     cli::cli_progress_step("Inserting text from GPT...")
   }
-  rstudioapi::insertText(improved_text)
+  insert_text(improved_text)
 }
 
+# Wrapper around create_edit to help with testthat
+# @export
+openai_create_edit <- function(model, input, instruction, temperature,
+                               top_p, openai_api_key, openai_organization){
+  openai::create_edit(
+    model = model,
+    input = input,
+    instruction = instruction,
+    temperature = temperature,
+    top_p = top_p,
+    openai_api_key = openai_api_key,
+    openai_organization = openai_organization
+  )
+}
 
 #' Use GPT to improve text
 #'
@@ -61,17 +75,18 @@ gpt_edit <- function(model,
 #' @return Nothing is returned. The improved text is inserted into the current RStudio session.
 #' @export
 gpt_create <- function(model,
-                     temperature,
-                     max_tokens,
-                     top_p,
-                     openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-                     openai_organization = NULL,
-                     append_text = TRUE) {
+                       temperature,
+                       max_tokens,
+                       top_p,
+                       openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+                       openai_organization = NULL,
+                       append_text = TRUE) {
   check_api()
-  selection <- rstudioapi::selectionGet()
+  selection <- get_selection()
+  cat('here\n')
   cli::cli_progress_step("Asking GPT for help...")
 
-  edit <- openai::create_completion(
+  edit <- openai_create_completion(
     model = model,
     prompt = selection$value,
     temperature = temperature,
@@ -90,9 +105,25 @@ gpt_create <- function(model,
     improved_text <- edit$choices$text
     cli::cli_progress_step("Inserting text from GPT...")
   }
-  rstudioapi::insertText(improved_text)
+  insert_text(improved_text)
 }
 
+
+# Wrapper around create_completion to help with testthat
+# @export
+openai_create_completion <- function(model, prompt, temperature, max_tokens,
+                                     top_p, openai_api_key, openai_organization,
+                                     suffix = NULL){
+  openai::create_completion(
+    model = model,
+    prompt = prompt,
+    temperature = temperature,
+    top_p = top_p,
+    openai_api_key = openai_api_key,
+    openai_organization = openai_organization,
+    suffix = NULL
+  )
+}
 
 #' Use GPT to improve text
 #'
@@ -115,13 +146,12 @@ gpt_insert <- function(model,
                        max_tokens = 1000,
                        top_p,
                        openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-                       openai_organization = NULL,
-                       append_text = FALSE) {
+                       openai_organization = NULL) {
   check_api()
-  selection <- rstudioapi::selectionGet()
+  selection <- get_selection()
   cli::cli_progress_step("Asking GPT for help...")
 
-  edit <- openai::create_completion(
+  edit <- openai_create_completion(
     model = model,
     prompt = prompt,
     suffix = selection$value,
@@ -134,13 +164,16 @@ gpt_insert <- function(model,
 
   cli::cli_progress_step("Inserting text from GPT...")
 
-  if (append_text) {
-    improved_text <- c(selection$value, edit$choices$text)
-    cli::cli_progress_step("Appending text from GPT...")
-  } else {
-    improved_text <- c(edit$choices$text, selection$value)
-    cli::cli_progress_step("Inserting text from GPT...")
-  }
-  cli::cat_print(improved_text)
+  improved_text <- c(edit$choices$text, selection$value)
+  insert_text(improved_text)
+}
+
+# Wrapper around selectionGet to help with testthat
+get_selection <- function(){
+  rstudioapi::selectionGet()
+}
+
+# Wrapper around selectionGet to help with testthat
+insert_text <- function(improved_text){
   rstudioapi::insertText(improved_text)
 }

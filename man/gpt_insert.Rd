@@ -11,8 +11,7 @@ gpt_insert(
   max_tokens = 1000,
   top_p,
   openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-  openai_organization = NULL,
-  append_text = FALSE
+  openai_organization = NULL
 )
 }
 \arguments{
