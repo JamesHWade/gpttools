@@ -7,3 +7,5 @@
 ^pkgdown$
 ^\.github$
 ^codecov\.yml$
+^revdep$
+^images$

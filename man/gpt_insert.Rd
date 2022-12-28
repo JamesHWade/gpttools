@@ -28,8 +28,6 @@ gpt_insert(
 \item{openai_api_key}{An API key for the OpenAI API.}
 
 \item{openai_organization}{An optional organization ID for the OpenAI API.}
-
-\item{append_text}{Add text to selection rather than replace, defaults to TRUE}
 }
 \value{
 Nothing is returned. The improved text is inserted into the current RStudio session.

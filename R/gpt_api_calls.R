@@ -136,7 +136,6 @@ openai_create_completion <- function(model, prompt, temperature, max_tokens,
 #' @param top_p A parameter for controlling the probability of the GPT model's output.
 #' @param openai_api_key An API key for the OpenAI API.
 #' @param openai_organization An optional organization ID for the OpenAI API.
-#' @param append_text Add text to selection rather than replace, defaults to TRUE
 #'
 #' @return Nothing is returned. The improved text is inserted into the current RStudio session.
 #' @export
