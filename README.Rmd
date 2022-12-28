@@ -116,3 +116,7 @@ OpenAI.
 
 DO NOT HIGHLIGHT, AND THEREFORE UPLOAD, DATA/CODE/TEXT THAT SHOULD
 REMAIN PRIVATE
+
+## Code of Conduct
+
+Please note that the gpttools project is released with a [Contributor Code of Conduct](https://jameshwade.github.io/gpttools/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

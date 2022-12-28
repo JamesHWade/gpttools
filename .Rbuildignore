@@ -9,3 +9,4 @@
 ^codecov\.yml$
 ^revdep$
 ^images$
+^CODE_OF_CONDUCT\.md$
