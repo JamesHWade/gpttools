@@ -13,8 +13,8 @@ check_api_connection <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
     # If the status code is 200, the key is valid
     cli::cli_alert_success("API key is valid and a simple API call worked.")
     cli::cli_alert_info("The API is checked once per session.")
-    options("gptstudio.valid_api" = TRUE)
-    options("gptstudio.openai_key" = api_key)
+    options("gpttools.valid_api" = TRUE)
+    options("gpttools.openai_key" = api_key)
   } else {
     # If the status code is not 200, the key is invalid
     cli::cli_abort(c(
@@ -61,8 +61,8 @@ check_api_key <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
 #' function aborts.
 #' @export
 check_api <- function(api_key = Sys.getenv("OPENAI_API_KEY")){
-  valid_api <- getOption("gptstudio.valid_api")
-  key   <- getOption("gptstudio.openai_key")
+  valid_api <- getOption("gpttools.valid_api")
+  key   <- getOption("gpttools.openai_key")
 
   if (!valid_api) {
     check_api_connection(api_key)
