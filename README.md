@@ -26,6 +26,25 @@ very active discussion.
 **Read the privacy note at the bottom, this is alpha software there is
 no warranty for anything.**
 
+## Installation
+
+``` r
+require(remotes)
+remotes::install_github("JamesHWade/gpttools")
+```
+
+### R \>=4.2 dependency
+
+The current version require R 4.2 or greater because of a current
+dependency. If you are using an older version of R, you can get around
+this dependency by installing `{openai}` from my fork of the [original
+package](https://github.com/irudnyts/openai). Here’s how to do that:
+
+``` r
+require(remotes)
+remotes::install_github("JamesHWade/openai")
+```
+
 ## Prerequisites
 
 1.  Make an OpenAI account. As of now, the free one will do.
@@ -103,7 +122,7 @@ below.
 
 ### Add Roxygen
 
-<video src="https://user-images.githubusercontent.com/6314313/209890944-3d6a00fa-2d8c-4df7-8a11-f5a5ec3a1391.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890944-3d6a00fa-2d8c-4df7-8a11-f5a5ec3a1391.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;">
+<video src="https://user-images.githubusercontent.com/6314313/209890939-ebd7afea-7d68-40b4-b482-b3fe51485ab1.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890939-ebd7afea-7d68-40b4-b482-b3fe51485ab1.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;">
 </video>
 
 ### Convert a Script into Functions
