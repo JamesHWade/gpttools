@@ -98,6 +98,8 @@ The package has four addins:
 -   Convert script to function: uses code-davinci-edit-001 model from
     OpenAI to convert a highlighted script into a function with the
     prompt: "convert this R code into an R function"
+    
+-   Write a unit test for a function with testthat: uses text-davinci-003 model from OpenAI to suggest a unit test for a selected function with the prompt: "Suggest a unit text for this function using the testthat package"
 
 -   A freeform addins that let's you specify the prompt using the "edit"
     functionality of chat-gpt
