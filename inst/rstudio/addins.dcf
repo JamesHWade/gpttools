@@ -3,12 +3,12 @@ Description: Uses openai's GPT-3.5 to generate comments for your code
 Binding: comment_code_addin
 Interactive: false
 
-Name: From script to function
-Description: Uses openai's GPT-3.5 to generate comments for your code
+Name: Convert script to function
+Description: Uses OpenAI's GPT-3.5 to generate comments for your code
 Binding: script_to_function_addin
 Interactive: false
 
-Name: Add Roxygen to function
+Name: Add roxygen to function
 Description: Add a roxygen skeleton to document your functions
 Binding: add_roxygen_addin
 Interactive: false
@@ -19,6 +19,11 @@ Binding: suggest_unit_test_addin
 Interactive: false
 
 Name: Freeform GPT editor
-Description: Uses openai's GPT-3.5 perform a user specified edit to the selected text or code
+Description: Uses OpenAI's GPT-3.5 perform a user specified edit to the selected text or code
 Binding: gptAddin
+Interactive: true
+
+Name: Document Data
+Description: Uses OpenAI's GPT-3.5 document data for a pacakge with help from the user
+Binding: document_data
 Interactive: true

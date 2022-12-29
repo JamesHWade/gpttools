@@ -50,9 +50,9 @@ remotes::install_github("JamesHWade/openai")
 1.  Make an OpenAI account. As of now, the free one will do.
 
 2.  [Create an OpenAI API key](https://beta.openai.com/account/api-keys)
-    to use `{openai}` package within Rstudio
+    to use `{openai}` package within RStudio
 
-3.  Set the API key up in Rstudio in one of two ways:
+3.  Set the API key up in RStudio in one of two ways:
 
 - By default, functions of `{openai}` will look for `OPENAI_API_KEY`
   environment variable. If you want to set a global environment
@@ -95,7 +95,7 @@ The package has four addins:
 
 - Add roxygen: uses text-davinci-003 model from OpenAI to add and fill
   out a roxygen skeleton to your highlight code (should be a function)
-  wiht the prompt: “insert roxygen skeleton to document this function”
+  with the prompt: “insert roxygen skeleton to document this function”
 
 - Convert script to function: uses code-davinci-edit-001 model from
   OpenAI to convert a highlighted script into a function with the
@@ -107,7 +107,7 @@ The package has four addins:
   package”
 
 - A freeform addins that let’s you specify the prompt using the “edit”
-  functionality of chat-gpt
+  functionality of ChatGPT
 
 You can access these addins through the addin toolbar or use the command
 pallet: `CMD/CTRL+SHIFT+P`. Examples of each of the addins in action is

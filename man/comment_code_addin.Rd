@@ -7,5 +7,5 @@
 comment_code_addin()
 }
 \description{
-Call this function as a Rstudio addin to ask GPT to add comments to your code
+Call this function as a RStudio addin to ask GPT to add comments to your code
 }

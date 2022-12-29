@@ -1,6 +1,6 @@
 #' active voice Addin
 #'
-#' Call this function as a Rstudio addin to ask GPT to add comments to your code
+#' Call this function as a RStudio addin to ask GPT to add comments to your code
 #'
 #' @export
 comment_code_addin <- function() {

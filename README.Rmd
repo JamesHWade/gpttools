@@ -43,16 +43,19 @@ no warranty for anything.**
 
 ## Installation
 
-```r
+``` r
 require(remotes)
 remotes::install_github("JamesHWade/gpttools")
 ```
 
-### R >=4.2 dependency
+### R \>=4.2 dependency
 
-The current version require R 4.2 or greater because of a current dependency. If you are using an older version of R, you can get around this dependency by installing `{openai}` from my fork of the [original package](https://github.com/irudnyts/openai). Here's how to do that:
+The current version require R 4.2 or greater because of a current
+dependency. If you are using an older version of R, you can get around
+this dependency by installing `{openai}` from my fork of the [original
+package](https://github.com/irudnyts/openai). Here's how to do that:
 
-```r
+``` r
 require(remotes)
 remotes::install_github("JamesHWade/openai")
 ```
@@ -62,9 +65,9 @@ remotes::install_github("JamesHWade/openai")
 1.  Make an OpenAI account. As of now, the free one will do.
 
 2.  [Create an OpenAI API key](https://beta.openai.com/account/api-keys)
-    to use `{openai}` package within Rstudio
+    to use `{openai}` package within RStudio
 
-3.  Set the API key up in Rstudio in one of two ways:
+3.  Set the API key up in RStudio in one of two ways:
 
 -   By default, functions of `{openai}` will look for `OPENAI_API_KEY`
     environment variable. If you want to set a global environment
@@ -109,42 +112,49 @@ The package has four addins:
 
 -   Add roxygen: uses text-davinci-003 model from OpenAI to add and fill
     out a roxygen skeleton to your highlight code (should be a function)
-    wiht the prompt: "insert roxygen skeleton to document this function"
+    with the prompt: "insert roxygen skeleton to document this function"
 
 -   Convert script to function: uses code-davinci-edit-001 model from
     OpenAI to convert a highlighted script into a function with the
     prompt: "convert this R code into an R function"
-    
--   Write a unit test for a function with testthat: uses text-davinci-003 model from OpenAI to suggest a unit test for a selected function with the prompt: "Suggest a unit text for this function using the testthat package"
+
+-   Write a unit test for a function with testthat: uses
+    text-davinci-003 model from OpenAI to suggest a unit test for a
+    selected function with the prompt: "Suggest a unit text for this
+    function using the testthat package"
 
 -   A freeform addins that let's you specify the prompt using the "edit"
-    functionality of chat-gpt
+    functionality of ChatGPT
 
 You can access these addins through the addin toolbar or use the command
-pallet: `CMD/CTRL+SHIFT+P`. Examples of each of the addins in action is below.
+pallet: `CMD/CTRL+SHIFT+P`. Examples of each of the addins in action is
+below.
 
 ![](man/figures/image-1429395462.png)
 
 ### Comment Code
 
 <video src="https://user-images.githubusercontent.com/6314313/209890944-3d6a00fa-2d8c-4df7-8a11-f5a5ec3a1391.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890944-3d6a00fa-2d8c-4df7-8a11-f5a5ec3a1391.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;">
+
 </video>
 
 ### Add Roxygen
 
 <video src="https://user-images.githubusercontent.com/6314313/209890939-ebd7afea-7d68-40b4-b482-b3fe51485ab1.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890939-ebd7afea-7d68-40b4-b482-b3fe51485ab1.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;">
+
 </video>
 
 ### Convert a Script into Functions
 
 <video src="https://user-images.githubusercontent.com/6314313/209890949-4da2bdd7-bcac-4769-9b11-7759b4abb760.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890949-4da2bdd7-bcac-4769-9b11-7759b4abb760.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;">
+
 </video>
 
 ### Suggest a Unit Test for a Function
 
 <video src="https://user-images.githubusercontent.com/6314313/209890959-fca623d9-5e8e-463c-ac64-80f3db9875d9.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890959-fca623d9-5e8e-463c-ac64-80f3db9875d9.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;">
-</video>
 
+</video>
 
 ## Privacy Notice
 

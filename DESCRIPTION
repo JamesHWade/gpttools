@@ -1,5 +1,5 @@
 Package: gpttools
-Title: gpttools extends gptstudio to be a devtools-like package using the latest NLP models to make package development easier
+Title: Extends gptstudio for package development to help you document code, write tests, or even explain code
 Version: 0.1.0
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
@@ -12,11 +12,17 @@ RoxygenNote: 7.2.3
 Depends:
     R (>= 3.6)
 Imports: 
+    assertthat,
     cli,
+    dplyr,
     httr,
     openai,
+    purrr,
+    rlang,
     rstudioapi (>= 0.12),
-    shiny
+    shiny,
+    skimr,
+    stats
 Suggests: 
     covr,
     mockr,

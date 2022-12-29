@@ -1,6 +1,6 @@
 #' Freeform GPT editor
 #'
-#' Call this function as a Rstudio addin to open a GPT shiny app.
+#' Call this function as a RStudio addin to open a GPT shiny app.
 #'
 #' @export
 gptAddin <- function() {
