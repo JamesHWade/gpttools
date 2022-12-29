@@ -86,7 +86,8 @@ pallet: `CMD/CTRL+SHIFT+P`.
 
 ## Comment Code
 
-![](https://imgur.com/AGXSzZY)
+<video src="https://user-images.githubusercontent.com/6314313/209890939-ebd7afea-7d68-40b4-b482-b3fe51485ab1.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890939-ebd7afea-7d68-40b4-b482-b3fe51485ab1.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;">
+</video>
 
 ## Privacy Notice
 
