@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# gpttools <a href="https://jameshwade.github.io/gpttools/"><img src="man/figures/logo.png" align="right" height="139" /></a>
+# gpttools <a href="https://jameshwade.github.io/gpttools/"><img src="man/figures/logo.png" align="right" height="139"/></a>
 
 <!-- badges: start -->
 
@@ -101,6 +101,10 @@ pallet: `CMD/CTRL+SHIFT+P`.
 
 ![](man/figures/image-1429395462.png)
 
+## Comment Code
+
+![](https://imgur.com/AGXSzZY)
+
 ## Privacy Notice
 
 **Privacy note:** these functions work by taking the text or code you
@@ -119,4 +123,7 @@ REMAIN PRIVATE
 
 ## Code of Conduct
 
-Please note that the gpttools project is released with a [Contributor Code of Conduct](https://jameshwade.github.io/gpttools/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the gpttools project is released with a [Contributor
+Code of
+Conduct](https://jameshwade.github.io/gpttools/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.

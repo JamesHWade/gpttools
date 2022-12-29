@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gpttools <a href="https://jameshwade.github.io/gpttools/"><img src="man/figures/logo.png" align="right" height="139" /></a>
+# gpttools <a href="https://jameshwade.github.io/gpttools/"><img src="man/figures/logo.png" align="right" height="139"/></a>
 
 <!-- badges: start -->
 
@@ -83,6 +83,10 @@ You can access these addins through the addin toolbar or use the command
 pallet: `CMD/CTRL+SHIFT+P`.
 
 ![](man/figures/image-1429395462.png)
+
+## Comment Code
+
+![](https://imgur.com/AGXSzZY)
 
 ## Privacy Notice
 
