@@ -41,6 +41,15 @@ very active discussion.
 **Read the privacy note at the bottom, this is alpha software there is
 no warranty for anything.**
 
+## Installation
+
+The current version require R 4.2 or greater because of a current dependency. It may be possible to extend to older versions of R.
+
+```r
+require(remotes)
+remotes::install_github("JamesHWade/gpttools")
+```
+
 ## Prerequisites
 
 1.  Make an OpenAI account. As of now, the free one will do.
