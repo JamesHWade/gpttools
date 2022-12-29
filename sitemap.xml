@@ -19,6 +19,9 @@
     <loc>https://jameshwade.github.io/gpttools/index.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/news/index.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/add_roxygen_addin.html</loc>
   </url>
   <url>
@@ -31,7 +34,13 @@
     <loc>https://jameshwade.github.io/gpttools/reference/check_api_key.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/collect_dataframes.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/comment_code_addin.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/document_data.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gptAddin.html</loc>
@@ -49,9 +58,15 @@
     <loc>https://jameshwade.github.io/gpttools/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/prep_data_prompt.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/script_to_function_addin.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/suggest_unit_test_addin.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/summarize_data.html</loc>
   </url>
 </urlset>
