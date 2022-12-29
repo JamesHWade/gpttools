@@ -2,9 +2,7 @@
 % Please edit documentation in R/document_data.R
 \name{prep_data_prompt}
 \alias{prep_data_prompt}
-\title{Preps OpenAI model prompt for data documentation
-
-Prepares data prompt by summarizing data and printing it}
+\title{Preps OpenAI model prompt for data documentation}
 \usage{
 prep_data_prompt(data, method, prompt)
 }
@@ -19,8 +17,6 @@ prep_data_prompt(data, method, prompt)
 A string
 }
 \description{
-Preps OpenAI model prompt for data documentation
-
 Prepares data prompt by summarizing data and printing it
 }
 \examples{

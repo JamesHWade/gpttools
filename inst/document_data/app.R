@@ -1,9 +1,7 @@
+library(gpttools)
 ui <- miniUI::miniPage(
 
-  miniUI::gadgetTitleBar(
-    "Document your data with gpttools",
-    left = miniUI::miniTitleBarButton("button", "Run GPT", primary = TRUE),
-    right = miniUI::miniTitleBarCancelButton(inputId = "cancel", label = "Close",primary = FALSE)),
+  miniUI::gadgetTitleBar("Document your data with gpttools"),
   miniUI::miniContentPanel(
     shiny::fillCol(
       flex = c(3,1),
@@ -43,13 +41,21 @@ ui <- miniUI::miniPage(
           ),
           helpText("If your reponse is cutoff, you can increase the number of tokens (at increase cost!).")
         ),
-        shiny::textAreaInput(inputId="prompt",
-                             label="Prompt for the model to use to document your data",
-                             value="",
-                             rows = 5,
-                             width="90%",
-                             height = "400")
-      ),
+        column(
+          width = 12,
+          shiny::textAreaInput(inputId="prompt",
+                               label="Prompt for the model to use to document your data",
+                               value="",
+                               rows = 5,
+                               width="90%",
+                               height = "400"),
+          shiny::actionButton(inputId = "update_prompt",
+                              label = "Update Prompt",
+                              icon = icon("rotate-right")),
+          shiny::actionButton(inputId = "query_gpt",
+                              label = "Document Data",
+                              icon = icon("wand-magic-sparkles"))
+        )),
       shiny::verbatimTextOutput(outputId = "response",
                                 placeholder = T)
     )
@@ -60,25 +66,25 @@ server <- function(input, output, session) {
   dataframes <- reactive(collect_dataframes())
   prepped_prompt <- reactive({
     req(stringr::str_length(input$dataframes) > 0)
-    cat("input$dataframes: ", input$dataframes)
     prep_data_prompt(
       get(rlang::sym(input$dataframes)),
       method = input$sum_method,
       prompt = "Create a roxygen skeleton to document this data. Include at least `title`, `format`, and `describe` fields. Provide range, number of missing values, and type for each column in the data frame. Follow roxygen2 conventions:\n\n")
   })
-  observe({
+  observe(
     updateSelectInput(session = session,
                       inputId = "dataframes",
-                      choices = dataframes())
+                      choices = dataframes()))
+  shiny::observeEvent(input$update_prompt, {
+    cli::cli_alert_info("Updating prompt")
     updateTextAreaInput(
       session = session,
       inputId = "prompt",
       value = prepped_prompt())
   })
-  shiny::observeEvent(input$button,{
-    selection <- rstudioapi::selectionGet()
-
-    interim <- openai_create_completion(
+  shiny::observeEvent(input$query_gpt,{
+    cli::cli_alert_info("Querying GPT")
+    interim <- gpttools:::openai_create_completion(
       model = "text-davinci-003",
       prompt = input$prompt,
       temperature = input$temperature,
@@ -86,6 +92,9 @@ server <- function(input, output, session) {
       openai_api_key = Sys.getenv("OPENAI_API_KEY"),
       openai_organization = NULL
     )
+    cli::cli_alert_info("Query complete. Providing output text.")
+
+    interim$choices
 
     output$response <- shiny::renderText(interim$choices[1,1])
 

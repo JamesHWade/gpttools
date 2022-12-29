@@ -2,7 +2,6 @@
 #'
 #' This function runs a Shiny application to view and document data.
 #'
-#'
 #' @export
 document_data <- function() {
   check_api()
@@ -49,8 +48,8 @@ summarize_data <- function(data, method = c("skimr", "glimpse", "summary")) {
 
 
 #' @title Preps OpenAI model prompt for data documentation
-#'
-#' Prepares data prompt by summarizing data and printing it
+#' @description
+#'   Prepares data prompt by summarizing data and printing it
 #'
 #' @param data A data.frame
 #' @param method A summarization method, one of "skimr", "glimpse", or "summary"
@@ -67,6 +66,6 @@ prep_data_prompt <- function(data, method, prompt) {
 
   summarized_data <- summarize_data(data = data, method = method)
 
-  paste(prompt, testthat::capture_output(print(summarized_data)), sep = "\n")
+  paste(testthat::capture_output(print(summarized_data)), prompt, sep = "\n")
 
 }
