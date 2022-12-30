@@ -7,10 +7,11 @@
 add_roxygen_addin()
 }
 \value{
-NULL (nothing is returned; the generated roxygen skeleton is inserted into the document).
+NULL (nothing is returned; the generated roxygen skeleton is
+inserted into the document).
 }
 \description{
 This function uses the OpenAI API to generate a roxygen skeleton for the
 current selection in RStudio. The roxygen skeleton is then inserted into the
-document using the prompt: "insert roxygen skeleton to document this function"
+document using prompt: "insert roxygen skeleton to document this function"
 }

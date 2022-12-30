@@ -11,3 +11,4 @@
 ^images$
 ^CODE_OF_CONDUCT\.md$
 ^cran-comments\.md$
+^\.pre-commit-config\.yaml$

@@ -16,19 +16,23 @@ gpt_create(
 \arguments{
 \item{model}{The name of the GPT model to use.}
 
-\item{temperature}{A parameter for controlling the randomness of the GPT model's output.}
+\item{temperature}{A parameter for controlling the randomness of the GPT
+model's output.}
 
-\item{max_tokens}{Maximum number of tokens to return (related to length of response), defaults to 500}
+\item{max_tokens}{Maximum number of tokens to return (related to length of
+response), defaults to 500}
 
 \item{openai_api_key}{An API key for the OpenAI API.}
 
 \item{openai_organization}{An optional organization ID for the OpenAI API.}
 
-\item{append_text}{Add text to selection rather than replace, defaults to TRUE}
+\item{append_text}{Add text to selection rather than replace, default to TRUE}
 }
 \value{
-Nothing is returned. The improved text is inserted into the current RStudio session.
+Nothing is returned. The improved text is inserted into the current
+RStudio session.
 }
 \description{
-This function uses the GPT model from OpenAI to improve the spelling and grammar of the selected text in the current RStudio session.
+This function uses the GPT model from OpenAI to improve the spelling and
+grammar of the selected text in the current RStudio session.
 }
