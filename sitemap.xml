@@ -43,7 +43,7 @@
     <loc>https://jameshwade.github.io/gpttools/reference/document_data.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/gptAddin.html</loc>
+    <loc>https://jameshwade.github.io/gpttools/reference/gpt_addin.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_create.html</loc>
@@ -59,6 +59,12 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/prep_data_prompt.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/run_document_data.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/run_gpt_freeform.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/script_to_function_addin.html</loc>
