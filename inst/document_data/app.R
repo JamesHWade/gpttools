@@ -18,7 +18,7 @@ ui <- miniUI::miniPage(
           shiny::selectInput(
             inputId = "sum_method",
             label = "What method should be used to summarize data?",
-            choices = c("skimr", "glimpse", "summary"),
+            choices = c("skimr", "summary"),
             width = "90%"
           ),
           helpText("Different summary methods may produce different skeletons."),
