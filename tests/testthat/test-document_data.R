@@ -6,6 +6,8 @@ test_that("Summarize mtcars works", {
 })
 
 test_that("Summarize airquality works", {
+  skip_on_cran()
+  skip_on_ci()
   expect_snapshot(summarize_data(airquality, "skimr"))
   expect_snapshot(summarize_data(airquality, "skimr_lite"))
   expect_snapshot(summarize_data(airquality, "column_types"))
