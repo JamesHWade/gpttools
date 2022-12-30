@@ -15,6 +15,7 @@ Imports:
     assertthat,
     cli,
     httr,
+    miniUI,
     openai,
     purrr,
     rlang,

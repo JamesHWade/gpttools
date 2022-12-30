@@ -12,6 +12,8 @@ repos:
         -    assertthat
         -    cli
         -    httr
+        -    git2r
+        -    miniUI
         -    openai
         -    purrr
         -    rlang

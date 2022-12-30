@@ -1,4 +1,4 @@
-# Summarize data works
+# Summarize mtcars works
 
     Code
       summarize_data(mtcars, "skimr")
@@ -115,95 +115,94 @@
        3rd Qu.:1.0000   3rd Qu.:4.000   3rd Qu.:4.000  
        Max.   :1.0000   Max.   :5.000   Max.   :8.000  
 
----
+# Summarize airquality works
 
     Code
-      summarize_data(iris, "skimr")
+      summarize_data(airquality, "skimr")
     Output
       -- Data Summary ------------------------
                                  Values
       Name                       data  
-      Number of rows             150   
-      Number of columns          5     
+      Number of rows             153   
+      Number of columns          6     
       _______________________          
       Column type frequency:           
-        factor                   1     
-        numeric                  4     
+        numeric                  6     
       ________________________         
       Group variables            None  
       
-      -- Variable type: factor -------------------------------------------------------
-        skim_variable n_missing complete_rate ordered n_unique
-      1 Species               0             1 FALSE          3
-        top_counts               
-      1 set: 50, ver: 50, vir: 50
-      
       -- Variable type: numeric ------------------------------------------------------
-        skim_variable n_missing complete_rate mean    sd  p0 p25  p50 p75 p100
-      1 Sepal.Length          0             1 5.84 0.828 4.3 5.1 5.8  6.4  7.9
-      2 Sepal.Width           0             1 3.06 0.436 2   2.8 3    3.3  4.4
-      3 Petal.Length          0             1 3.76 1.77  1   1.6 4.35 5.1  6.9
-      4 Petal.Width           0             1 1.20 0.762 0.1 0.3 1.3  1.8  2.5
+        skim_variable n_missing complete_rate   mean    sd   p0   p25   p50   p75
+      1 Ozone                37         0.758  42.1  33.0   1    18    31.5  63.2
+      2 Solar.R               7         0.954 186.   90.1   7   116.  205   259. 
+      3 Wind                  0         1       9.96  3.52  1.7   7.4   9.7  11.5
+      4 Temp                  0         1      77.9   9.47 56    72    79    85  
+      5 Month                 0         1       6.99  1.42  5     6     7     8  
+      6 Day                   0         1      15.8   8.86  1     8    16    23  
+         p100
+      1 168  
+      2 334  
+      3  20.7
+      4  97  
+      5   9  
+      6  31  
 
 ---
 
     Code
-      summarize_data(iris, "skimr_lite")
+      summarize_data(airquality, "skimr_lite")
     Output
       -- Data Summary ------------------------
                                  Values
       Name                       data  
-      Number of rows             150   
-      Number of columns          5     
+      Number of rows             153   
+      Number of columns          6     
       _______________________          
       Column type frequency:           
-        factor                   1     
-        numeric                  4     
+        numeric                  6     
       ________________________         
       Group variables            None  
       
-      -- Variable type: factor -------------------------------------------------------
-        skim_variable n_missing complete_rate ordered n_unique
-      1 Species               0             1 FALSE          3
-        top_counts               
-      1 set: 50, ver: 50, vir: 50
-      
       -- Variable type: numeric ------------------------------------------------------
-        skim_variable n_missing complete_rate min mean median max
-      1 Sepal.Length          0             1 4.3 5.84   5.8  7.9
-      2 Sepal.Width           0             1 2   3.06   3    4.4
-      3 Petal.Length          0             1 1   3.76   4.35 6.9
-      4 Petal.Width           0             1 0.1 1.20   1.3  2.5
+        skim_variable n_missing complete_rate  min  mean median  max
+      1 Ozone                37         0.758 NA   NA      NA   NA  
+      2 Solar.R               7         0.954 NA   NA      NA   NA  
+      3 Wind                  0         1      1.7  9.96    9.7 20.7
+      4 Temp                  0         1     56   77.9    79   97  
+      5 Month                 0         1      5    6.99    7    9  
+      6 Day                   0         1      1   15.8    16   31  
 
 ---
 
     Code
-      summarize_data(iris, "column_types")
+      summarize_data(airquality, "column_types")
     Output
-              column    type
-      1 Sepal.Length numeric
-      2  Sepal.Width numeric
-      3 Petal.Length numeric
-      4  Petal.Width numeric
-      5      Species  factor
+         column    type
+      1   Ozone integer
+      2 Solar.R integer
+      3    Wind numeric
+      4    Temp integer
+      5   Month integer
+      6     Day integer
 
 ---
 
     Code
-      summarize_data(iris, "summary")
+      summarize_data(airquality, "summary")
     Output
-        Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
-       Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
-       1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
-       Median :5.800   Median :3.000   Median :4.350   Median :1.300  
-       Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
-       3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
-       Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
-             Species  
-       setosa    :50  
-       versicolor:50  
-       virginica :50  
-                      
-                      
-                      
-
+           Ozone           Solar.R           Wind             Temp      
+       Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
+       1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
+       Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+       Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
+       3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
+       Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+       NA's   :37       NA's   :7                                       
+           Month            Day      
+       Min.   :5.000   Min.   : 1.0  
+       1st Qu.:6.000   1st Qu.: 8.0  
+       Median :7.000   Median :16.0  
+       Mean   :6.993   Mean   :15.8  
+       3rd Qu.:8.000   3rd Qu.:23.0  
+       Max.   :9.000   Max.   :31.0  
+                                     
