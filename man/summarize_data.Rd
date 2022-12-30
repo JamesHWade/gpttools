@@ -4,13 +4,16 @@
 \alias{summarize_data}
 \title{Summarize data}
 \usage{
-summarize_data(data, method = c("skimr", "glimpse", "summary"))
+summarize_data(
+  data,
+  method = c("skimr", "skimr_lite", "column_types", "summary")
+)
 }
 \arguments{
 \item{data}{A data frame}
 
 \item{method}{A character vector specifying the method to use for summarizing the data.
-Must be one of "skimr", "glimpse", or "summary". Default is "skimr".}
+Must be one of "skimr", "skimr_lite", "column_types", or "summary". Default is "skimr".}
 }
 \value{
 Summarized data according to specified method

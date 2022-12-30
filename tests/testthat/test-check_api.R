@@ -14,7 +14,7 @@ test_that("API checking works on CI", {
   expect_message(check_api())
 })
 
-test_that("API checking works with check_api(), assumes OPENAI_API_KEY is set", {
+test_that("API checking works, assumes OPENAI_API_KEY is set", {
   skip_if_offline()
   skip_on_ci()
   expect_message(check_api())
@@ -39,4 +39,3 @@ test_that("API connection can return true", {
   skip_on_ci()
   expect_message(check_api_connection())
 })
-

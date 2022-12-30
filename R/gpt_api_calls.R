@@ -1,15 +1,19 @@
 #' Use GPT to improve text
 #'
-#' This function uses the GPT model from OpenAI to improve the spelling and grammar of the selected text in the current RStudio session.
+#' This function uses the GPT model from OpenAI to improve the spelling and
+#' grammar of the selected text in the current RStudio session.
 #'
 #' @param model The name of the GPT model to use.
 #' @param instruction Instruction given to the model on how to improve the text.
-#' @param temperature A parameter for controlling the randomness of the GPT model's output.
+#' @param temperature A parameter for controlling the randomness of the GPT
+#' model's output.
 #' @param openai_api_key An API key for the OpenAI API.
 #' @param openai_organization An optional organization ID for the OpenAI API.
-#' @param append_text Add text to selection rather than replace, defaults to FALSE
+#' @param append_text Add text to selection rather than replace, defaults to
+#'  FALSE
 #'
-#' @return Nothing is returned. The improved text is inserted into the current RStudio session.
+#' @return Nothing is returned. The improved text is inserted into the current
+#'  RStudio session.
 #' @export
 gpt_edit <- function(model,
                      instruction,
@@ -44,7 +48,8 @@ gpt_edit <- function(model,
 
 # Wrapper around create_edit to help with testthat
 # @export
-openai_create_edit <- function(model, input, instruction, temperature, openai_api_key, openai_organization){
+openai_create_edit <- function(model, input, instruction, temperature,
+                               openai_api_key, openai_organization) {
   openai::create_edit(
     model = model,
     input = input,
@@ -57,16 +62,20 @@ openai_create_edit <- function(model, input, instruction, temperature, openai_ap
 
 #' Use GPT to improve text
 #'
-#' This function uses the GPT model from OpenAI to improve the spelling and grammar of the selected text in the current RStudio session.
+#' This function uses the GPT model from OpenAI to improve the spelling and
+#'  grammar of the selected text in the current RStudio session.
 #'
 #' @param model The name of the GPT model to use.
-#' @param temperature A parameter for controlling the randomness of the GPT model's output.
-#' @param max_tokens Maximum number of tokens to return (related to length of response), defaults to 500
+#' @param temperature A parameter for controlling the randomness of the GPT
+#'  model's output.
+#' @param max_tokens Maximum number of tokens to return (related to length of
+#' response), defaults to 500
 #' @param openai_api_key An API key for the OpenAI API.
 #' @param openai_organization An optional organization ID for the OpenAI API.
-#' @param append_text Add text to selection rather than replace, defaults to TRUE
+#' @param append_text Add text to selection rather than replace, default to TRUE
 #'
-#' @return Nothing is returned. The improved text is inserted into the current RStudio session.
+#' @return Nothing is returned. The improved text is inserted into the current
+#' RStudio session.
 #' @export
 gpt_create <- function(model,
                        temperature,
@@ -76,7 +85,7 @@ gpt_create <- function(model,
                        append_text = TRUE) {
   check_api()
   selection <- get_selection()
-  cat('here\n')
+  cat("here\n")
   cli::cli_progress_step("Asking GPT for help...")
 
   edit <- openai_create_completion(
@@ -105,7 +114,7 @@ gpt_create <- function(model,
 # @export
 openai_create_completion <- function(model, prompt, temperature, max_tokens,
                                      openai_api_key, openai_organization,
-                                     suffix = NULL){
+                                     suffix = NULL) {
   openai::create_completion(
     model = model,
     prompt = prompt,
@@ -119,17 +128,22 @@ openai_create_completion <- function(model, prompt, temperature, max_tokens,
 
 #' Use GPT to improve text
 #'
-#' This function uses the GPT model from OpenAI to improve the spelling and grammar of the selected text in the current RStudio session.
+#' This function uses the GPT model from OpenAI to improve the spelling and
+#' grammar of the selected text in the current RStudio session.
 #'
 #' @param model The name of the GPT model to use.
 #' @param prompt Instructions for the insertion
-#' @param temperature A parameter for controlling the randomness of the GPT model's output.
-#' @param max_tokens Maximum number of tokens to return (related to length of response), defaults to 100
+#' @param temperature A parameter for controlling the randomness of the GPT
+#' model's output.
+#' @param max_tokens Maximum number of tokens to return (related to length of
+#' response), defaults to 100
 #' @param openai_api_key An API key for the OpenAI API.
 #' @param openai_organization An optional organization ID for the OpenAI API.
-#' @param append_text Add text to selection rather than replace, defaults to FALSE
+#' @param append_text Add text to selection rather than replace, defaults to
+#' FALSE
 #'
-#' @return Nothing is returned. The improved text is inserted into the current RStudio session.
+#' @return Nothing is returned. The improved text is inserted into the current
+#' RStudio session.
 #' @export
 gpt_insert <- function(model,
                        prompt,
@@ -168,11 +182,11 @@ gpt_insert <- function(model,
 }
 
 # Wrapper around selectionGet to help with testthat
-get_selection <- function(){
+get_selection <- function() {
   rstudioapi::selectionGet()
 }
 
 # Wrapper around selectionGet to help with testthat
-insert_text <- function(improved_text){
+insert_text <- function(improved_text) {
   rstudioapi::insertText(improved_text)
 }

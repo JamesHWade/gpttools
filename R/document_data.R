@@ -20,8 +20,36 @@ collect_dataframes <- function() {
   objects <- names(rlang::global_env())
   purrr::map_chr(
     .x = objects,
-    .f = ~ if (is.data.frame(get(.x))) { .x } else { NA }) |>
+    .f = ~ if (is.data.frame(get(.x))) {
+      .x
+    } else {
+      NA
+    }
+  ) |>
     stats::na.omit()
+}
+
+skim_lite <- function(data) {
+  my_skim <- skimr::skim_with(
+    numeric = skimr::sfl(
+      min = ~ min(.x),
+      mean = ~ mean(.x),
+      median = ~ median(.x),
+      max = ~ max(.x)
+    ),
+    append = FALSE
+  )
+  my_skim(data)
+}
+
+collect_column_types <- function(data) {
+  purrr::map_dfr(
+    names(data),
+    ~ data.frame(
+      column = .x,
+      type = class(data[[.x]])
+    )
+  )
 }
 
 #' Summarize data
@@ -29,19 +57,27 @@ collect_dataframes <- function() {
 #' Summarize a data frame using one of three methods.
 #'
 #' @param data A data frame
-#' @param method A character vector specifying the method to use for summarizing the data.
-#'   Must be one of "skimr", "glimpse", or "summary". Default is "skimr".
+#' @param method A character vector specifying the method to use for
+#' summarizing the data. Must be one of "skimr", "skimr_lite", "column_types",
+#'  or "summary". Default is "skimr".
 #'
 #' @return Summarized data according to specified method
-summarize_data <- function(data, method = c("skimr", "glimpse", "summary")) {
+summarize_data <- function(data,
+                           method = c(
+                             "skimr",
+                             "skimr_lite",
+                             "column_types",
+                             "summary"
+                           )) {
   assertthat::assert_that(is.data.frame(data))
 
   rlang::arg_match(method)
 
   switch(method[1],
-         "skimr"   = skimr::skim_without_charts(data),
-         "glimpse" = dplyr::glimpse(data, width = 80),
-         "summary" = summary(data)
+    "skimr" = skimr::skim_without_charts(data),
+    "skimr_lite" = skim_lite(data),
+    "column_types" = collect_column_types(data),
+    "summary" = summary(data)
   )
 }
 
@@ -57,9 +93,11 @@ summarize_data <- function(data, method = c("skimr", "glimpse", "summary")) {
 #' @return A string
 #' @export
 #' @examples
-#' prep_data_prompt(data = mtcars,
-#'                  method = "skimr",
-#'                  prompt = "This is a test prompt.")
+#' prep_data_prompt(
+#'   data = mtcars,
+#'   method = "skimr",
+#'   prompt = "This is a test prompt."
+#' )
 prep_data_prompt <- function(data, method, prompt) {
   assertthat::assert_that(is.data.frame(data))
   assertthat::assert_that(assertthat::is.string(prompt))
@@ -67,5 +105,4 @@ prep_data_prompt <- function(data, method, prompt) {
   summarized_data <- summarize_data(data = data, method = method)
 
   paste(testthat::capture_output(print(summarized_data)), prompt, sep = "\n")
-
 }
