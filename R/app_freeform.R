@@ -17,8 +17,16 @@ run_gpt_freeform <- function() {
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
       "GPTstudio Freeform Editor",
-      left = miniUI::miniTitleBarButton("button", "Run GPT", primary = TRUE),
-      right = miniUI::miniTitleBarCancelButton("cancel", "Close", primary = FALSE)
+      left = miniUI::miniTitleBarButton(
+        "button",
+        "Run GPT",
+        primary = TRUE
+      ),
+      right = miniUI::miniTitleBarCancelButton(
+        "cancel",
+        "Close",
+        primary = FALSE
+      )
     ),
     miniUI::miniContentPanel(
       shiny::fillCol(

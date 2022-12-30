@@ -1,5 +1,6 @@
 addin
 addins
+airquality
 assertthat
 aut
 BugReports
@@ -29,6 +30,7 @@ Lifecycle
 LLMs
 miniUI
 mockr
+mtcars
 NLP
 OpenAI
 openai

@@ -1,4 +1,4 @@
-# Summarize data works
+# Summarize mtcars works
 
     Code
       summarize_data(mtcars, "skimr")
@@ -115,7 +115,7 @@
        3rd Qu.:1.0000   3rd Qu.:4.000   3rd Qu.:4.000  
        Max.   :1.0000   Max.   :5.000   Max.   :8.000  
 
----
+# Summarize airquality works
 
     Code
       summarize_data(iris, "skimr")
@@ -206,4 +206,3 @@
                       
                       
                       
-

@@ -105,7 +105,7 @@ run_document_data <- function() {
   server <- function(input, output, session) {
     dataframes <- shiny::reactive(collect_dataframes())
     prepped_prompt <- shiny::reactive({
-      req(nchar(input$dataframes) > 0)
+      shiny::req(nchar(input$dataframes) > 0)
       prep_data_prompt(
         get(rlang::sym(input$dataframes)),
         method = input$sum_method,
@@ -132,7 +132,7 @@ run_document_data <- function() {
     })
     shiny::observeEvent(input$query_gpt, {
       cli::cli_alert_info("Querying GPT")
-      interim <- gpttools:::openai_create_completion(
+      interim <- openai_create_completion(
         model = "text-davinci-003",
         prompt = input$prompt,
         temperature = input$temperature,
