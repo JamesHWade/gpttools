@@ -1,5 +1,5 @@
 Name: Comment your code
-Description: Uses openai's GPT-3.5 to generate comments for your code
+Description: Uses OpenAI's GPT-3.5 to generate comments for your code
 Binding: comment_code_addin
 Interactive: false
 
@@ -20,10 +20,10 @@ Interactive: false
 
 Name: Freeform GPT editor
 Description: Uses OpenAI's GPT-3.5 perform a user specified edit to the selected text or code
-Binding: gptAddin
+Binding: gpt_addin
 Interactive: true
 
 Name: Document Data
-Description: Uses OpenAI's GPT-3.5 document data for a pacakge with help from the user
+Description: Uses OpenAI's GPT-3.5 document data for a package with help from the user
 Binding: document_data
 Interactive: true

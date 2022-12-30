@@ -1,14 +1,3 @@
-#' Document Data
-#'
-#' This function runs a Shiny application to view and document data.
-#'
-#' @export
-document_data <- function() {
-  check_api()
-  withr::local_options(shiny.launch.browser = .rs.invokeShinyPaneViewer)
-  shiny::runApp(system.file(package = "gpttools", "document_data"))
-}
-
 #' Collect Dataframes
 #'
 #' @description Collect all the dataframes in the global environment.
