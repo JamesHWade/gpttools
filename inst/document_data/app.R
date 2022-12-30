@@ -9,16 +9,16 @@ ui <- miniUI::miniPage(
         flex = c(1,1),
         shiny::column(
           12,
-          shiny::selectInput(
-            inputId = "dataframes",
-            label   = "What data do you want to document?",
-            choices = NULL,
-            width   = "90%"),
+            shiny::selectInput(
+              inputId = "dataframes",
+              label   = "What data do you want to document?",
+              choices = NULL,
+              width   = "90%"),
           helpText("Only dataframes in the global environment are shown."),
           shiny::selectInput(
             inputId = "sum_method",
             label = "What method should be used to summarize data?",
-            choices = c("skimr", "summary"),
+            choices = c("skimr", "skimr_lite", "column_types", "summary"),
             width = "90%"
           ),
           helpText("Different summary methods may produce different skeletons."),
@@ -74,7 +74,8 @@ server <- function(input, output, session) {
   observe(
     updateSelectInput(session = session,
                       inputId = "dataframes",
-                      choices = dataframes()))
+                      choices = dataframes())
+    )
   shiny::observeEvent(input$update_prompt, {
     cli::cli_alert_info("Updating prompt")
     updateTextAreaInput(
