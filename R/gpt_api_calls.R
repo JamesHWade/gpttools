@@ -44,7 +44,7 @@ gpt_edit <- function(model,
 
 # Wrapper around create_edit to help with testthat
 # @export
-openai_create_edit <- function(model, input, instruction, temperature, openai_api_key, openai_organization){
+openai_create_edit <- function(model, input, instruction, temperature, openai_api_key, openai_organization) {
   openai::create_edit(
     model = model,
     input = input,
@@ -76,7 +76,7 @@ gpt_create <- function(model,
                        append_text = TRUE) {
   check_api()
   selection <- get_selection()
-  cat('here\n')
+  cat("here\n")
   cli::cli_progress_step("Asking GPT for help...")
 
   edit <- openai_create_completion(
@@ -105,7 +105,7 @@ gpt_create <- function(model,
 # @export
 openai_create_completion <- function(model, prompt, temperature, max_tokens,
                                      openai_api_key, openai_organization,
-                                     suffix = NULL){
+                                     suffix = NULL) {
   openai::create_completion(
     model = model,
     prompt = prompt,
@@ -168,11 +168,11 @@ gpt_insert <- function(model,
 }
 
 # Wrapper around selectionGet to help with testthat
-get_selection <- function(){
+get_selection <- function() {
   rstudioapi::selectionGet()
 }
 
 # Wrapper around selectionGet to help with testthat
-insert_text <- function(improved_text){
+insert_text <- function(improved_text) {
   rstudioapi::insertText(improved_text)
 }

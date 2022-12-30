@@ -20,8 +20,8 @@ check_api_connection <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
     cli::cli_abort(c(
       "x" = "API key found but call was unsuccessful",
       "i" = "OPEN_API_KEY is set to {Sys.getenv(\"OPENAI_API_KEY\")}",
-      "i" = "Generate new API key at https://beta.openai.com/account/api-keys")
-    )
+      "i" = "Generate new API key at https://beta.openai.com/account/api-keys"
+    ))
   }
 }
 
@@ -42,8 +42,8 @@ check_api_key <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
       "x" = "API key not found or is not formatted appropriately.",
       "i" = "OPEN_API_KEY is set to {Sys.getenv(\"OPENAI_API_KEY\")}",
       "i" = "Check OPEN_API_KEY is set with Sys.getenv(\"OPENAI_API_KEY\")",
-      "i" = "Get key from https://beta.openai.com/account/api-keys")
-    )
+      "i" = "Get key from https://beta.openai.com/account/api-keys"
+    ))
   }
 }
 
@@ -60,9 +60,9 @@ check_api_key <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
 #' printed. If the API key is invalid, an error message is printed and the
 #' function aborts.
 #' @export
-check_api <- function(api_key = Sys.getenv("OPENAI_API_KEY")){
+check_api <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
   valid_api <- getOption("gpttools.valid_api")
-  key   <- getOption("gpttools.openai_key")
+  key <- getOption("gpttools.openai_key")
 
   if (!valid_api) {
     check_api_connection(api_key)
@@ -74,8 +74,10 @@ check_api <- function(api_key = Sys.getenv("OPENAI_API_KEY")){
   }
 }
 
-simple_api_check <- function(api_key){
-  response <- httr::GET("https://api.openai.com/v1/models",
-            httr::add_headers(Authorization = paste0("Bearer ", api_key)))
+simple_api_check <- function(api_key) {
+  response <- httr::GET(
+    "https://api.openai.com/v1/models",
+    httr::add_headers(Authorization = paste0("Bearer ", api_key))
+  )
   httr::status_code(response)
 }
