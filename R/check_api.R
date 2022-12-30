@@ -1,10 +1,14 @@
 #' Check connection to OpenAI's API works
 #'
-#' This function checks whether the API key provided in the `OPENAI_API_KEY` environment variable is valid.
+#' This function checks whether the API key provided in the `OPENAI_API_KEY`
+#' environment variable is valid.
 #'
-#' @param api_key An API key. Defaults to the value of the `OPENAI_API_KEY` environment variable.
+#' @param api_key An API key. Defaults to the value of the `OPENAI_API_KEY`
+#' environment variable.
 #'
-#' @return Nothing is returned. If the API key is valid, a success message is printed. If the API key is invalid, an error message is printed and the function is aborted.
+#' @return Nothing is returned. If the API key is valid, a success message is
+#' printed. If the API key is invalid, an error message is printed and the
+#' function is aborted.
 #' @export
 check_api_connection <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
   check_api_key(api_key)
@@ -27,10 +31,14 @@ check_api_connection <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
 
 #' Check API key
 #'
-#' This function checks whether the API key provided as an argument is in the correct format.
+#' This function checks whether the API key provided as an argument is in the
+#' correct format.
 #'
-#' @param api_key An API key. Defaults to the value of the `OPENAI_API_KEY` environment variable.
-#' @return Nothing is returned. If the API key is in the correct format, a success message is printed. If the API key is not in the correct format, an error message is printed and the function aborts.
+#' @param api_key An API key. Defaults to the value of the `OPENAI_API_KEY`
+#' environment variable.
+#' @return Nothing is returned. If the API key is in the correct format, a
+#' success message is printed. If the API key is not in the correct format,
+#' an error message is printed and the function aborts.
 #' @export
 #'
 check_api_key <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
@@ -69,7 +77,7 @@ check_api <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
   } else if (key == Sys.getenv("OPENAI_API_KEY")) {
     cli::cli_alert_success("API already validated in this session.")
   } else {
-    cli::cli_alert_warning("API key has changed. Checking API connection again.")
+    cli::cli_alert_warning("API key has changed. Re-checking API connection.")
     check_api_connection(api_key)
   }
 }
