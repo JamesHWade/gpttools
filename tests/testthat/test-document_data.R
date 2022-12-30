@@ -6,8 +6,8 @@ test_that("Summarize mtcars works", {
 })
 
 test_that("Summarize airquality works", {
-  expect_snapshot(summarize_data(iris, "skimr"))
-  expect_snapshot(summarize_data(iris, "skimr_lite"))
-  expect_snapshot(summarize_data(iris, "column_types"))
-  expect_snapshot(summarize_data(iris, "summary"))
+  expect_snapshot(summarize_data(airquality, "skimr"))
+  expect_snapshot(summarize_data(airquality, "skimr_lite"))
+  expect_snapshot(summarize_data(airquality, "column_types"))
+  expect_snapshot(summarize_data(airquality, "summary"))
 })
