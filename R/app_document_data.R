@@ -6,7 +6,7 @@
 document_data <- function() {
   check_api()
   withr::local_options(shiny.launch.browser = .rs.invokeShinyPaneViewer)
-  shiny::runApp(system.file(package = "gpttools", "document_data"))
+  run_document_data()
 }
 
 #' Shiny app that supports Document Data addin
