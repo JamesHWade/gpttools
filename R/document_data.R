@@ -14,7 +14,7 @@ collect_dataframes <- function() {
     } else {
       NA
     }
-  ) |>
+  ) %>%
     stats::na.omit()
 }
 
