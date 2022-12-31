@@ -69,10 +69,6 @@ repos:
         args: ['--maxkb=200']
     -   id: file-contents-sorter
         files: '^\.Rbuildignore$'
-    -   id: end-of-file-fixer
-        exclude: >
-          '\.Rd'
-          '\.md'
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
     rev: v1.5.1
     hooks:
