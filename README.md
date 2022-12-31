@@ -26,8 +26,24 @@ implications of using these models. Ethics of LLMs (also called
 [Foundation Models](https://arxiv.org/abs/2108.07258)) is an area of
 very active discussion.
 
-**Read the privacy note at the bottom, this is alpha software there is
-no warranty for anything.**
+## Privacy Notice
+
+These functions work by taking the text or code you have highlighted or selected with the
+cursor, or your prompt if you use one of the built-in apps, and send these to OpenAI as part
+of a prompt. Prompts fall under the privacy notice, rules, or exceptions you agreed to when
+making an OpenAI account. We cannot tell you or guarantee how secure these prompts are when
+sent to OpenAI. We do not know what OpenAI does with your prompts, but OpenAI is clear that
+they use prompts and results to improve their model unless you opt out explicitly by
+contacting them.
+
+The code is designed to ONLY share the highlighted or selected text, or a prompt you build
+with the help of one of our apps and no other elements of your R environment. Make sure you
+are aware of what you send to OpenAI and do not accidentally share sensitive data with
+OpenAI.
+
+**DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD REMAIN PRIVATE**
+
+See OpenAI's Terms of Use at <https://openai.com/terms>.
 
 ## Installation
 
@@ -35,34 +51,6 @@ no warranty for anything.**
 require(remotes)
 remotes::install_github("JamesHWade/gpttools")
 ```
-
-### R \>=4.2 dependency
-
-The current version require R 4.2 or greater because of a current
-dependency. If you are using an older version of R, you can get around
-this dependency by installing `{openai}` from my fork of the [original
-package](https://github.com/irudnyts/openai). Here’s how to do that:
-
-``` r
-require(remotes)
-remotes::install_github("JamesHWade/openai")
-```
-
-## Privacy Notice
-
-These functions work by taking the text or code you have highlighted or
-selected with the cursor and send these to OpenAI as part of a prompt,
-they fall under their privacy notice, rules, or exceptions you agreed to
-with OpenAI when making an account. We do not know how secure these are
-when sent to OpenAI, we also do not know what OpenAI does with them. The
-code is designed to ONLY share the highlighted or selected text and no
-other elements of your R environment (i.e. data) unless you have
-highlighted it when running the addin. This may limit usability for now,
-but I do not want people to accidentally share sensitive data with
-OpenAI.
-
-**DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD
-REMAIN PRIVATE**
 
 ## Prerequisites
 
