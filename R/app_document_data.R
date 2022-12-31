@@ -15,24 +15,26 @@ document_data <- function() {
 #' @export
 run_document_data <- function() {
   ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar("Document your data with gpttools"),
+    miniUI::gadgetTitleBar(
+      title = "Document your data with gpttools",
+      left  = NULL,
+      right = miniUI::miniTitleBarButton("done", "Done", primary = TRUE)
+    ),
     miniUI::miniContentPanel(
       shiny::fillCol(
-        flex = c(1, 1),
         shiny::fillRow(
-          flex = c(1, 1),
           shiny::fillCol(
-            flex = c(1, 1, 2, 2, 2),
+            flex = c(1, 1, 1.5, 2, 1),
             shiny::fillRow(
               shiny::selectInput(
                 inputId = "dataframes",
-                label   = "What data do you want to document?",
+                label   = "Select data",
                 choices = NULL,
                 width   = "90%"
               ),
               shiny::selectInput(
                 inputId = "sum_method",
-                label = "What method should be used to summarize data?",
+                label = "Select summary method",
                 choices = c("skimr", "skimr_lite", "column_types", "summary"),
                 width = "90%"
               )
@@ -52,7 +54,7 @@ run_document_data <- function() {
               ),
               shiny::sliderInput(
                 inputId = "max_tokens",
-                label = "Maximum number of tokens to spend.",
+                label = "Maximum tokens",
                 min = 12,
                 max = 1000,
                 value = 100,
@@ -61,10 +63,10 @@ run_document_data <- function() {
             ),
             shiny::helpText(
               "Temperature is a parameter for controlling the randomness of
-                   the GPT model's output. Tokens refers to the cost of a model
-                   query. One token refers to about 4 letters. If your reponse
-                   is cutoff, you can increase the number of tokens (at increase
-                   cost!)."
+              the GPT model's output. Tokens refers to the cost of a model
+              query. One token refers to about 4 letters. If your reponse is
+              cutoff, you can increase the number of tokens (at increase
+              cost!)."
             ),
             shiny::fillRow(
               shiny::actionButton(
@@ -88,8 +90,7 @@ run_document_data <- function() {
               label = "Prompt for the model to use to document your data",
               value = "",
               rows = 10,
-              width = "100%",
-              height = "400"
+              width = "100%"
             ),
             shiny::h3("Model Response"),
             shiny::verbatimTextOutput(
@@ -104,6 +105,7 @@ run_document_data <- function() {
 
   server <- function(input, output, session) {
     dataframes <- shiny::reactive(collect_dataframes())
+
     prepped_prompt <- shiny::reactive({
       shiny::req(nchar(input$dataframes) > 0)
       prep_data_prompt(
@@ -115,6 +117,7 @@ run_document_data <- function() {
       roxygen2 conventions:\n\n"
       )
     })
+
     shiny::observe(
       shiny::updateSelectInput(
         session = session,
@@ -122,16 +125,19 @@ run_document_data <- function() {
         choices = dataframes()
       )
     )
-    shiny::observeEvent(input$update_prompt, {
+    shiny::observe({
       cli::cli_alert_info("Updating prompt")
       shiny::updateTextAreaInput(
         session = session,
         inputId = "prompt",
         value = prepped_prompt()
       )
-    })
-    shiny::observeEvent(input$query_gpt, {
-      cli::cli_alert_info("Querying GPT")
+    }) %>%
+      shiny::bindEvent(input$update_prompt)
+
+    shiny::observe({
+      rlang::inform(c("i" = "Querying OpenAI's API..."))
+
       interim <- openai_create_completion(
         model = "text-davinci-003",
         prompt = input$prompt,
@@ -140,12 +146,16 @@ run_document_data <- function() {
         openai_api_key = Sys.getenv("OPENAI_API_KEY"),
         openai_organization = NULL
       )
-      cli::cli_alert_info("Query complete. Providing output text.")
-      output$response <- shiny::renderText(interim$choices[1, 1])
-    })
 
-    shiny::observeEvent(input$cancel, shiny::stopApp())
+      rlang::inform(c("i" = "Response received. Providng output text."))
+      output$response <- shiny::renderText(interim$choices[1, 1])
+    }) %>%
+      shiny::bindEvent(input$query_gpt)
+
+    shiny::observe(shiny::stopApp()) %>% shiny::bindEvent(input$done)
   }
 
   shiny::shinyApp(ui, server)
 }
+
+run_document_data()

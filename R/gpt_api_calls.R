@@ -49,7 +49,8 @@ gpt_edit <- function(model,
 # Wrapper around create_edit to help with testthat
 # @export
 openai_create_edit <- function(model, input, instruction, temperature,
-                               openai_api_key, openai_organization) {
+                               openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+                               openai_organization = NULL) {
   if ("openai" %in% utils::installed.packages()) {
     openai::create_edit(
       model = model,
@@ -91,7 +92,7 @@ openai_create_edit <- function(model, input, instruction, temperature,
 #' @export
 gpt_create <- function(model,
                        temperature,
-                       max_tokens,
+                       max_tokens = getOption("gpttools.max_tokens"),
                        openai_api_key = Sys.getenv("OPENAI_API_KEY"),
                        openai_organization = NULL,
                        append_text = TRUE) {
@@ -161,7 +162,7 @@ openai_create_completion <- function(model, prompt, temperature, max_tokens,
 #' @param temperature A parameter for controlling the randomness of the GPT
 #' model's output.
 #' @param max_tokens Maximum number of tokens to return (related to length of
-#' response), defaults to 100
+#' response), defaults to 500
 #' @param openai_api_key An API key for the OpenAI API.
 #' @param openai_organization An optional organization ID for the OpenAI API.
 #' @param append_text Add text to selection rather than replace, defaults to
@@ -173,7 +174,7 @@ openai_create_completion <- function(model, prompt, temperature, max_tokens,
 gpt_insert <- function(model,
                        prompt,
                        temperature = 0.1,
-                       max_tokens = 100,
+                       max_tokens = getOption("gpttools.max_tokens"),
                        openai_api_key = Sys.getenv("OPENAI_API_KEY"),
                        openai_organization = NULL,
                        append_text = FALSE) {
@@ -182,7 +183,6 @@ gpt_insert <- function(model,
   cli::cli_progress_step("Asking GPT for help...")
 
   prompt <- paste(prompt, selection$value)
-  cli::cat_print(prompt)
 
   edit <- openai_create_completion(
     model = model,
@@ -216,9 +216,6 @@ insert_text <- function(improved_text) {
   rstudioapi::insertText(improved_text)
 }
 
-
-
-
 #' Warn about openai package
 #'
 #' Warn the user if the openai package is not installed and their R version is
@@ -240,7 +237,7 @@ warn_about_openai_pkg <- function() {
                  current release of the openai package but it is not installed.
                  Please install it with: `install.packages(\"openai\")`"
     rlang::warn(message,
-      .fequency = "regularly",
+      .frequency = "regularly",
       .frequency_id = "openai_pkg",
       use_cli_format = TRUE
     )

@@ -16,17 +16,9 @@ gpt_addin <- function() {
 run_gpt_freeform <- function() {
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
-      "GPTstudio Freeform Editor",
-      left = miniUI::miniTitleBarButton(
-        "button",
-        "Run GPT",
-        primary = TRUE
-      ),
-      right = miniUI::miniTitleBarCancelButton(
-        "cancel",
-        "Close",
-        primary = FALSE
-      )
+      title = "GPTstudio Freeform Editor",
+      left  = miniUI::miniTitleBarButton("cancel", "Close", primary = FALSE),
+      right = miniUI::miniTitleBarButton("button", "Run GPT", primary = TRUE)
     ),
     miniUI::miniContentPanel(
       shiny::fillCol(
@@ -67,18 +59,23 @@ run_gpt_freeform <- function() {
   )
 
   server <- function(input, output, session) {
-    shiny::observeEvent(input$button, {
+    shiny::observe({
       selection <- rstudioapi::selectionGet()
 
-      interim <- openai::create_edit(
+      rlang::inform(c("i" = "Querying OpenAI's API..."))
+
+      interim <- openai_create_edit(
         model = input$model,
         input = selection$value,
         instruction = input$question,
         temperature = input$temperature
       )
 
+      rlang::inform(c("i" = "Response received. Providng output text."))
+
       output$response <- shiny::renderText(interim$choices[1, 1])
-    })
+    }) %>%
+      shiny::bindEvent(input$button)
 
     shiny::observeEvent(input$cancel, shiny::stopApp())
   }

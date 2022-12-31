@@ -5,7 +5,6 @@
 \title{Create completion}
 \usage{
 create_completion2(
-  engine_id = lifecycle::deprecated(),
   model,
   prompt = "<|endoftext|>",
   suffix = NULL,
@@ -26,8 +25,6 @@ create_completion2(
 )
 }
 \arguments{
-\item{engine_id}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
-
 \item{model}{required; a length one character vector.}
 
 \item{prompt}{required; defaults to \code{"<|endoftext|>"}; an arbitrary length
