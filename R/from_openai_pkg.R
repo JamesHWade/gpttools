@@ -12,7 +12,6 @@
 #' For arguments description please refer to the [official
 #' documentation](https://beta.openai.com/docs/api-reference/edits/create).
 #'
-#' @param engine_id `r lifecycle::badge("deprecated")`
 #' @param model required; a length one character vector.
 #' @param input required; defaults to `'"'`; a length one character vector.
 #' @param instruction required; a length one character vector.
@@ -35,23 +34,13 @@
 #' )
 #' }
 #' @export
-create_edit2 <- function(engine_id = lifecycle::deprecated(),
-                         model,
+create_edit2 <- function(model,
                          input = '"',
                          instruction,
                          temperature = 1,
                          top_p = 1,
                          openai_api_key = Sys.getenv("OPENAI_API_KEY"),
                          openai_organization = NULL) {
-  if (lifecycle::is_present(engine_id)) {
-    lifecycle::deprecate_warn(
-      "0.3.0",
-      "create_completion(engine_id)",
-      "create_completion(model)"
-    )
-    model <- engine_id
-  }
-
   #---------------------------------------------------------------------------
   # Validate arguments
 
@@ -173,7 +162,6 @@ create_edit2 <- function(engine_id = lifecycle::deprecated(),
 #' For arguments description please refer to the official
 #' [docs](https://beta.openai.com/docs/api-reference/completions/create).
 #'
-#' @param engine_id `r lifecycle::badge("deprecated")`
 #' @param model required; a length one character vector.
 #' @param prompt required; defaults to `"<|endoftext|>"`; an arbitrary length
 #'   character vector.
@@ -226,8 +214,7 @@ create_edit2 <- function(engine_id = lifecycle::deprecated(),
 #' )
 #' }
 #' @export
-create_completion2 <- function(engine_id = lifecycle::deprecated(),
-                               model,
+create_completion2 <- function(model,
                                prompt = "<|endoftext|>",
                                suffix = NULL,
                                max_tokens = 16,
@@ -244,15 +231,6 @@ create_completion2 <- function(engine_id = lifecycle::deprecated(),
                                user = NULL,
                                openai_api_key = Sys.getenv("OPENAI_API_KEY"),
                                openai_organization = NULL) {
-  if (lifecycle::is_present(engine_id)) {
-    lifecycle::deprecate_warn(
-      "0.3.0",
-      "create_completion(engine_id)",
-      "create_completion(model)"
-    )
-    model <- engine_id
-  }
-
   #---------------------------------------------------------------------------
   # Validate arguments
 

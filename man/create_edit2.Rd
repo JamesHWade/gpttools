@@ -5,7 +5,6 @@
 \title{Create edit}
 \usage{
 create_edit2(
-  engine_id = lifecycle::deprecated(),
   model,
   input = "\\"",
   instruction,
@@ -16,8 +15,6 @@ create_edit2(
 )
 }
 \arguments{
-\item{engine_id}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
-
 \item{model}{required; a length one character vector.}
 
 \item{input}{required; defaults to \code{'"'}; a length one character vector.}

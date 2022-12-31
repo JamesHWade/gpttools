@@ -17,6 +17,13 @@ check_api_connection <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
     # If the status code is 200, the key is valid
     cli::cli_alert_success("API key is valid and a simple API call worked.")
     cli::cli_alert_info("The API is checked once per session.")
+    cli::cli_alert_info(
+      "The default value for number of tokens per query is 500. This equates to
+      approximately $0.01 USD per query. You can increase or decrease the
+      number of tokens with the `gpttools.max_tokens` option. Here is an
+      example to lower the max tokens to 100 tokens per query:"
+    )
+    cli::cli_code("options(\"gpttools.max_tokens\") = 100")
     options("gpttools.valid_api" = TRUE)
     options("gpttools.openai_key" = api_key)
   } else {

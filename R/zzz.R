@@ -1,8 +1,9 @@
 .onLoad <- function(lib, pkg) {
   op <- options()
   op_gpttools <- list(
-    gpttools.valid_api = FALSE,
-    gpttools.openai_key = NULL
+    gpttools.valid_api  = FALSE,
+    gpttools.openai_key = NULL,
+    gpttools.max_tokens = 500
   )
 
   toset <- !(names(op_gpttools) %in% names(op))
