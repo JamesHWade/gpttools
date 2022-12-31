@@ -9,34 +9,41 @@
   toset <- !(names(op_gpttools) %in% names(op))
   if (any(toset)) options(op_gpttools[toset])
 
-
   invisible()
 }
 
 globalVariables(".rs.invokeShinyPaneViewer")
-
 
 .onAttach <- function(lib, pkg) {
   packageStartupMessage(startup_message(), appendLF = FALSE)
 }
 
 startup_message <- function() {
-  cli::cli_h1("Privacy Notice")
-  cli::cli_h2("Please read this notice before using gpttools")
+  cli::cli_h1("Privacy Notice for gpttools")
   cli::cli_text(
     "These functions work by taking the text or code you have highlighted or
-    selected with the cursor and send these to OpenAI as part of a prompt, they
-    fall under their privacy notice, rules, or exceptions you agreed to with
-    OpenAI when making an account. We do not know how secure these are when
-    sent to OpenAI, we also do not know what OpenAI does with them. The code is
-    designed to ONLY share the highlighted or selected text and no other
-    elements of your R environment (i.e. data) unless you have highlighted it
-    when running the addin. This may limit usability for now, but I do not want
-    people to accidentally share sensitive data with OpenAI."
+    selected with the cursor, or your prompt if you use one of the built-in
+    apps, and send these to OpenAI as part of a prompt. Prompts fall under the
+    privacy notice, rules, or exceptions you agreed to when making an OpenAI
+    account. We cannot tell you or guarantee how secure these prompts are when
+    sent to OpenAI. We do not know what OpenAI does with your prompts, but
+    OpenAI is clear that they use prompts and results to improve their model
+    unless you opt out explicitly by contacting them."
   )
   cli::cli_text()
   cli::cli_text(
-    "{.strong DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT
-    SHOULD REMAIN PRIVATE}"
+    "The code is designed to ONLY share the highlighted or selected text, or a
+    prompt you build with the help of one of our apps and no other elements of
+    your R environment. Make sure you are aware of what you send to OpenAI and
+    do not accidentally share sensitive data with OpenAI.\n"
   )
+  cli::cli_text()
+  cli::cli_text(
+    cli::col_red(
+      "{.strong DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT
+      SHOULD REMAIN PRIVATE}"
+    )
+  )
+  cli::cli_text()
+  cli::cli_text("See OpenAI's Terms of Use at {.url https://openai.com/terms}.")
 }

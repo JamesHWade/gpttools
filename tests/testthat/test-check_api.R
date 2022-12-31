@@ -37,5 +37,6 @@ test_that("API connection checking works", {
 test_that("API connection can return true", {
   skip_if_offline()
   skip_on_ci()
-  expect_message(check_api_connection())
+  expect_error(check_api_connection())
+  expect_true(check_api_connection(Sys.getenv("OPENAI_API_KEY")))
 })
