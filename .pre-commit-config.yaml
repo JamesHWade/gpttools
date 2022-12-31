@@ -55,6 +55,8 @@ repos:
           data/.*|
           )$
     -   id: lintr
+        args: [--warn_only]
+        verbose: true
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement
@@ -67,8 +69,6 @@ repos:
         args: ['--maxkb=200']
     -   id: file-contents-sorter
         files: '^\.Rbuildignore$'
-    -   id: end-of-file-fixer
-        exclude: '\.Rd'
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
     rev: v1.5.1
     hooks:
