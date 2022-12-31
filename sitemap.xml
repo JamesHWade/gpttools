@@ -40,6 +40,12 @@
     <loc>https://jameshwade.github.io/gpttools/reference/comment_code_addin.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/create_completion2.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/create_edit2.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/document_data.html</loc>
   </url>
   <url>
@@ -58,6 +64,9 @@
     <loc>https://jameshwade.github.io/gpttools/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/pipe.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/prep_data_prompt.html</loc>
   </url>
   <url>
@@ -74,5 +83,8 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/summarize_data.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/warn_about_openai_pkg.html</loc>
   </url>
 </urlset>
