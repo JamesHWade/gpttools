@@ -77,27 +77,20 @@
 
 <!-- badges: end -->
 <p>The goal of gpttools is to extend gptstudio for R package developers to more easily incorporate use of large language models (LLMs) into their project workflows. These models appear to be a step change in our use of text for knowledge work, but you should carefully consider ethical implications of using these models. Ethics of LLMs (also called <a href="https://arxiv.org/abs/2108.07258" class="external-link">Foundation Models</a>) is an area of very active discussion.</p>
-<p><strong>Read the privacy note at the bottom, this is alpha software there is no warranty for anything.</strong></p>
+<div class="section level2">
+<h2 id="privacy-notice">Privacy Notice<a class="anchor" aria-label="anchor" href="#privacy-notice"></a>
+</h2>
+<p>These functions work by taking the text or code you have highlighted or selected with the cursor, or your prompt if you use one of the built-in apps, and send these to OpenAI as part of a prompt. Prompts fall under the privacy notice, rules, or exceptions you agreed to when making an OpenAI account. We cannot tell you or guarantee how secure these prompts are when sent to OpenAI. We do not know what OpenAI does with your prompts, but OpenAI is clear that they use prompts and results to improve their model unless you opt out explicitly by contacting them.</p>
+<p>The code is designed to ONLY share the highlighted or selected text, or a prompt you build with the help of one of our apps and no other elements of your R environment. Make sure you are aware of what you send to OpenAI and do not accidentally share sensitive data with OpenAI.</p>
+<p><strong>DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD REMAIN PRIVATE</strong></p>
+<p>See OpenAI’s Terms of Use at <a href="https://openai.com/terms" class="external-link uri">https://openai.com/terms</a>.</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"JamesHWade/gpttools"</span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="r-42-dependency">R &gt;=4.2 dependency<a class="anchor" aria-label="anchor" href="#r-42-dependency"></a>
-</h3>
-<p>The current version require R 4.2 or greater because of a current dependency. If you are using an older version of R, you can get around this dependency by installing <a href="https://github.com/irudnyts/openai" class="external-link">openai</a> from my fork of the <a href="https://github.com/irudnyts/openai" class="external-link">original package</a>. Here’s how to do that:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"JamesHWade/openai"</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="privacy-notice">Privacy Notice<a class="anchor" aria-label="anchor" href="#privacy-notice"></a>
-</h2>
-<p>These functions work by taking the text or code you have highlighted or selected with the cursor and send these to OpenAI as part of a prompt, they fall under their privacy notice, rules, or exceptions you agreed to with OpenAI when making an account. We do not know how secure these are when sent to OpenAI, we also do not know what OpenAI does with them. The code is designed to ONLY share the highlighted or selected text and no other elements of your R environment (i.e. data) unless you have highlighted it when running the addin. This may limit usability for now, but I do not want people to accidentally share sensitive data with OpenAI.</p>
-<p><strong>DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD REMAIN PRIVATE</strong></p>
 </div>
 <div class="section level2">
 <h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
@@ -110,17 +103,17 @@
 <ul>
 <li>By default, functions of <a href="https://github.com/irudnyts/openai" class="external-link">openai</a> will look for <code>OPENAI_API_KEY</code> environment variable. If you want to set a global environment variable, you can use the following command, where <code>"&lt;APIKEY&gt;"</code> should be replaced with your actual key:</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OPENAI_API_KEY <span class="op">=</span> <span class="st">"&lt;OPENAI_API_KEY&gt;"</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Alternatively, you can set the key in your .Renviron file.</li>
 </ul>
 <p>Otherwise, you can add the key to the .Renviron file of the project. The following commands will open .Renviron for editing:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://usethis.r-lib.org" class="external-link">usethis</a></span><span class="op">)</span></span>
 <span><span class="fu">edit_r_environ</span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"project"</span><span class="op">)</span></span></code></pre></div>
 <p>You can add the following line to the file (again, replace xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx with your actual key):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></code></pre></div>
 <p>This now set the API key every time you start up this particular project. Note: If you are using GitHub/Gitlab, do not forget to add .Renviron to .gitignore!</p>
 </div>
 <div class="section level2">
