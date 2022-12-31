@@ -28,7 +28,6 @@ Imports:
 Suggests: 
     covr,
     mockr,
-    openai,
     testthat (>= 3.0.0),
     withr,
     uuid
