@@ -14,18 +14,23 @@ Depends:
 Imports: 
     assertthat,
     cli,
+    glue,
     httr,
+    jsonlite,
+    lifecycle,
+    magrittr,
     miniUI,
-    openai,
     purrr,
     rlang,
     rstudioapi (>= 0.12),
     shiny,
     skimr,
-    stats
+    stats,
+    utils
 Suggests: 
     covr,
     mockr,
+    openai,
     testthat (>= 3.0.0),
     withr,
     uuid

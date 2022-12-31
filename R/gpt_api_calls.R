@@ -50,14 +50,26 @@ gpt_edit <- function(model,
 # @export
 openai_create_edit <- function(model, input, instruction, temperature,
                                openai_api_key, openai_organization) {
-  openai::create_edit(
-    model = model,
-    input = input,
-    instruction = instruction,
-    temperature = temperature,
-    openai_api_key = openai_api_key,
-    openai_organization = openai_organization
-  )
+  if ("openai" %in% utils::installed.packages()) {
+    openai::create_edit(
+      model = model,
+      input = input,
+      instruction = instruction,
+      temperature = temperature,
+      openai_api_key = openai_api_key,
+      openai_organization = openai_organization
+    )
+  } else {
+    warn_about_openai_pkg()
+    create_edit2(
+      model = model,
+      input = input,
+      instruction = instruction,
+      temperature = temperature,
+      openai_api_key = openai_api_key,
+      openai_organization = openai_organization
+    )
+  }
 }
 
 #' Use GPT to improve text
@@ -115,15 +127,28 @@ gpt_create <- function(model,
 openai_create_completion <- function(model, prompt, temperature, max_tokens,
                                      openai_api_key, openai_organization,
                                      suffix = NULL) {
-  openai::create_completion(
-    model = model,
-    prompt = prompt,
-    temperature = temperature,
-    max_tokens = max_tokens,
-    openai_api_key = openai_api_key,
-    openai_organization = openai_organization,
-    suffix = NULL
-  )
+  if ("openai" %in% utils::installed.packages()) {
+    openai::create_completion(
+      model = model,
+      prompt = prompt,
+      temperature = temperature,
+      max_tokens = max_tokens,
+      openai_api_key = openai_api_key,
+      openai_organization = openai_organization,
+      suffix = NULL
+    )
+  } else {
+    warn_about_openai_pkg()
+    create_completion2(
+      model = model,
+      prompt = prompt,
+      temperature = temperature,
+      max_tokens = max_tokens,
+      openai_api_key = openai_api_key,
+      openai_organization = openai_organization,
+      suffix = NULL
+    )
+  }
 }
 
 #' Use GPT to improve text
@@ -189,4 +214,35 @@ get_selection <- function() {
 # Wrapper around selectionGet to help with testthat
 insert_text <- function(improved_text) {
   rstudioapi::insertText(improved_text)
+}
+
+
+
+
+#' Warn about openai package
+#'
+#' Warn the user if the openai package is not installed and their R version is
+#' compatible with the current release of the package.
+#'
+#' @return NULL
+#'
+#' @export
+
+#' @examples
+#' \dontrun{
+#' warn_about_openai_pkg()
+#' }
+warn_about_openai_pkg <- function() {
+  rlang::inform("Package `openai` not detected in installed packages.")
+  current_r_version <- as.character(utils::packageVersion("base"))
+  if (utils::compareVersion(current_r_version, "4.2.0") >= 0) {
+    message <- "Your R version {current_r_version} is compatible with the
+                 current release of the openai package but it is not installed.
+                 Please install it with: `install.packages(\"openai\")`"
+    rlang::warn(message,
+      .fequency = "regularly",
+      .frequency_id = "openai_pkg",
+      use_cli_format = TRUE
+    )
+  }
 }
