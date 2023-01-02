@@ -210,13 +210,9 @@
 # Collect dataframes works
 
     Code
-      collect_dataframes()
+      collect_dataframes() %>% as.character()
     Output
       [1] "mtcars"
-      attr(,"na.action")
-      [1] 1
-      attr(,"class")
-      [1] "omit"
 
 ---
 
