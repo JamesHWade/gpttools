@@ -23,8 +23,7 @@ Imports:
     shiny,
     skimr,
     stats,
-    usethis,
-    utils
+    usethis
 Suggests: 
     covr,
     mockr,

@@ -11,3 +11,9 @@ comment_code_addin <- function() {
     temperature = 0.1
   )
 }
+
+
+x <- 5
+y <- 10
+z <- x + y
+z
