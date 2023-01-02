@@ -147,10 +147,12 @@ ask_to_set_api <- function(try_again = FALSE) {
 }
 
 obscure_key <- function(api_key) {
-  if(nchar(api_key) > 8) {
-  api_start <- substr(api_key, 1, 4)
-  api_mid   <- paste0(rep("*", nchar(api_key) - 8), collapse = "")
-  api_end   <- substr(api_key, nchar(api_key) - 3, nchar(api_key))
-  paste0(api_start, api_mid, api_end)
-  } else "<hidden> (too short to obscure)"
+  if (nchar(api_key) > 8) {
+    api_start <- substr(api_key, 1, 4)
+    api_mid <- paste0(rep("*", nchar(api_key) - 8), collapse = "")
+    api_end <- substr(api_key, nchar(api_key) - 3, nchar(api_key))
+    paste0(api_start, api_mid, api_end)
+  } else {
+    "<hidden> (too short to obscure)"
+  }
 }
