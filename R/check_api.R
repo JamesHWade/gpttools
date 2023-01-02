@@ -3,8 +3,7 @@
 #' This function checks whether the API key provided in the `OPENAI_API_KEY`
 #' environment variable is valid.
 #'
-#' @param api_key An API key. Defaults to the value of the `OPENAI_API_KEY`
-#' environment variable.
+#' @param api_key An API key.
 #'
 #' @return Nothing is returned. If the API key is valid, a success message is
 #' printed. If the API key is invalid, an error message is printed and the
@@ -31,7 +30,7 @@ check_api_connection <- function(api_key) {
     } else {
       # If the status code is not 200, the key is invalid
       cli_alert_danger("API key found but call was unsuccessful.")
-      cli_alert_info("Attempted to use API key: {api_key}")
+      cli_alert_info("Attempted to use API key: {obscure_key(api_key)}")
       if (interactive()) {
         ask_to_set_api()
       } else {
@@ -46,8 +45,7 @@ check_api_connection <- function(api_key) {
 #' This function checks whether the API key provided as an argument is in the
 #' correct format.
 #'
-#' @param api_key An API key. Defaults to the value of the `OPENAI_API_KEY`
-#' environment variable.
+#' @param api_key An API key.
 #' @return Nothing is returned. If the API key is in the correct format, a
 #' success message is printed. If the API key is not in the correct format,
 #' an error message is printed and the function aborts.

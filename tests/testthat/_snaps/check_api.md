@@ -7,7 +7,7 @@
     Message <cliMessage>
       v API key found and matches the expected format.
       x API key found but call was unsuccessful.
-      i Attempted to use API key: 38a5603f-85b0-4d2e-ae43-3d0778272d60
+      i Attempted to use API key: 38a5****************************2d60
 
 ---
 
@@ -98,7 +98,7 @@
       ! API key has changed. Re-checking API connection.
       v API key found and matches the expected format.
       x API key found but call was unsuccessful.
-      i Attempted to use API key: 38a5603f-85b0-4d2e-ae43-3d0778272d60
+      i Attempted to use API key: 38a5****************************2d60
 
 # API key validation works
 
@@ -130,7 +130,7 @@
     Message <cliMessage>
       v API key found and matches the expected format.
       x API key found but call was unsuccessful.
-      i Attempted to use API key: 38a5603f-85b0-4d2e-ae43-3d0778272d60
+      i Attempted to use API key: 38a5****************************2d60
 
 ---
 
