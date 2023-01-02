@@ -17,8 +17,12 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 ![Package
 Version](https://img.shields.io/github/r-package/v/jameshwade/gpttools)
 [![R-CMD-check](https://github.com/JamesHWade/gpttools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JamesHWade/gpttools/actions/workflows/R-CMD-check.yaml)
-![Open Issues](https://img.shields.io/github/issues/jameshwade/gpttools)
-![Open PRs](https://img.shields.io/github/issues-pr/jameshwade/gpttools)
+[![Open
+Issues](https://img.shields.io/github/issues/jameshwade/gpttools)](https://github.com/JamesHWade/gpttools/issues)
+[![Open
+PRs](https://img.shields.io/github/issues-pr/jameshwade/gpttools)](https://github.com/JamesHWade/gpttools/pulls)
+![Forks](https://img.shields.io/github/forks/jameshwade/gpttools?style=flat)
+![Stars](https://img.shields.io/github/stars/jameshwade/gpttools?style=flat)
 <!-- badges: end -->
 
 The goal of gpttools is to extend gptstudio for R package developers to
