@@ -46,5 +46,6 @@ test_that("API connection checking works", {
 test_that("API connection can return true", {
   skip_if_offline()
   skip_on_ci()
+  withr::local_options(gpttools.valid_api = FALSE)
   expect_snapshot(check_api_connection(Sys.getenv("OPENAI_API_KEY")))
 })

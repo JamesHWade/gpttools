@@ -3,7 +3,6 @@ withr::local_options(gpttools.max_tokens = 24)
 test_that("Commenting code has correct inputs", {
   skip_on_ci()
   skip_if_offline()
-
   mockr::local_mock(
     get_selection = function() list(value = "x < 24"),
     insert_text = function(improved_text) improved_text
@@ -12,6 +11,8 @@ test_that("Commenting code has correct inputs", {
 })
 
 test_that("Inserting roxygen works", {
+  skip_on_ci()
+  skip_if_offline()
   mockr::local_mock(
     get_selection = function() list(value = "add_xy <- function(x, y) x + y"),
     insert_text = function(improved_text) improved_text
@@ -20,6 +21,8 @@ test_that("Inserting roxygen works", {
 })
 
 test_that("Script to function works", {
+  skip_on_ci()
+  skip_if_offline()
   mockr::local_mock(
     get_selection = function() list(value = "x <- 1\ny <- 2\nz <- x + y\nz"),
     insert_text = function(improved_text) improved_text
@@ -28,6 +31,8 @@ test_that("Script to function works", {
 })
 
 test_that("Suggesting a unit test works", {
+  skip_on_ci()
+  skip_if_offline()
   mockr::local_mock(
     get_selection = function() list(value = "add_xy <- function(x, y) x + y"),
     insert_text = function(improved_text) improved_text
