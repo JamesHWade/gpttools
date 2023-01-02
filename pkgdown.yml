@@ -2,7 +2,7 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-12-31T19:52Z
+last_built: 2023-01-02T13:14Z
 urls:
   reference: https://jameshwade.github.io/gpttools/reference
   article: https://jameshwade.github.io/gpttools/articles
