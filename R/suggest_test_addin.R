@@ -6,9 +6,9 @@
 suggest_unit_test_addin <- function() {
   gpt_insert(
     model = "text-davinci-003",
-    prompt = "Suggest a unit text for this function using the testthat package",
+    prompt = "Suggest a unit test for this function with R package testthat",
     temperature = 0.5,
-    max_tokens = 1000,
+    max_tokens = getOption("gpttools.max_tokens"),
     append_text = TRUE
   )
 }

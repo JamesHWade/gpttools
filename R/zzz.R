@@ -12,7 +12,6 @@
   invisible()
 }
 
-globalVariables(".rs.invokeShinyPaneViewer")
 
 .onAttach <- function(lib, pkg) {
   packageStartupMessage(startup_message(), appendLF = FALSE)
@@ -47,3 +46,5 @@ startup_message <- function() {
   cli::cli_text()
   cli::cli_text("See OpenAI's Terms of Use at {.url https://openai.com/terms}.")
 }
+
+globalVariables(".rs.invokeShinyPaneViewer")
