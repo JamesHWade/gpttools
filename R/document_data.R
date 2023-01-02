@@ -88,8 +88,8 @@ summarize_data <- function(data,
 #'   prompt = "This is a test prompt."
 #' )
 prep_data_prompt <- function(data, method, prompt) {
-  assertthat::assert_that(is.data.frame(data))
-  assertthat::assert_that(assertthat::is.string(prompt))
+  assert_that(is.data.frame(data))
+  assert_that(is.string(prompt))
 
   summarized_data <- summarize_data(data = data, method = method)
 

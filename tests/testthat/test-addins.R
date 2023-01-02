@@ -24,7 +24,7 @@ test_that("Script to function works", {
   skip_on_ci()
   skip_if_offline()
   mockr::local_mock(
-    get_selection = function() list(value = "x <- 1\ny <- 2\nz <- x + y\nz"),
+    get_selection = function() list(value = "x <- 1;y <- 2;z <- x + y;z"),
     insert_text = function(improved_text) improved_text
   )
   expect_type(script_to_function_addin(), "character")
