@@ -26,7 +26,7 @@
       Checking API key using OPENAI_API_KEY environment variable...
     Message <cliMessage>
       x API key not found or is not formatted correctly.
-      i OPEN_API_KEY is set to <hidden> (too short to obscure)
+      i Attempted to validate key: <hidden> (too short to obscure)
       i Generate a key at <https://beta.openai.com/account/api-keys>
 
 # API checking works on CI
@@ -113,7 +113,7 @@
       check_api_key("1234")
     Message <cliMessage>
       x API key not found or is not formatted correctly.
-      i OPEN_API_KEY is set to sk-p*******************************************u2xY
+      i Attempted to validate key: <hidden> (too short to obscure)
       i Generate a key at <https://beta.openai.com/account/api-keys>
 
 ---

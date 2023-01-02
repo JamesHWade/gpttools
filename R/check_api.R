@@ -64,7 +64,7 @@ check_api_key <- function(api_key) {
     } else {
       cli_alert_danger("API key not found or is not formatted correctly.")
       cli_alert_info(
-        "OPEN_API_KEY is set to {obscure_key(Sys.getenv(\"OPENAI_API_KEY\"))}"
+        "Attempted to validate key: {obscure_key(api_key)}"
       )
       cli_alert_info(
         "Generate a key at {.url https://beta.openai.com/account/api-keys}"
@@ -147,7 +147,8 @@ ask_to_set_api <- function(try_again = FALSE) {
 }
 
 obscure_key <- function(api_key) {
-  if (nchar(api_key) > 8) {
+  if (nchar(api_key) == 0) "no key provided"
+  else if (nchar(api_key) > 8) {
     api_start <- substr(api_key, 1, 4)
     api_mid <- paste0(rep("*", nchar(api_key) - 8), collapse = "")
     api_end <- substr(api_key, nchar(api_key) - 3, nchar(api_key))
