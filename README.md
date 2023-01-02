@@ -28,22 +28,24 @@ very active discussion.
 
 ## Privacy Notice
 
-These functions work by taking the text or code you have highlighted or selected with the
-cursor, or your prompt if you use one of the built-in apps, and send these to OpenAI as part
-of a prompt. Prompts fall under the privacy notice, rules, or exceptions you agreed to when
-making an OpenAI account. We cannot tell you or guarantee how secure these prompts are when
-sent to OpenAI. We do not know what OpenAI does with your prompts, but OpenAI is clear that
-they use prompts and results to improve their model unless you opt out explicitly by
-contacting them.
+These functions work by taking the text or code you have highlighted or
+selected with the cursor, or your prompt if you use one of the built-in
+apps, and send these to OpenAI as part of a prompt. Prompts fall under
+the privacy notice, rules, or exceptions you agreed to when making an
+OpenAI account. We cannot tell you or guarantee how secure these prompts
+are when sent to OpenAI. We do not know what OpenAI does with your
+prompts, but OpenAI is clear that they use prompts and results to
+improve their model unless you opt out explicitly by contacting them.
 
-The code is designed to ONLY share the highlighted or selected text, or a prompt you build
-with the help of one of our apps and no other elements of your R environment. Make sure you
-are aware of what you send to OpenAI and do not accidentally share sensitive data with
-OpenAI.
+The code is designed to ONLY share the highlighted or selected text, or
+a prompt you build with the help of one of our apps and no other
+elements of your R environment. Make sure you are aware of what you send
+to OpenAI and do not accidentally share sensitive data with OpenAI.
 
-**DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD REMAIN PRIVATE**
+**DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD
+REMAIN PRIVATE**
 
-See OpenAI's Terms of Use at <https://openai.com/terms>.
+See OpenAI’s Terms of Use at <https://openai.com/terms>.
 
 ## Installation
 
@@ -141,22 +143,6 @@ below.
 
 <video src="https://user-images.githubusercontent.com/6314313/209890959-fca623d9-5e8e-463c-ac64-80f3db9875d9.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890959-fca623d9-5e8e-463c-ac64-80f3db9875d9.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;">
 </video>
-
-## Privacy Notice
-
-**Privacy note:** these functions work by taking the text or code you
-have highlighted/selected with the cursor and send these to OpenAI as
-part of a prompt, they fall under their privacy notice/rules/exceptions
-you agreed to with OpenAI when making an account. I do not know how
-secure these are when sent to OpenAI, I also don’t know what OpenAI does
-with them. The code is designed to ONLY share the highlighted/selected
-text and no other elements of your R environment (i.e. data) unless you
-have highlighted it when running the addin. This may limit usability for
-now, but I do not want people to accidentally share sensitive data with
-OpenAI.
-
-DO NOT HIGHLIGHT, AND THEREFORE UPLOAD, DATA/CODE/TEXT THAT SHOULD
-REMAIN PRIVATE
 
 ## Code of Conduct
 
