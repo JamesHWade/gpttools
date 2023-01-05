@@ -108,9 +108,12 @@ by the API.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">openai_create_completion</span><span class="op">(</span>model <span class="op">=</span> <span class="st">"text-davinci-002"</span>, prompt <span class="op">=</span> <span class="st">"Hello world!"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in query_openai_api(body, openai_api_key, task = "completions"):</span> <span style="color: #BB0000;">✖</span> OpenAI API request failed [401].</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> Error message: You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://beta.openai.com.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">openai_create_completion</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  model <span class="op">=</span> <span class="st">"text-davinci-002"</span>,</span></span>
+<span class="r-in"><span>  prompt <span class="op">=</span> <span class="st">"Hello world!"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
