@@ -28,10 +28,10 @@ gpt_edit <- function(model,
     input = selection$value,
     instruction = instruction,
     temperature = temperature,
-    openai_api_key = openai_api_key,
+    openai_api_key = openai_api_key
   )
 
-  inform("Inserting text from GPT...")
+  cli::cat_print(edit)
 
   if (append_text) {
     improved_text <- c(selection$value, edit$choices$text)
@@ -40,6 +40,9 @@ gpt_edit <- function(model,
     improved_text <- edit$choices$text
     inform("Inserting text from GPT...")
   }
+
+  cli_text("{improved_text}")
+
   insert_text(improved_text)
 }
 

@@ -1,29 +1,29 @@
+sample_key <- uuid::UUIDgenerate()
 
 mockr::local_mock(
   get_selection = function() {
     data.frame(value = "here is some selected text")
-  }
+  },
+  insert_text = function(improved_text) improved_text
 )
-
-mockr::local_mock(insert_text = function(improved_text) improved_text)
-sample_key <- uuid::UUIDgenerate()
 
 test_that("gpt_edit can replace and append text", {
   mockr::local_mock(
     openai_create_edit =
       function(model, input, instruction, temperature, openai_api_key) {
         list(choices = data.frame(text = "here are edits openai returns"))
-      }
+      },
+    check_api = function() TRUE
   )
-  mockr::local_mock(check_api = function() TRUE)
   replace_text <-
     gpt_edit(
       model = "code-davinci-edit-001",
       instruction = "instructions",
       temperature = 0.1,
-      openai_api_key = sample_key,
+      openai_api_key = Sys.getenv("OPENAI_API_KEY"),
       append_text = FALSE
     )
+
   expect_equal(replace_text, "here are edits openai returns")
 
   appended_text <-

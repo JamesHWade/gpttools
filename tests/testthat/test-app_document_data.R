@@ -18,6 +18,6 @@ test_that("{shinytest2} recording: app_document_data", {
   )
   app$set_inputs(temperature = 0.48)
   app$set_inputs(question = "Testing app")
-  app$click("button")
+  pp$click("button")
   app$expect_values()
 })
