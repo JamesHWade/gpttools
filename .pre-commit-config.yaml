@@ -7,53 +7,22 @@ repos:
     -   id: style-files
         args: [--style_pkg=styler, --style_fun=tidyverse_style]
     -   id: roxygenize
-    #     # roxygen requires loading pkg -> add dependencies from DESCRIPTION
-    #     additional_dependencies:
-    #     -    assertthat
-    #     -    cli
-    #     -    httr
-    #     -    git2r
-    #     -    miniUI
-    #     -    openai
-    #     -    purrr
-    #     -    rlang
-    #     -    rstudioapi
-    #     -    shiny
-    #     -    skimr
-    #     -    stats
-    # codemeta must be above use-tidy-description when both are used
-    # -   id: codemeta-description-updated
+        # roxygen requires loading pkg -> add dependencies from DESCRIPTION
+        additional_dependencies:
+        -    assertthat
+        -    cli
+        -    httr
+        -    git2r
+        -    miniUI
+        -    openai
+        -    purrr
+        -    rlang
+        -    rstudioapi
+        -    shiny
+        -    skimr
+        -    stats
+        -    usethis
     -   id: use-tidy-description
-    -   id: spell-check
-        exclude: >
-          (?x)^(
-          .*\.[rR]|
-          .*\.feather|
-          .*\.jpeg|
-          .*\.pdf|
-          .*\.png|
-          .*\.py|
-          .*\.RData|
-          .*\.rds|
-          .*\.Rds|
-          .*\.Rproj|
-          .*\.sh|
-          (.*/|)\.gitignore|
-          (.*/|)\.gitlab-ci\.yml|
-          (.*/|)\.lintr|
-          (.*/|)\.pre-commit-.*|
-          (.*/|)\.Rbuildignore|
-          (.*/|)\.Renviron|
-          (.*/|)\.Rprofile|
-          (.*/|)\.travis\.yml|
-          (.*/|)appveyor\.yml|
-          (.*/|)NAMESPACE|
-          (.*/|)renv/settings\.dcf|
-          (.*/|)renv\.lock|
-          (.*/|)WORDLIST|
-          \.github/workflows/.*|
-          data/.*|
-          )$
     -   id: lintr
         args: [--warn_only]
         verbose: true
