@@ -11,8 +11,6 @@
 #'   specify temperature and top_p at a time.
 #' @param openai_api_key The API key for accessing OpenAI's API. By default, the
 #'   function will try to use the `OPENAI_API_KEY` environment variable.
-#' @param openai_organization The organization to use when accessing OpenAI's
-#'   API. If `NULL`, the default organization will be used.
 #' @return A list with the edited text and other information returned by the
 #'   API.
 #' @export
@@ -73,7 +71,12 @@ openai_create_edit <- function(model,
 #' @return A list with the generated completions and other information returned
 #'   by the API.
 #' @examples
-#' openai_create_completion(model = "text-davinci-002", prompt = "Hello world!")
+#' \dontrun{
+#' openai_create_completion(
+#'   model = "text-davinci-002",
+#'   prompt = "Hello world!"
+#' )
+#' }
 #' @export
 openai_create_completion <-
   function(model,

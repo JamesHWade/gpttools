@@ -43,5 +43,10 @@ by the API.
 Generate text completions using OpenAI's API
 }
 \examples{
-openai_create_completion(model = "text-davinci-002", prompt = "Hello world!")
+\dontrun{
+openai_create_completion(
+  model = "text-davinci-002",
+  prompt = "Hello world!"
+)
+}
 }

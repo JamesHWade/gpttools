@@ -109,7 +109,7 @@ run_document_data <- function() {
     prepped_prompt <- shiny::reactive({
       shiny::req(nchar(input$dataframes) > 0)
       prep_data_prompt(
-        get(rlang::sym(input$dataframes)),
+        get(sym(input$dataframes)),
         method = input$sum_method,
         prompt = "Create a roxygen skeleton to document this data. Include at
       least `title`, `format`, and `describe` fields. Provide range, number of
@@ -126,7 +126,7 @@ run_document_data <- function() {
       )
     )
     shiny::observe({
-      cli::cli_alert_info("Updating prompt")
+      inform("Updating prompt")
       shiny::updateTextAreaInput(
         session = session,
         inputId = "prompt",
@@ -136,18 +136,17 @@ run_document_data <- function() {
       shiny::bindEvent(input$update_prompt)
 
     shiny::observe({
-      rlang::inform(c("i" = "Querying OpenAI's API..."))
+      inform(c("i" = "Querying OpenAI's API..."))
 
       interim <- openai_create_completion(
         model = "text-davinci-003",
         prompt = input$prompt,
         temperature = input$temperature,
         max_tokens = input$max_tokens,
-        openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-        openai_organization = NULL
+        openai_api_key = Sys.getenv("OPENAI_API_KEY")
       )
 
-      rlang::inform(c("i" = "Response received. Providng output text."))
+      inform(c("i" = "Response received. Providng output text."))
       output$response <- shiny::renderText(interim$choices[1, 1])
     }) %>%
       shiny::bindEvent(input$query_gpt)

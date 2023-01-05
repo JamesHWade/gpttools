@@ -30,9 +30,6 @@ specify temperature and top_p at a time.}
 
 \item{openai_api_key}{The API key for accessing OpenAI's API. By default, the
 function will try to use the \code{OPENAI_API_KEY} environment variable.}
-
-\item{openai_organization}{The organization to use when accessing OpenAI's
-API. If \code{NULL}, the default organization will be used.}
 }
 \value{
 A list with the edited text and other information returned by the
@@ -44,8 +41,8 @@ Create and edit text using OpenAI's API
 \examples{
 \dontrun{
 openai_create_edit(
- model = "text-davinci-002",
- input = "Hello world!",
+  model = "text-davinci-002",
+  input = "Hello world!",
   instruction = "Capitalize the first letter of each sentence."
 )
 }
