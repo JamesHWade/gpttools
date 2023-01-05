@@ -55,7 +55,9 @@ Roxygen
 RoxygenNote
 RStudio
 rstudioapi
+selectionGet
 sexualized
+shinytest
 skimr
 socio
 stringr
