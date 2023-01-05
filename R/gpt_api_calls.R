@@ -8,7 +8,6 @@
 #' @param temperature A parameter for controlling the randomness of the GPT
 #' model's output.
 #' @param openai_api_key An API key for the OpenAI API.
-#' @param openai_organization An optional organization ID for the OpenAI API.
 #' @param append_text Add text to selection rather than replace, defaults to
 #'  FALSE
 #'
@@ -19,7 +18,6 @@ gpt_edit <- function(model,
                      instruction,
                      temperature,
                      openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-                     openai_organization = NULL,
                      append_text = FALSE) {
   check_api()
   selection <- get_selection()
@@ -31,7 +29,6 @@ gpt_edit <- function(model,
     instruction = instruction,
     temperature = temperature,
     openai_api_key = openai_api_key,
-    openai_organization = openai_organization
   )
 
   inform("Inserting text from GPT...")
@@ -57,7 +54,6 @@ gpt_edit <- function(model,
 #' @param max_tokens Maximum number of tokens to return (related to length of
 #' response), defaults to 500
 #' @param openai_api_key An API key for the OpenAI API.
-#' @param openai_organization An optional organization ID for the OpenAI API.
 #' @param append_text Add text to selection rather than replace, default to TRUE
 #'
 #' @return Nothing is returned. The improved text is inserted into the current
@@ -67,7 +63,6 @@ gpt_create <- function(model,
                        temperature,
                        max_tokens = getOption("gpttools.max_tokens"),
                        openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-                       openai_organization = NULL,
                        append_text = TRUE) {
   check_api()
   selection <- get_selection()
@@ -79,7 +74,6 @@ gpt_create <- function(model,
     temperature = temperature,
     max_tokens = max_tokens,
     openai_api_key = openai_api_key,
-    openai_organization = openai_organization
   )
 
   inform("Inserting text from GPT...")
@@ -107,7 +101,6 @@ gpt_create <- function(model,
 #' @param max_tokens Maximum number of tokens to return (related to length of
 #' response), defaults to 500
 #' @param openai_api_key An API key for the OpenAI API.
-#' @param openai_organization An optional organization ID for the OpenAI API.
 #' @param append_text Add text to selection rather than replace, defaults to
 #' FALSE
 #'
@@ -119,7 +112,6 @@ gpt_insert <- function(model,
                        temperature = 0.1,
                        max_tokens = getOption("gpttools.max_tokens"),
                        openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-                       openai_organization = NULL,
                        append_text = FALSE) {
   check_api()
   selection <- get_selection()
@@ -133,7 +125,6 @@ gpt_insert <- function(model,
     temperature = temperature,
     max_tokens = max_tokens,
     openai_api_key = openai_api_key,
-    openai_organization = openai_organization
   )
 
   inform("Inserting text from GPT...")

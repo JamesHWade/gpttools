@@ -2,109 +2,46 @@
 % Please edit documentation in R/gpt_queries.R
 \name{openai_create_completion}
 \alias{openai_create_completion}
-\title{Create completion}
+\title{Generate text completions using OpenAI's API}
 \usage{
 openai_create_completion(
   model,
   prompt = "<|endoftext|>",
   suffix = NULL,
   max_tokens = 16,
-  temperature = 1,
-  top_p = 1,
-  n = 1,
-  logprobs = NULL,
-  echo = FALSE,
-  stop = NULL,
-  presence_penalty = 0,
-  frequency_penalty = 0,
-  best_of = 1,
-  logit_bias = NULL,
-  user = NULL,
-  openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-  openai_organization = NULL
+  temperature = NULL,
+  top_p = NULL,
+  openai_api_key = Sys.getenv("OPENAI_API_KEY")
 )
 }
 \arguments{
-\item{model}{required; a length one character vector.}
+\item{model}{The model to use for generating text}
 
-\item{prompt}{required; defaults to \code{"<|endoftext|>"}; an arbitrary length
-character vector.}
+\item{prompt}{The prompt for generating completions}
 
-\item{suffix}{optional; defaults to \code{NULL}; a length one character vector.}
+\item{suffix}{The suffix for generating completions. If \code{NULL}, no suffix
+will be used.}
 
-\item{max_tokens}{required; defaults to \code{16}; a length one numeric vector
-with the integer value greater than \code{0}.}
+\item{max_tokens}{The maximum number of tokens to generate.}
 
-\item{temperature}{required; defaults to \code{1}; a length one numeric vector
-with the value between \code{0} and \code{2}.}
+\item{temperature}{The temperature to use for generating text (between 0 and
+1). If \code{NULL}, the default temperature will be used. It is recommended NOT
+to specify temperature and top_p at a time.}
 
-\item{top_p}{required; defaults to \code{1}; a length one numeric vector with the
-value between \code{0} and \code{1}.}
+\item{top_p}{The top-p value to use for generating text (between 0 and 1). If
+\code{NULL}, the default top-p value will be used. It is recommended NOT to
+specify temperature and top_p at a time.}
 
-\item{n}{required; defaults to \code{1}; a length one numeric vector with the
-integer value greater than \code{0}.}
-
-\item{logprobs}{optional; defaults to \code{NULL}; a length one numeric vector
-with the integer value between \code{0} and \code{5}.}
-
-\item{echo}{required; defaults to \code{FALSE}; a length one logical vector.}
-
-\item{stop}{optional; defaults to \code{NULL}; a character vector of length
-between one and four.}
-
-\item{presence_penalty}{required; defaults to \code{0}; a length one numeric
-vector with a value between \code{-2} and \code{2}.}
-
-\item{frequency_penalty}{required; defaults to \code{0}; a length one numeric
-vector with a value between \code{-2} and \code{2}.}
-
-\item{best_of}{required; defaults to \code{1}; a length one numeric vector with
-the integer value greater than \code{0}.}
-
-\item{logit_bias}{optional; defaults to \code{NULL}; a named list.}
-
-\item{user}{optional; defaults to \code{NULL}; a length one character vector.}
-
-\item{openai_api_key}{required; defaults to \code{Sys.getenv("OPENAI_API_KEY")}
-(i.e., the value is retrieved from the \code{.Renviron} file); a length one
-character vector. Specifies OpenAI API key.}
-
-\item{openai_organization}{optional; defaults to \code{NULL}; a length one
-character vector. Specifies OpenAI organization.}
+\item{openai_api_key}{The API key for accessing OpenAI's API. By default, the
+function will try to use the \code{OPENAI_API_KEY} environment variable.}
 }
 \value{
-Returns a list, elements of which contain completion(s) and
-supplementary information.
+A list with the generated completions and other information returned
+by the API.
 }
 \description{
-This code is altered from \href{https://github.com/irudnyts/openai}{openai}.
-Credit goes to irudnyts for contributions to this function.
-}
-\details{
-Creates a completion based on the provided prompt and parameters. See \href{https://beta.openai.com/docs/api-reference/completions/create}{this page} for
-details.
-
-For arguments description please refer to the official
-\href{https://beta.openai.com/docs/api-reference/completions/create}{docs}.
+Generate text completions using OpenAI's API
 }
 \examples{
-\dontrun{
-create_completion(
-  model = "text-davinci-002",
-  prompt = "Say this is a test",
-  max_tokens = 5
-)
-
-logit_bias <- list(
-  "11" = -100,
-  "13" = -100
-)
-create_completion(
-  model = "ada",
-  prompt = "Generate a question and an answer",
-  n = 4,
-  best_of = 4,
-  logit_bias = logit_bias
-)
-}
+openai_create_completion(model = "text-davinci-002", prompt = "Hello world!")
 }
