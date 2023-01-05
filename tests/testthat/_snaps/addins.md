@@ -2,17 +2,8 @@
 
     Code
       comment_code_addin()
-    Message <cliMessage>
-      v API already validated in this session.
-    Message <rlang_message>
-      Asking GPT for help...
-    Message <cliMessage>
-      Status code: 200
-    Message <rlang_message>
-      Inserting text from GPT...
-      Inserting text from GPT...
     Output
-      [1] "x < 24 // this is a comment\n"
+      [1] "x is less than 24"
 
 # Inserting roxygen works [on CI]
 
