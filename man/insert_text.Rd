@@ -6,6 +6,9 @@
 \usage{
 insert_text(improved_text)
 }
+\arguments{
+\item{improved_text}{Text from model queries to inert into script or document}
+}
 \description{
 Wrapper around selectionGet to help with testthat
 }
