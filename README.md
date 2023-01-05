@@ -23,6 +23,9 @@ Issues](https://img.shields.io/github/issues/jameshwade/gpttools)](https://githu
 PRs](https://img.shields.io/github/issues-pr/jameshwade/gpttools)](https://github.com/JamesHWade/gpttools/pulls)
 ![Forks](https://img.shields.io/github/forks/jameshwade/gpttools?style=flat)
 ![Stars](https://img.shields.io/github/stars/jameshwade/gpttools?style=flat)
+![Last
+Commit](https://img.shields.io/github/last-commit/jameshwade/gpttools)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 <!-- badges: end -->
 
 The goal of gpttools is to extend gptstudio for R package developers to
