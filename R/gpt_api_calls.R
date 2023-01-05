@@ -150,6 +150,7 @@ gpt_insert <- function(model,
 }
 
 # Wrapper around selectionGet to help with testthat
+#' @export
 get_selection <- function() {
   rstudioapi::verifyAvailable()
   rstudioapi::selectionGet()
