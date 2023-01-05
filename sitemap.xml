@@ -43,6 +43,9 @@
     <loc>https://jameshwade.github.io/gpttools/reference/document_data.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/get_selection.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_addin.html</loc>
   </url>
   <url>
@@ -56,6 +59,9 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/insert_text.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/openai_create_completion.html</loc>
