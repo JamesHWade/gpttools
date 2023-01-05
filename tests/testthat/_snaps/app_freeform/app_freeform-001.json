@@ -1,0 +1,15 @@
+{
+  "input": {
+    "button": 1,
+    "cancel": 0,
+    "model": "code-davinci-edit-001",
+    "question": "Testing app",
+    "temperature": 0.48
+  },
+  "output": {
+    "response": "A mocked response from OpenAI"
+  },
+  "export": {
+
+  }
+}

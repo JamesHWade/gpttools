@@ -60,7 +60,7 @@ run_gpt_freeform <- function() {
 
   server <- function(input, output, session) {
     shiny::observe({
-      selection <- rstudioapi::selectionGet()
+      selection <- get_selection()
 
       rlang::inform(c("i" = "Querying OpenAI's API..."))
 

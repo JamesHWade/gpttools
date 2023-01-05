@@ -149,13 +149,21 @@ gpt_insert <- function(model,
   insert_text(improved_text)
 }
 
-# Wrapper around selectionGet to help with testthat
+#' Wrapper around selectionGet to help with testthat
+#'
+#' @return Text selection via `rstudioapi::selectionGet`
+#'
+#' @export
 get_selection <- function() {
   rstudioapi::verifyAvailable()
   rstudioapi::selectionGet()
 }
 
-# Wrapper around selectionGet to help with testthat
+#' Wrapper around selectionGet to help with testthat
+#'
+#' @param improved_text Text from model queries to inert into script or document
+#'
+#' @export
 insert_text <- function(improved_text) {
   rstudioapi::verifyAvailable()
   rstudioapi::insertText(improved_text)
