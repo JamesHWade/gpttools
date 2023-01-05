@@ -75,33 +75,34 @@ openai_create_edit <- function(model,
 #' @examples
 #' openai_create_completion(model = "text-davinci-002", prompt = "Hello world!")
 #' @export
-openai_create_completion <- function(model,
-                                     prompt = "<|endoftext|>",
-                                     suffix = NULL,
-                                     max_tokens = 16,
-                                     temperature = NULL,
-                                     top_p = NULL,
-                                     openai_api_key = Sys.getenv("OPENAI_API_KEY")) {
-  assert_that(
-    is.string(model),
-    is.string(prompt),
-    is.count(max_tokens),
-    is.string(suffix) || is.null(suffix),
-    value_between(temperature, 0, 1) || is.null(temperature),
-    is.string(openai_api_key),
-    value_between(top_p, 0, 1) || is.null(top_p)
-  )
+openai_create_completion <-
+  function(model,
+           prompt = "<|endoftext|>",
+           suffix = NULL,
+           max_tokens = 16,
+           temperature = NULL,
+           top_p = NULL,
+           openai_api_key = Sys.getenv("OPENAI_API_KEY")) {
+    assert_that(
+      is.string(model),
+      is.string(prompt),
+      is.count(max_tokens),
+      is.string(suffix) || is.null(suffix),
+      value_between(temperature, 0, 1) || is.null(temperature),
+      is.string(openai_api_key),
+      value_between(top_p, 0, 1) || is.null(top_p)
+    )
 
-  body <- list(
-    model = model,
-    prompt = prompt,
-    suffix = suffix,
-    max_tokens = max_tokens,
-    temperature = temperature
-  )
+    body <- list(
+      model = model,
+      prompt = prompt,
+      suffix = suffix,
+      max_tokens = max_tokens,
+      temperature = temperature
+    )
 
-  query_openai_api(body, openai_api_key, task = "completions")
-}
+    query_openai_api(body, openai_api_key, task = "completions")
+  }
 
 query_openai_api <- function(body, openai_api_key, task) {
   arg_match(task, c("completions", "edits"))

@@ -29,9 +29,10 @@ test_that("Inserting roxygen works", {
 
 test_that("Inserting roxygen works [on CI]", {
   mockr::local_mock(
-    gpt_insert = function(model, prompt, temperature, max_tokens, append_textf) {
-      "#' @param x an int"
-    }
+    gpt_insert =
+      function(model, prompt, temperature, max_tokens, append_textf) {
+        "#' @param x an int"
+      }
   )
   expect_snapshot(add_roxygen_addin())
 })
