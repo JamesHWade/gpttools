@@ -53,9 +53,30 @@ See OpenAI’s Terms of Use at <https://openai.com/terms>.
 
 ## Installation
 
+### From GitHub repo with `{remotes}`
+
 ``` r
 require(remotes)
 remotes::install_github("JamesHWade/gpttools")
+```
+
+### From [R-Universe](https://r-universe.dev/) build
+
+``` r
+# Enable repository from jameshwade
+options(repos = c(
+  jameshwade = "https://jameshwade.r-universe.dev",
+  CRAN = "https://cloud.r-project.org"
+))
+# Download and install gpttools in R
+install.packages("gpttools")
+#> Installing package into '/private/var/folders/f0/vt7wqnsn2_108drc_6r2ml040000gn/T/RtmpEEiLym/temp_libpathdb3444ccd327'
+#> (as 'lib' is unspecified)
+#> 
+#> The downloaded binary packages are in
+#>  /var/folders/f0/vt7wqnsn2_108drc_6r2ml040000gn/T//RtmpUgLs6E/downloaded_packages
+# Browse the gpttools manual pages
+help(package = "gpttools")
 ```
 
 ## Prerequisites
@@ -86,12 +107,11 @@ require(usethis)
 edit_r_environ(scope = "project")
 ```
 
-You can add the following line to the file (again, replace
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx with your actual
-key):
+You can add the following line to the file (again, replace `<api_key>`
+with your actual key):
 
 ``` bash
-OPENAI_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+OPENAI_API_KEY=<api_key>
 ```
 
 This now set the API key every time you start up this particular

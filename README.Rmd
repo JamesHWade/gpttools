@@ -61,24 +61,41 @@ See OpenAI's Terms of Use at <https://openai.com/terms>.
 
 ## Installation
 
+### From GitHub repo with `{remotes}`
+
 ``` r
 require(remotes)
 remotes::install_github("JamesHWade/gpttools")
 ```
+
+### From [R-Universe](https://r-universe.dev/) build
+
+``` {r}
+# Enable repository from jameshwade
+options(repos = c(
+  jameshwade = "https://jameshwade.r-universe.dev",
+  CRAN = "https://cloud.r-project.org"
+))
+# Download and install gpttools in R
+install.packages("gpttools")
+# Browse the gpttools manual pages
+help(package = "gpttools")
+```
+
 
 ## Prerequisites
 
 1.  Make an OpenAI account. As of now, the free one will do.
 
 2.  [Create an OpenAI API key](https://beta.openai.com/account/api-keys)
-    to use `{openai}` package within RStudio
+to use `{openai}` package within RStudio
 
 3.  Set the API key up in RStudio in one of two ways:
 
 -   By default, functions of `{openai}` will look for `OPENAI_API_KEY`
-    environment variable. If you want to set a global environment
-    variable, you can use the following command, where `"<APIKEY>"`
-    should be replaced with your actual key:
+environment variable. If you want to set a global environment
+variable, you can use the following command, where `"<APIKEY>"`
+should be replaced with your actual key:
 
 ```{r}
 #| eval: false
@@ -97,11 +114,11 @@ edit_r_environ(scope = "project")
 ```
 
 You can add the following line to the file (again, replace
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx with your actual
+`<api_key>` with your actual
 key):
 
 ``` bash
-OPENAI_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+OPENAI_API_KEY=<api_key>
 ```
 
 This now set the API key every time you start up this particular
@@ -113,24 +130,24 @@ project. Note: If you are using GitHub/Gitlab, do not forget to add
 The package has four addins:
 
 -   Comment code: uses code-davinci-edit-001 model from OpenAI to add
-    comments to your code with the prompt: "add comments to each line of
-    code, explaining what the code does"
+comments to your code with the prompt: "add comments to each line of
+code, explaining what the code does"
 
 -   Add roxygen: uses text-davinci-003 model from OpenAI to add and fill
-    out a roxygen skeleton to your highlight code (should be a function)
-    with the prompt: "insert roxygen skeleton to document this function"
+out a roxygen skeleton to your highlight code (should be a function)
+with the prompt: "insert roxygen skeleton to document this function"
 
 -   Convert script to function: uses code-davinci-edit-001 model from
-    OpenAI to convert a highlighted script into a function with the
-    prompt: "convert this R code into an R function"
+OpenAI to convert a highlighted script into a function with the
+prompt: "convert this R code into an R function"
 
 -   Write a unit test for a function with testthat: uses
-    text-davinci-003 model from OpenAI to suggest a unit test for a
-    selected function with the prompt: "Suggest a unit text for this
-    function using the testthat package"
+text-davinci-003 model from OpenAI to suggest a unit test for a
+selected function with the prompt: "Suggest a unit text for this
+function using the testthat package"
 
 -   A freeform addins that let's you specify the prompt using the "edit"
-    functionality of ChatGPT
+functionality of ChatGPT
 
 You can access these addins through the addin toolbar or use the command
 pallet: `CMD/CTRL+SHIFT+P`. Examples of each of the addins in action is
