@@ -1,6 +1,6 @@
 Package: gpttools
 Title: Extends gptstudio for package development to help you document code, write tests, or even explain code
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9740-1905"))
@@ -9,32 +9,34 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Depends: R (>= 3.5)
 Imports: 
     assertthat,
     cli,
     glue,
     httr,
     jsonlite,
+    lifecycle,
     magrittr,
     miniUI,
     purrr,
-    rlang,
+    rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
     shiny,
     skimr,
     stats,
-    usethis
+    usethis,
+    withr
 Suggests: 
     covr,
     mockr,
     testthat (>= 3.0.0),
-    withr,
     uuid,
     shinytest2,
-    spelling
+    spelling,
+    roxygen2
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-URL: https://github.com/JamesHWade/gpttools,
-    https://jameshwade.github.io/gpttools/
+URL: https://github.com/JamesHWade/gpttools
 BugReports: https://github.com/JamesHWade/gpttools/issues
 Language: en-US
