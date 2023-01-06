@@ -62,7 +62,7 @@ run_gpt_freeform <- function() {
     shiny::observe({
       selection <- get_selection()
 
-      rlang::inform(c("i" = "Querying OpenAI's API..."))
+      cli_inform("Querying OpenAI's API...")
 
       interim <- openai_create_edit(
         model = input$model,
@@ -71,7 +71,7 @@ run_gpt_freeform <- function() {
         temperature = input$temperature
       )
 
-      rlang::inform(c("i" = "Response received. Providng output text."))
+      cli_inform(c("i" = "Response received. Providng output text."))
 
       output$response <- shiny::renderText(interim$choices[1, 1])
     }) %>%
