@@ -7,10 +7,16 @@
     <loc>https://jameshwade.github.io/gpttools/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/CONTRIBUTING.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/LICENSE-text.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/SUPPORT.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/authors.html</loc>
@@ -58,6 +64,9 @@
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_insert.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/gpttools-package.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/index.html</loc>
   </url>
   <url>
@@ -89,5 +98,8 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/summarize_data.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/tidyeval.html</loc>
   </url>
 </urlset>
