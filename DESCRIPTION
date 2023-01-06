@@ -18,7 +18,7 @@ Imports:
     magrittr,
     miniUI,
     purrr,
-    rlang,
+    rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
     shiny,
     skimr,
@@ -31,10 +31,10 @@ Suggests:
     withr,
     uuid,
     shinytest2,
-    spelling
+    spelling,
+    roxygen2
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-URL: https://github.com/JamesHWade/gpttools,
-    https://jameshwade.github.io/gpttools/
+URL: https://github.com/JamesHWade/gpttools
 BugReports: https://github.com/JamesHWade/gpttools/issues
 Language: en-US
