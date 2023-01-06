@@ -1,8 +1,6 @@
 # Contributing to gpttools
 
-This outlines how to propose a change to gpttools. 
-For more detailed info about contributing to this, and other tidyverse packages, please see the
-[**development contributing guide**](https://rstd.io/tidy-contrib). 
+This outlines how to propose a change to gpttools. This is based on the tidyverse team's contributing guide. 
 
 ## Fixing typos
 
@@ -12,9 +10,9 @@ You can find the `.R` file that generates the `.Rd` by reading the comment in th
 
 ## Bigger changes
 
-If you want to make a bigger change, it's a good idea to first file an issue and make sure someone from the team agrees that it’s needed. 
+If you want to make a bigger change, it's a good idea to first file an issue and make sure someone from the team agrees that it’s needed. Maybe we could work on it together!
 If you’ve found a bug, please file an issue that illustrates the bug with a minimal 
-[reprex](https://www.tidyverse.org/help/#reprex) (this will also help you write a unit test, if needed).
+[reprex](https://www.tidyverse.org/help/#reprex) (this will also help you write a unit test, if needed). If you aren't sure how to create the reprex (it can be tricky with gpttools interactive tools), please just describe your issue as best you can.
 
 ### Pull request process
 

@@ -88,11 +88,10 @@ help(package = "gpttools")
 1.  Make an OpenAI account. As of now, the free one will do.
 
 2.  [Create an OpenAI API key](https://beta.openai.com/account/api-keys)
-to use `{openai}` package within RStudio
 
 3.  Set the API key up in RStudio in one of two ways:
 
--   By default, functions of `{openai}` will look for `OPENAI_API_KEY`
+-   By default, API calls will look for `OPENAI_API_KEY`
 environment variable. If you want to set a global environment
 variable, you can use the following command, where `"<APIKEY>"`
 should be replaced with your actual key:
