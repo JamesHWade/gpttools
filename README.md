@@ -70,11 +70,6 @@ options(repos = c(
 ))
 # Download and install gpttools in R
 install.packages("gpttools")
-#> Installing package into '/private/var/folders/f0/vt7wqnsn2_108drc_6r2ml040000gn/T/RtmpEEiLym/temp_libpathdb3444ccd327'
-#> (as 'lib' is unspecified)
-#> 
-#> The downloaded binary packages are in
-#>  /var/folders/f0/vt7wqnsn2_108drc_6r2ml040000gn/T//RtmpUgLs6E/downloaded_packages
 # Browse the gpttools manual pages
 help(package = "gpttools")
 ```

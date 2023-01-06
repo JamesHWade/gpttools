@@ -70,7 +70,7 @@ remotes::install_github("JamesHWade/gpttools")
 
 ### From [R-Universe](https://r-universe.dev/) build
 
-``` {r}
+``` r
 # Enable repository from jameshwade
 options(repos = c(
   jameshwade = "https://jameshwade.r-universe.dev",
