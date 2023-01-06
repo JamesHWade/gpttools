@@ -115,11 +115,11 @@
 </h2>
 <ol style="list-style-type: decimal">
 <li><p>Make an OpenAI account. As of now, the free one will do.</p></li>
-<li><p><a href="https://beta.openai.com/account/api-keys" class="external-link">Create an OpenAI API key</a> to use <a href="https://github.com/irudnyts/openai" class="external-link">openai</a> package within RStudio</p></li>
+<li><p><a href="https://beta.openai.com/account/api-keys" class="external-link">Create an OpenAI API key</a></p></li>
 <li><p>Set the API key up in RStudio in one of two ways:</p></li>
 </ol>
 <ul>
-<li>By default, functions of <a href="https://github.com/irudnyts/openai" class="external-link">openai</a> will look for <code>OPENAI_API_KEY</code> environment variable. If you want to set a global environment variable, you can use the following command, where <code>"&lt;APIKEY&gt;"</code> should be replaced with your actual key:</li>
+<li>By default, API calls will look for <code>OPENAI_API_KEY</code> environment variable. If you want to set a global environment variable, you can use the following command, where <code>"&lt;APIKEY&gt;"</code> should be replaced with your actual key:</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OPENAI_API_KEY <span class="op">=</span> <span class="st">"&lt;OPENAI_API_KEY&gt;"</span><span class="op">)</span></span></code></pre></div>
