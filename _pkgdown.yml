@@ -1,3 +1,5 @@
 url: https://jameshwade.github.io/gpttools/
 template:
   bootstrap: 5
+development:
+  mode: auto
