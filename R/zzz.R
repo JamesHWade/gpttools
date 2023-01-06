@@ -48,4 +48,4 @@ startup_message <- function() {
   cli::cli_text("See OpenAI's Terms of Use at {.url https://openai.com/terms}.")
 }
 
-globalVariables(".rs.invokeShinyPaneViewer")
+utils::globalVariables(".rs.invokeShinyPaneViewer")

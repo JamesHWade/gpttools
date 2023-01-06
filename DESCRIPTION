@@ -33,6 +33,7 @@ Suggests:
     shinytest2,
     spelling
 Config/testthat/edition: 3
+Config/testthat/parallel: true
 URL: https://github.com/JamesHWade/gpttools,
     https://jameshwade.github.io/gpttools/
 BugReports: https://github.com/JamesHWade/gpttools/issues

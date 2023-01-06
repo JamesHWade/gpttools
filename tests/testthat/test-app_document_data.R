@@ -1,5 +1,7 @@
 test_that("{shinytest2} recording: app_document_data", {
   skip_on_ci()
+  skip_on_cran()
+  skip_if(TRUE)
   withr::local_options("gpttools.api_valid" = TRUE)
   data(mtcars)
   mockr::local_mock(

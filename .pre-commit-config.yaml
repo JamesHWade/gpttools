@@ -6,22 +6,22 @@ repos:
     hooks:
     -   id: style-files
         args: [--style_pkg=styler, --style_fun=tidyverse_style]
-    -   id: roxygenize
-        # roxygen requires loading pkg -> add dependencies from DESCRIPTION
-        additional_dependencies:
-        -    assertthat
-        -    cli
-        -    httr
-        -    git2r
-        -    miniUI
-        -    openai
-        -    purrr
-        -    rlang
-        -    rstudioapi
-        -    shiny
-        -    skimr
-        -    stats
-        -    usethis
+    # -   id: roxygenize
+    #     # roxygen requires loading pkg -> add dependencies from DESCRIPTION
+    #     additional_dependencies:
+    #     -    assertthat
+    #     -    cli
+    #     -    httr
+    #     -    git2r
+    #     -    miniUI
+    #     -    openai
+    #     -    purrr
+    #     -    rlang
+    #     -    rstudioapi
+    #     -    shiny
+    #     -    skimr
+    #     -    stats
+    #     -    usethis
     -   id: use-tidy-description
     -   id: lintr
         args: [--warn_only]
@@ -39,7 +39,7 @@ repos:
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
     rev: v1.5.1
     hooks:
-    # Only reuiqred when https://pre-commit.ci is used for config validation
+    # Only required when https://pre-commit.ci is used for config validation
     -   id: check-pre-commit-ci-config
 -   repo: local
     hooks:

@@ -1,153 +1,164 @@
-#' Create and edit text using OpenAI's API
+#' Use GPT to improve text
 #'
-#' @param model The model to use for generating text
-#' @param input The input text to edit
-#' @param instruction The instruction for editing the text
-#' @param temperature The temperature to use for generating text (between 0 and
-#'   1). If `NULL`, the default temperature will be used. It is recommended NOT
-#'   to specify temperature and top_p at a time.
-#' @param top_p The top-p value to use for generating text (between 0 and 1). If
-#'   `NULL`, the default top-p value will be used. It is recommended NOT to
-#'   specify temperature and top_p at a time.
-#' @param openai_api_key The API key for accessing OpenAI's API. By default, the
-#'   function will try to use the `OPENAI_API_KEY` environment variable.
-#' @return A list with the edited text and other information returned by the
-#'   API.
+#' This function uses the GPT model from OpenAI to improve the spelling and
+#' grammar of the selected text in the current RStudio session.
+#'
+#' @param model The name of the GPT model to use.
+#' @param instruction Instruction given to the model on how to improve the text.
+#' @param temperature A parameter for controlling the randomness of the GPT
+#' model's output.
+#' @param openai_api_key An API key for the OpenAI API.
+#' @param append_text Add text to selection rather than replace, defaults to
+#'  FALSE
+#'
+#' @return Nothing is returned. The improved text is inserted into the current
+#'  RStudio session.
 #' @export
-#' @examples
-#' \dontrun{
-#' openai_create_edit(
-#'   model = "text-davinci-002",
-#'   input = "Hello world!",
-#'   instruction = "Capitalize the first letter of each sentence."
-#' )
-#' }
-openai_create_edit <- function(model,
-                               input = '"',
-                               instruction,
-                               temperature = NULL,
-                               top_p = NULL,
-                               openai_api_key = Sys.getenv("OPENAI_API_KEY")) {
-  assert_that(
-    is.string(model),
-    is.string(input),
-    is.string(instruction),
-    is.number(temperature) && value_between(temperature, 0, 1),
-    is.string(openai_api_key),
-    value_between(top_p, 0, 1) || is.null(top_p)
-  )
+gpt_edit <- function(model,
+                     instruction,
+                     temperature,
+                     openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+                     append_text = FALSE) {
+  check_api()
+  selection <- get_selection()
+  inform("Asking GPT for help...")
 
-  if (is.number(temperature) && is.number(top_p)) {
-    warn("It is recommended NOT to specify temperature and top_p at a time.")
-  }
-
-  body <- list(
+  edit <- openai_create_edit(
     model = model,
-    input = input,
+    input = selection$value,
     instruction = instruction,
     temperature = temperature,
-    top_p = top_p
+    openai_api_key = openai_api_key
   )
 
-  query_openai_api(body, openai_api_key, task = "edits")
+  cli::cat_print(edit)
+
+  if (append_text) {
+    improved_text <- c(selection$value, edit$choices$text)
+    inform("Appending text from GPT...")
+  } else {
+    improved_text <- edit$choices$text
+    inform("Inserting text from GPT...")
+  }
+
+  cli_text("{improved_text}")
+
+  insert_text(improved_text)
 }
 
-
-#' Generate text completions using OpenAI's API
+#' Use GPT to improve text
 #'
-#' @param model The model to use for generating text
-#' @param prompt The prompt for generating completions
-#' @param suffix The suffix for generating completions. If `NULL`, no suffix
-#'   will be used.
-#' @param max_tokens The maximum number of tokens to generate.
-#' @param temperature The temperature to use for generating text (between 0 and
-#'   1). If `NULL`, the default temperature will be used. It is recommended NOT
-#'   to specify temperature and top_p at a time.
-#' @param top_p The top-p value to use for generating text (between 0 and 1). If
-#'   `NULL`, the default top-p value will be used. It is recommended NOT to
-#'   specify temperature and top_p at a time.
-#' @param openai_api_key The API key for accessing OpenAI's API. By default, the
-#'   function will try to use the `OPENAI_API_KEY` environment variable.
-#' @return A list with the generated completions and other information returned
-#'   by the API.
-#' @examples
-#' \dontrun{
-#' openai_create_completion(
-#'   model = "text-davinci-002",
-#'   prompt = "Hello world!"
-#' )
-#' }
+#' This function uses the GPT model from OpenAI to improve the spelling and
+#'  grammar of the selected text in the current RStudio session.
+#'
+#' @param model The name of the GPT model to use.
+#' @param temperature A parameter for controlling the randomness of the GPT
+#'  model's output.
+#' @param max_tokens Maximum number of tokens to return (related to length of
+#' response), defaults to 500
+#' @param openai_api_key An API key for the OpenAI API.
+#' @param append_text Add text to selection rather than replace, default to TRUE
+#'
+#' @return Nothing is returned. The improved text is inserted into the current
+#' RStudio session.
 #' @export
-openai_create_completion <-
-  function(model,
-           prompt = "<|endoftext|>",
-           suffix = NULL,
-           max_tokens = 16,
-           temperature = NULL,
-           top_p = NULL,
-           openai_api_key = Sys.getenv("OPENAI_API_KEY")) {
-    assert_that(
-      is.string(model),
-      is.string(prompt),
-      is.count(max_tokens),
-      is.string(suffix) || is.null(suffix),
-      value_between(temperature, 0, 1) || is.null(temperature),
-      is.string(openai_api_key),
-      value_between(top_p, 0, 1) || is.null(top_p)
-    )
+gpt_create <- function(model,
+                       temperature,
+                       max_tokens = getOption("gpttools.max_tokens"),
+                       openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+                       append_text = TRUE) {
+  check_api()
+  selection <- get_selection()
 
-    body <- list(
-      model = model,
-      prompt = prompt,
-      suffix = suffix,
-      max_tokens = max_tokens,
-      temperature = temperature
-    )
 
-    query_openai_api(body, openai_api_key, task = "completions")
-  }
-
-query_openai_api <- function(body, openai_api_key, task) {
-  arg_match(task, c("completions", "edits"))
-
-  base_url <- glue("https://api.openai.com/v1/{task}")
-
-  headers <- c(
-    "Authorization" = glue("Bearer {openai_api_key}"),
-    "Content-Type" = "application/json"
+  edit <- openai_create_completion(
+    model = model,
+    prompt = selection$value,
+    temperature = temperature,
+    max_tokens = max_tokens,
+    openai_api_key = openai_api_key,
   )
 
-  response <- httr::POST(
-    url = base_url,
-    httr::add_headers(headers),
-    body = body,
-    encode = "json"
+  inform("Inserting text from GPT...")
+
+  if (append_text) {
+    improved_text <- c(selection$value, edit$choices$text)
+    inform("Appending text from GPT...")
+  } else {
+    improved_text <- edit$choices$text
+    inform("Inserting text from GPT...")
+  }
+  insert_text(improved_text)
+}
+
+
+#' Use GPT to improve text
+#'
+#' This function uses the GPT model from OpenAI to improve the spelling and
+#' grammar of the selected text in the current RStudio session.
+#'
+#' @param model The name of the GPT model to use.
+#' @param prompt Instructions for the insertion
+#' @param temperature A parameter for controlling the randomness of the GPT
+#' model's output.
+#' @param max_tokens Maximum number of tokens to return (related to length of
+#' response), defaults to 500
+#' @param openai_api_key An API key for the OpenAI API.
+#' @param append_text Add text to selection rather than replace, defaults to
+#' FALSE
+#'
+#' @return Nothing is returned. The improved text is inserted into the current
+#' RStudio session.
+#' @export
+gpt_insert <- function(model,
+                       prompt,
+                       temperature = 0.1,
+                       max_tokens = getOption("gpttools.max_tokens"),
+                       openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+                       append_text = FALSE) {
+  check_api()
+  selection <- get_selection()
+  inform("Asking GPT for help...")
+
+  prompt <- paste(prompt, selection$value)
+
+  edit <- openai_create_completion(
+    model = model,
+    prompt = prompt,
+    temperature = temperature,
+    max_tokens = max_tokens,
+    openai_api_key = openai_api_key,
   )
 
-  parsed <- response %>%
-    httr::content(as = "text", encoding = "UTF-8") %>%
-    jsonlite::fromJSON(flatten = TRUE)
+  inform("Inserting text from GPT...")
 
-  if (httr::http_error(response)) {
-    abort(c(
-      "x" = glue("OpenAI API request failed [{httr::status_code(response)}]."),
-      "i" = glue("Error message: {parsed$error$message}")
-    ))
+  if (append_text) {
+    improved_text <- c(selection$value, edit$choices$text)
+  } else {
+    improved_text <- c(edit$choices$text, selection$value)
   }
 
-  cli_text("Status code: {httr::status_code(response)}")
+  cli_format(improved_text)
 
-  parsed
+  insert_text(improved_text)
 }
 
-value_between <- function(x, lower, upper) {
-  x >= lower && x <= upper
+#' Wrapper around selectionGet to help with testthat
+#'
+#' @return Text selection via `rstudioapi::selectionGet`
+#'
+#' @export
+get_selection <- function() {
+  rstudioapi::verifyAvailable()
+  rstudioapi::selectionGet()
 }
 
-both_specified <- function(x, y) {
-  x != 1 && y != 1
-}
-
-length_between <- function(x, lower, upper) {
-  length(x) >= lower && length(x) <= upper
+#' Wrapper around selectionGet to help with testthat
+#'
+#' @param improved_text Text from model queries to inert into script or document
+#'
+#' @export
+insert_text <- function(improved_text) {
+  rstudioapi::verifyAvailable()
+  rstudioapi::insertText(improved_text)
 }
