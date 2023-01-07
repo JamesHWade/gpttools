@@ -18,7 +18,6 @@ test_that("Collect dataframes works", {
   expect_snapshot(collect_column_types(mtcars))
 })
 
-
 test_that("Prep data prompt works", {
   data(mtcars)
   expect_snapshot(prep_data_prompt(mtcars, "skimr", prompt = "test"))

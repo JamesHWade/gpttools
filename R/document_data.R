@@ -62,7 +62,7 @@ summarize_data <- function(data,
 
   rlang::arg_match(method)
 
-  switch(method[1],
+  switch(method,
     "skimr" = skimr::skim_without_charts(data),
     "skimr_lite" = skim_lite(data),
     "column_types" = collect_column_types(data),
