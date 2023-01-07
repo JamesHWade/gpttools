@@ -30,6 +30,28 @@ implications of using these models. Ethics of LLMs (also called
 [Foundation Models](https://arxiv.org/abs/2108.07258)) is an area of
 very active discussion.
 
+## Installation
+
+### Install from GitHub with `{remotes}`
+
+``` r
+require(remotes)
+remotes::install_github("JamesHWade/gpttools")
+```
+
+### Install from [R-Universe](https://r-universe.dev/)
+
+``` r
+# Enable repository from jameshwade
+options(repos = c(
+  jameshwade = "https://jameshwade.r-universe.dev",
+  CRAN = "https://cloud.r-project.org"
+))
+# Download and install gpttools in R
+install.packages("gpttools")
+# Browse the gpttools manual pages
+help(package = "gpttools")
+```
 
 ## Privacy Notice
 
@@ -53,29 +75,6 @@ REMAIN PRIVATE**
 
 See OpenAI’s Terms of Use at <https://openai.com/terms> for more
 details.
-
-## Installation
-
-### From GitHub repo with `{remotes}`
-
-``` r
-require(remotes)
-remotes::install_github("JamesHWade/gpttools")
-```
-
-### From [R-Universe](https://r-universe.dev/) build
-
-``` r
-# Enable repository from jameshwade
-options(repos = c(
-  jameshwade = "https://jameshwade.r-universe.dev",
-  CRAN = "https://cloud.r-project.org"
-))
-# Download and install gpttools in R
-install.packages("gpttools")
-# Browse the gpttools manual pages
-help(package = "gpttools")
-```
 
 ## Prerequisites
 
