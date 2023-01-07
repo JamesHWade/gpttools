@@ -53,7 +53,7 @@
         temperature = 1, instruction = "fix the grammar", top_p = 1, openai_api_key = sample_key)
     Condition
       Warning:
-      It is recommended NOT to specify temperature and top_p at a time.
+      Specify either temperature or top_p, not both.
     Message
       ! OpenAI API request failed [401].Error message: Incorrect API key provided: 4f9bb533************************cc24. You can find your API key at https://beta.openai.com.
       Status code: 401
