@@ -89,7 +89,7 @@ check_api <- function() {
   valid_api <- getOption("gpttools.valid_api")
   saved_key <- getOption("gpttools.openai_key")
   if (!valid_api) {
-    inform("Checking API key using OPENAI_API_KEY environment variable...")
+    cli_inform("Checking API key using OPENAI_API_KEY environment variable...")
     check_api_connection(api_key)
   } else if (saved_key == Sys.getenv("OPENAI_API_KEY")) {
     cli_alert_success("API already validated in this session.")
@@ -138,7 +138,7 @@ ask_to_set_api <- function(try_again = FALSE) {
     if (set_api) {
       set_openai_api_key()
     } else {
-      warn("Not setting OPENAI_API_KEY environment variable.")
+      cli_warn("Not setting OPENAI_API_KEY environment variable.")
       invisible(FALSE)
     }
   } else {

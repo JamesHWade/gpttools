@@ -42,15 +42,17 @@ are when sent to OpenAI. We do not know what OpenAI does with your
 prompts, but OpenAI is clear that they use prompts and results to
 improve their model unless you opt out explicitly by contacting them.
 
-The code is designed to ONLY share the highlighted or selected text, or
+The code is designed to only share the highlighted or selected text, or
 a prompt you build with the help of one of our apps and no other
-elements of your R environment. Make sure you are aware of what you send
-to OpenAI and do not accidentally share sensitive data with OpenAI.
+elements of your R environment. Nonetheless, be sure you are aware of
+what you send to OpenAI and do not accidentally share sensitive data
+with OpenAI.
 
 **DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD
 REMAIN PRIVATE**
 
-See OpenAI’s Terms of Use at <https://openai.com/terms>.
+See OpenAI’s Terms of Use at <https://openai.com/terms> for more
+details.
 
 ## Installation
 

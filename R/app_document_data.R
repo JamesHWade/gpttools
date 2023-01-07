@@ -126,7 +126,7 @@ run_document_data <- function() {
       )
     )
     shiny::observe({
-      inform("Updating prompt")
+      cli_inform("Updating prompt")
       shiny::updateTextAreaInput(
         session = session,
         inputId = "prompt",
@@ -136,7 +136,7 @@ run_document_data <- function() {
       shiny::bindEvent(input$update_prompt)
 
     shiny::observe({
-      inform(c("i" = "Querying OpenAI's API..."))
+      cli_inform(c("i" = "Querying OpenAI's API..."))
 
       interim <- openai_create_completion(
         model = "text-davinci-003",
@@ -146,7 +146,7 @@ run_document_data <- function() {
         openai_api_key = Sys.getenv("OPENAI_API_KEY")
       )
 
-      inform(c("i" = "Response received. Providng output text."))
+      cli_inform(c("i" = "Response received. Providng output text."))
       output$response <- shiny::renderText(interim$choices[1, 1])
     }) %>%
       shiny::bindEvent(input$query_gpt)
