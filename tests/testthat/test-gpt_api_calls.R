@@ -25,7 +25,6 @@ test_that("OpenAI create edit fails with bad key", {
     top_p = 1,
     openai_api_key = sample_key
   ))
-
 })
 
 test_that("OpenAI create completion works", {
