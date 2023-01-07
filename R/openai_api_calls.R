@@ -133,7 +133,7 @@ query_openai_api <- function(body, openai_api_key, task) {
     jsonlite::fromJSON(flatten = TRUE)
 
   if (httr::http_error(response)) {
-    cli_abort(c(
+    cli_alert_warning(c(
       "x" = glue("OpenAI API request failed [{httr::status_code(response)}]."),
       "i" = glue("Error message: {parsed$error$message}")
     ))
@@ -150,8 +150,4 @@ value_between <- function(x, lower, upper) {
 
 both_specified <- function(x, y) {
   x != 1 && y != 1
-}
-
-length_between <- function(x, lower, upper) {
-  length(x) >= lower && length(x) <= upper
 }
