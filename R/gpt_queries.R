@@ -21,7 +21,7 @@ gpt_edit <- function(model,
                      append_text = FALSE) {
   check_api()
   selection <- get_selection()
-  inform("Asking GPT for help...")
+  cli_inform("Asking GPT for help...")
 
   edit <- openai_create_edit(
     model = model,
@@ -31,14 +31,12 @@ gpt_edit <- function(model,
     openai_api_key = openai_api_key
   )
 
-  cli::cat_print(edit)
-
   if (append_text) {
     improved_text <- c(selection$value, edit$choices$text)
-    inform("Appending text from GPT...")
+    cli_inform("Appending text from GPT...")
   } else {
     improved_text <- edit$choices$text
-    inform("Inserting text from GPT...")
+    cli_inform("Inserting text from GPT...")
   }
 
   cli_text("{improved_text}")
@@ -79,14 +77,14 @@ gpt_create <- function(model,
     openai_api_key = openai_api_key,
   )
 
-  inform("Inserting text from GPT...")
+  cli_inform("Inserting text from GPT...")
 
   if (append_text) {
     improved_text <- c(selection$value, edit$choices$text)
-    inform("Appending text from GPT...")
+    cli_inform("Appending text from GPT...")
   } else {
     improved_text <- edit$choices$text
-    inform("Inserting text from GPT...")
+    cli_inform("Inserting text from GPT...")
   }
   insert_text(improved_text)
 }
@@ -118,7 +116,7 @@ gpt_insert <- function(model,
                        append_text = FALSE) {
   check_api()
   selection <- get_selection()
-  inform("Asking GPT for help...")
+  cli_inform("Asking GPT for help...")
 
   prompt <- paste(prompt, selection$value)
 
@@ -130,15 +128,13 @@ gpt_insert <- function(model,
     openai_api_key = openai_api_key,
   )
 
-  inform("Inserting text from GPT...")
+  cli_inform("Inserting text from GPT...")
 
   if (append_text) {
     improved_text <- c(selection$value, edit$choices$text)
   } else {
     improved_text <- c(edit$choices$text, selection$value)
   }
-
-  cli_format(improved_text)
 
   insert_text(improved_text)
 }
