@@ -1,5 +1,6 @@
 url: https://jameshwade.github.io/gpttools/
 template:
   bootstrap: 5
+  bootswatch: litera
 development:
   mode: auto
