@@ -8,5 +8,6 @@
 #' @importFrom glue glue
 #' @importFrom lifecycle deprecated
 #' @importFrom utils globalVariables
+#' @importFrom glue glue
 ## usethis namespace: end
 NULL
