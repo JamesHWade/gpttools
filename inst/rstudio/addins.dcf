@@ -24,6 +24,12 @@ Binding: gpt_addin
 Interactive: true
 
 Name: Document Data
-Description: Uses OpenAI's GPT-3.5 document data for a package with help from the user
+Description: Uses OpenAI's GPT-3.5 to document data for a package with help from the user
 Binding: document_data
 Interactive: true
+
+Name: Suggest Improvements
+Description: Uses OpenAI's GPT-3.5 to make suggestions to improve user selected code
+Binding: suggest_code_improvements
+Interactive: false
+

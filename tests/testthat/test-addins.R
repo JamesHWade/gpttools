@@ -72,3 +72,22 @@ test_that("Suggesting a unit test works [on CI]", {
   )
   expect_snapshot(suggest_unit_test_addin())
 })
+
+test_that("Suggesting code improvements works", {
+  skip_on_ci()
+  skip_if_offline()
+  mockr::local_mock(
+    get_selection = function() list(value = "add_xy <- function(x, y) x + y"),
+    insert_text = function(improved_text) improved_text
+  )
+  expect_type(suggest_code_improvements(), "character")
+})
+
+test_that("Suggesting code improvements work [on CI]", {
+  mockr::local_mock(
+    gpt_insert = function(model, prompt, temperature, max_tokens, append_text) {
+      "add_xy(1, 2) == 3"
+    }
+  )
+  expect_snapshot(suggest_code_improvements())
+})

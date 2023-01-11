@@ -26,3 +26,10 @@
     Output
       [1] "add_xy(1, 2) == 3"
 
+# Suggesting code improvements work [on CI]
+
+    Code
+      suggest_code_improvements()
+    Output
+      [1] "add_xy(1, 2) == 3"
+
