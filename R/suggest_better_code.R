@@ -9,7 +9,7 @@ suggest_code_improvements <- function() {
     model = "text-davinci-003",
     prompt = glue::glue(
       "I'm writing R code for use in a package.",
-      "\nHow can I improve this code:"
+      "\nHow can I improve this code? Briefly describe why you made the change."
     ),
     temperature = 0.5,
     max_tokens = getOption("gpttools.max_tokens"),
