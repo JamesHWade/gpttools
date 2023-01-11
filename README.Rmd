@@ -19,17 +19,23 @@ knitr::opts_chunk$set(
 # gpttools <a href="https://jameshwade.github.io/gpttools/"><img src="man/figures/logo.png" align="right" height="139"/></a>
 
 <!-- badges: start -->
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
+[![Project Status: WIP -- Initial development is in progress, but there
+has not yet been a stable, usable release suitable for the
+public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gpttools)](https://CRAN.R-project.org/package=gpttools)
-[![gpttools status badge](https://jameshwade.r-universe.dev/badges/gpttools)](https://jameshwade.r-universe.dev)
+[![gpttools status
+badge](https://jameshwade.r-universe.dev/badges/gpttools)](https://jameshwade.r-universe.dev)
 [![Codecov test
 coverage](https://codecov.io/gh/JamesHWade/gpttools/branch/main/graph/badge.svg)](https://app.codecov.io/gh/JamesHWade/gpttools?branch=main)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/JamesHWade/gpttools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JamesHWade/gpttools/actions/workflows/R-CMD-check.yaml)
-![Last Commit](https://img.shields.io/github/last-commit/jameshwade/gpttools)
+![Last
+Commit](https://img.shields.io/github/last-commit/jameshwade/gpttools)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 <!-- badges: end -->
 
 The goal of gpttools is to extend gptstudio for R package developers to
@@ -63,15 +69,28 @@ install.packages("gpttools")
 help(package = "gpttools")
 ```
 
-## Privacy Notice
+## Privacy Notice for use of OpenAI Models
 
-These functions work by taking the text or code you have highlighted or selected with the cursor, or your prompt if you use one of the built-in apps, and send these to OpenAI as part of a prompt. Prompts fall under the privacy notice, rules, or exceptions you agreed to when making an OpenAI account. We cannot tell you or guarantee how secure these prompts are when sent to OpenAI. We do not know what OpenAI does with your prompts, but OpenAI is clear that they use prompts and results to improve their model unless you opt out explicitly by contacting them.
+These functions work by taking the text or code you have highlighted or
+selected with the cursor, or your prompt if you use one of the built-in
+apps, and send these to OpenAI as part of a prompt. Prompts fall under
+the privacy notice, rules, or exceptions you agreed to when making an
+OpenAI account. We cannot tell you or guarantee how secure these prompts
+are when sent to OpenAI. We do not know what OpenAI does with your
+prompts, but OpenAI is clear that they use prompts and results to
+improve their model unless you opt out explicitly by contacting them.
 
-The code is designed to only share the highlighted or selected text, or a prompt you build with the help of one of our apps and no other elements of your R environment. Nonetheless, be sure you are aware of what you send to OpenAI and do not accidentally share sensitive data with OpenAI.
+The code is designed to only share the highlighted or selected text, or
+a prompt you build with the help of one of our apps and no other
+elements of your R environment. Nonetheless, be sure you are aware of
+what you send to OpenAI and do not accidentally share sensitive data
+with OpenAI.
 
-**DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD REMAIN PRIVATE**
+**DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD
+REMAIN PRIVATE**
 
-See OpenAI's Terms of Use at <https://openai.com/terms> for more details.
+See OpenAI's Terms of Use at <https://openai.com/terms> for more
+details.
 
 ## Prerequisites
 
@@ -81,10 +100,10 @@ See OpenAI's Terms of Use at <https://openai.com/terms> for more details.
 
 3.  Set the API key up in RStudio in one of two ways:
 
--   By default, API calls will look for `OPENAI_API_KEY`
-environment variable. If you want to set a global environment
-variable, you can use the following command, where `"<APIKEY>"`
-should be replaced with your actual key:
+-   By default, API calls will look for `OPENAI_API_KEY` environment
+    variable. If you want to set a global environment variable, you can
+    use the following command, where `"<APIKEY>"` should be replaced
+    with your actual key:
 
 ```{r}
 #| eval: false
@@ -102,9 +121,8 @@ require(usethis)
 edit_r_environ(scope = "project")
 ```
 
-You can add the following line to the file (again, replace
-`<api_key>` with your actual
-key):
+You can add the following line to the file (again, replace `<api_key>`
+with your actual key):
 
 ``` bash
 OPENAI_API_KEY=<api_key>
@@ -119,30 +137,30 @@ project. Note: If you are using GitHub/Gitlab, do not forget to add
 The package has four addins:
 
 -   Comment code: uses code-davinci-edit-001 model from OpenAI to add
-comments to your code with the prompt: "add comments to each line of
-code, explaining what the code does"
+    comments to your code with the prompt: "add comments to each line of
+    code, explaining what the code does"
 
 -   Add roxygen: uses text-davinci-003 model from OpenAI to add and fill
-out a roxygen skeleton to your highlight code (should be a function)
-with the prompt: "insert roxygen skeleton to document this function"
+    out a roxygen skeleton to your highlight code (should be a function)
+    with the prompt: "insert roxygen skeleton to document this function"
 
 -   Convert script to function: uses code-davinci-edit-001 model from
-OpenAI to convert a highlighted script into a function with the
-prompt: "convert this R code into an R function"
+    OpenAI to convert a highlighted script into a function with the
+    prompt: "convert this R code into an R function"
 
 -   Write a unit test for a function with testthat: uses
-text-davinci-003 model from OpenAI to suggest a unit test for a
-selected function with the prompt: "Suggest a unit text for this
-function using the testthat package"
+    text-davinci-003 model from OpenAI to suggest a unit test for a
+    selected function with the prompt: "Suggest a unit text for this
+    function using the testthat package"
 
 -   A freeform addins that let's you specify the prompt using the "edit"
-functionality of ChatGPT
+    functionality of ChatGPT
 
 You can access these addins through the addin toolbar or use the command
 pallet: `CMD/CTRL+SHIFT+P`. Examples of each of the addins in action is
 below.
 
-![](man/figures/image-1429395462.png)
+![](man/figures/gpttools-addins.png)
 
 ### Comment Code
 
