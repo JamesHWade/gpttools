@@ -20,6 +20,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 ![Last
 Commit](https://img.shields.io/github/last-commit/jameshwade/gpttools)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 <!-- badges: end -->
 
 The goal of gpttools is to extend gptstudio for R package developers to
@@ -53,7 +54,7 @@ install.packages("gpttools")
 help(package = "gpttools")
 ```
 
-## Privacy Notice
+## Privacy Notice for use of OpenAI Models
 
 These functions work by taking the text or code you have highlighted or
 selected with the cursor, or your prompt if you use one of the built-in
@@ -142,7 +143,7 @@ You can access these addins through the addin toolbar or use the command
 pallet: `CMD/CTRL+SHIFT+P`. Examples of each of the addins in action is
 below.
 
-![](man/figures/image-1429395462.png)
+![](man/figures/gpttools-addins.png)
 
 ### Comment Code
 
