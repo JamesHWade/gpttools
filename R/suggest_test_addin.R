@@ -12,7 +12,3 @@ suggest_unit_test_addin <- function() {
     append_text = TRUE
   )
 }
-
-
-
-
