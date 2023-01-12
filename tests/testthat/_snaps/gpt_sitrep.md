@@ -18,7 +18,7 @@
     Message
       -- OpenAI API Status -----------------------------------------------------------
       v OpenAI API has been check and is valid
-      i API key set to sk-p*******************************************u2xY
+      i API key set to a4b5****************************77f9
       -- RStudio API -----------------------------------------------------------------
       -- Settings for gpttools -------------------------------------------------------
       i Max tokens set to 500
