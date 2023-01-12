@@ -64,6 +64,9 @@
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_insert.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/gpt_sitrep.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gpttools-package.html</loc>
   </url>
   <url>
@@ -101,8 +104,5 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/summarize_data.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/tidyeval.html</loc>
   </url>
 </urlset>
