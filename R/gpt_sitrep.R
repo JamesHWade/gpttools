@@ -21,11 +21,10 @@ gpt_sitrep <- function() {
       "i" = "API key set to {api_key}"
     ))
   } else {
-    cli_inform(c("x" = "OpenAI API not validated."))
-    api_check <- usethis::ui_yeah("Would you like to perform an API check?")
-    if (api_check) {
-      check_api()
-    }
+    cli_inform(c(
+      "x" = "OpenAI API not validated.",
+      "i" = "You can validate API by calling {.code check_api()}"
+    ))
   }
   cli_rule("RStudio API")
   if (rstudioapi::isAvailable()) {
@@ -35,6 +34,6 @@ gpt_sitrep <- function() {
   cli_rule("Settings for gpttools")
   max_tokens <- getOption("gpttools.max_tokens")
   cli_inform(c("i" = "Max tokens set to {col_br_yellow(max_tokens)}"))
-  clcode_style <- getOption("gpttools.code_style")
+  code_style <- getOption("gpttools.code_style")
   cli_inform(c("i" = "Code style is set to {col_br_green(code_style)}"))
 }
