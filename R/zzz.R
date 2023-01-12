@@ -4,7 +4,8 @@
     gpttools.valid_api        = FALSE,
     gpttools.openai_key       = NULL,
     gpttools.max_tokens       = 500,
-    gpttools.valid_rstudioapi = FALSE
+    gpttools.valid_rstudioapi = FALSE,
+    gpttools.code_style       = "tidyverse"
   )
 
   toset <- !(names(op_gpttools) %in% names(op))
