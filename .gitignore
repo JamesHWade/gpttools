@@ -5,6 +5,9 @@ docs
 .httr-oauth
 .DS_Store
 _site
+text/
+processed/
+indices/
 
 # History files
 .Rhistory
