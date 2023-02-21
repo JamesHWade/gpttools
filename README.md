@@ -31,6 +31,8 @@ implications of using these models. Ethics of LLMs (also called
 [Foundation Models](https://arxiv.org/abs/2108.07258)) is an area of
 very active discussion.
 
+If you like this package, you may also like [`{gptstudio}`](https://github.com/MichelNivard/gptstudio). This package is an extension of that one and maintained by the same developers.
+
 ## Installation
 
 ### Install from GitHub with `{remotes}`
