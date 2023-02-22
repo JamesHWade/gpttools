@@ -24,7 +24,7 @@ load_llama_index <- function(domain) {
   check_python_configuration()
   index <- switch(domain,
     "Posit Docs" = "docs.posit.co",
-    "Posit Solutiosn" = "solutions.posit.co",
+    "Posit Solutions" = "solutions.posit.co",
     "Quarto" = "quarto.org"
   )
   llama <- reticulate::import("llama_index")
