@@ -8,6 +8,7 @@ _site
 text/
 processed/
 indices/
+*~
 
 # History files
 .Rhistory
