@@ -15,9 +15,11 @@ run_chat_gpt <- function() {
         value = "", resize = "vertical",
         rows = 3, width = "100%"
       ),
-      shiny::actionButton(width = "100%",
-                          inputId = "chat", label =  "Chat",
-                          icon = shiny::icon("robot"), class = "btn-primary")
+      shiny::actionButton(
+        width = "100%",
+        inputId = "chat", label = "Chat",
+        icon = shiny::icon("robot"), class = "btn-primary"
+      )
     )
   )
 
@@ -29,14 +31,17 @@ run_chat_gpt <- function() {
       shiny::selectInput(
         "model", "OpenAI Model",
         choices = c("text-davinci-003", "code-davinci-002"),
-        width = "90%"),
+        width = "90%"
+      ),
       shiny::fluidRow(
         shiny::numericInput("temperature", "Temperature",
-                            min = 0, max = 1, value = 0.5, step = 0.1,
-                            width = "50%"),
+          min = 0, max = 1, value = 0.5, step = 0.1,
+          width = "50%"
+        ),
         shiny::numericInput("max_tokens", "Max Tokens",
-                            min = 16, max = 10000, value = 200, step = 1,
-                            width = "50%")
+          min = 16, max = 10000, value = 200, step = 1,
+          width = "50%"
+        )
       )
     )
   )
@@ -47,11 +52,12 @@ run_chat_gpt <- function() {
     shiny::tags$script(shiny::HTML(js)),
     hr(),
     bslib::layout_column_wrap(
-      width = 1/2,
+      width = 1 / 2,
       bslib::layout_column_wrap(
         width = 1,
         heights_equal = "row",
-        chat_card, model_settings_card),
+        chat_card, model_settings_card
+      ),
       shiny::uiOutput("all_chats_box")
     )
   )
@@ -81,7 +87,7 @@ run_chat_gpt <- function() {
       cat_print(r$all_chats)
       r$all_chats_formatted <-
         make_chat_history(r$all_chats_formatted, input$chat_input, new_response)
-      output$all_chats_box  <- shiny::renderUI(
+      output$all_chats_box <- shiny::renderUI(
         bslib::card(
           bslib::card_header("Chat History", class = "bg-primary"),
           bslib::card_body(
@@ -98,16 +104,17 @@ run_chat_gpt <- function() {
   }
 
   shiny::shinyApp(ui, server)
-
 }
 
 
 make_chat_history <- function(history, new_prompt, new_response) {
   new_response <-
-    list(shiny::strong("Question"),
-         shiny::markdown(new_prompt),
-         shiny::strong("Response"),
-         shiny::markdown(new_response))
+    list(
+      shiny::strong("Question"),
+      shiny::markdown(new_prompt),
+      shiny::strong("Response"),
+      shiny::markdown(new_response)
+    )
   if (is_null(history)) {
     new_response
   } else {
