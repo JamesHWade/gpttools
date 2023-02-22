@@ -194,6 +194,7 @@ process_text_files <- function(domain) {
 #'
 #' @param domain character string specifying the domain to create an index for
 #' @param index_type character string specifying the type of index to create
+#' @param input_dir character string specifying input directory
 #'
 #' @return the index created
 #'
@@ -202,7 +203,7 @@ process_text_files <- function(domain) {
 #' create_llama_index("movies")
 #' create_llama_index("books", index_type = "faiss")
 #' }
-create_llama_index <- function(domain, index_type = "simple") {
+create_llama_index <- function(domain, input_dir = "text", index_type = "simple") {
   check_python_configuration()
   llama <- reticulate::import("llama_index")
   index_text <-
@@ -212,8 +213,7 @@ create_llama_index <- function(domain, index_type = "simple") {
     )
   simple_directory_reader <- llama$SimpleDirectoryReader
   docs_to_load <- simple_directory_reader(
-    input_dir = "processed",
-    input_files = glue::glue("{domain}.csv")
+    input_dir = glue::glue("{input_dir}/{domain}")
   )
   documents <- docs_to_load$load_data()
   index <- index_text(documents)
@@ -246,7 +246,7 @@ load_llama_index <- function(domain) {
 #' @export
 query_llama_index <- function(index, query) {
   check_python_configuration()
-  index$query(query)
+  index$query(query, mode = "embedding")
 }
 
 #' Check Python Configuration
