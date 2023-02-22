@@ -4,10 +4,12 @@
 \alias{create_llama_index}
 \title{Create Llama Index}
 \usage{
-create_llama_index(domain, index_type = "simple")
+create_llama_index(domain, input_dir = "text", index_type = "simple")
 }
 \arguments{
 \item{domain}{character string specifying the domain to create an index for}
+
+\item{input_dir}{character string specifying input directory}
 
 \item{index_type}{character string specifying the type of index to create}
 }
