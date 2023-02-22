@@ -54,9 +54,10 @@ check_python_configuration <- function() {
 }
 
 chat_card <- card(
-  # height = "220px",
+  height = "450px",
   card_header("Write Prompt", class = "bg-primary"),
   card_body(
+    fill = TRUE,
     textAreaInput(
       inputId = "chat_input", label = NULL,
       value = "", resize = "vertical",

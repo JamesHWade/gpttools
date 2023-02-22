@@ -9,11 +9,12 @@ source("helper.R")
 
 ui <- fluidPage(
   theme = bs_theme(bootswatch = "litera", version = 5),
-  title = "Chat GPT from gptstudio",
+  title = "PositGPT",
   tags$script(HTML(js)),
   br(),
   layout_column_wrap(
     width = 1 / 2,
+    fill = TRUE,
     chat_card,
     uiOutput("all_chats_box")
   )
