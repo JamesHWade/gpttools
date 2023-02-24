@@ -27,8 +27,8 @@ get_domain_hyperlinks <- function(local_domain, url) {
     if (stringr::str_detect(link, paste0("^https?://", local_domain))) {
       clean_link <- link
     } else if (stringr::str_detect(link, "^/[^/]|^/+$|^\\./|^[[:alnum:]]") &&
-               !stringr::str_detect(link, "^https?://|\\.\\.|#|mailto:") &&
-               !(link == "_")) {
+      !stringr::str_detect(link, "^https?://|\\.\\.|#|mailto:") &&
+      !(link == "_")) {
       if (stringr::str_detect(link, "^\\./")) {
         link <- stringr::str_replace(link, "^\\./", "/")
       } else if (stringr::str_detect(link, "^[[:alnum:]]")) {

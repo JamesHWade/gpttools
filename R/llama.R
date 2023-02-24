@@ -18,8 +18,8 @@ create_llama_index <- function(domain, input_dir = "text", index_type = "simple"
   llama <- reticulate::import("llama_index")
   index_text <-
     switch(index_type,
-           "simple"   = llama$GPTSimpleVectorIndex,
-           "faiss"    = llama$GPTFaissIndex
+      "simple"   = llama$GPTSimpleVectorIndex,
+      "faiss"    = llama$GPTFaissIndex
     )
   simple_directory_reader <- llama$SimpleDirectoryReader
   docs_to_load <- simple_directory_reader(
