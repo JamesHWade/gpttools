@@ -38,13 +38,14 @@ add_embeddings <- function(index) {
     dplyr::mutate(embeddings = create_openai_embedding(chunks),
                   usage = embeddings |> dplyr::pull(usage),
                   embedding = embeddings |> dplyr::pull(embedding)) |>
+    dplyr::select(-embeddings) |>
     dplyr::ungroup()
 }
 
 create_index <- function(domain) {
   index <- split_text_files(domain = domain) |>
     add_embeddings()
-  arrow::write_feather(index, sink = "indices/{domain}.feather")
+  arrow::write_feather(index, sink = glue::glue("indices/{domain}.feather"))
   index
 }
 
@@ -120,12 +121,8 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
 
   n_tokens <- tokenizers::count_characters(instructions) / 4
   n_tokens <- min(3500L, as.integer(n_tokens))
-
-  print(n_tokens)
-
   answer <- openai_create_completion(model = "text-davinci-003",
                                      prompt = instructions,
-                                     max_tokens = as.integer(4097L - n_tokens))
-
+                                     max_tokens = as.integer(4000L - n_tokens))
   list(instructions, answer)
 }

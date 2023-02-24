@@ -124,9 +124,6 @@ write_scrape_dirs <- function(local_domain) {
 #' @return A character vector with all new line characters removed.
 #'
 #' @export
-#'
-#' @examples
-#' remove_new_lines(c("Hello\nWorld", "Foo\nBar"))
 remove_new_lines <- function(serie) {
   serie |>
     stringr::str_replace("\n", " ") |>
@@ -148,7 +145,6 @@ remove_new_lines <- function(serie) {
 #' @return A character vector containing the text from the URL.
 #'
 #' @export
-#'
 scrape_url <- function(url) {
   rlang::check_installed("rvest")
   exclude_tags <- c("style", "script", "head", "meta", "link", "button")
