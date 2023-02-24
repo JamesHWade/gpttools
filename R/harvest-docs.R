@@ -27,8 +27,8 @@ get_domain_hyperlinks <- function(local_domain, url) {
     if (stringr::str_detect(link, paste0("^https?://", local_domain))) {
       clean_link <- link
     } else if (stringr::str_detect(link, "^/[^/]|^/+$|^\\./|^[[:alnum:]]") &&
-      !stringr::str_detect(link, "^https?://|\\.\\.|#|mailto:") &&
-      !(link == "_")) {
+               !stringr::str_detect(link, "^https?://|\\.\\.|#|mailto:") &&
+               !(link == "_")) {
       if (stringr::str_detect(link, "^\\./")) {
         link <- stringr::str_replace(link, "^\\./", "/")
       } else if (stringr::str_detect(link, "^[[:alnum:]]")) {
@@ -151,13 +151,14 @@ remove_new_lines <- function(serie) {
 #'
 scrape_url <- function(url) {
   rlang::check_installed("rvest")
-  exclude_tags <- c("style", "script", "head", "meta", "link")
+  exclude_tags <- c("style", "script", "head", "meta", "link", "button")
   text <- rvest::read_html(url) |>
-    rvest::html_nodes(xpath = paste("//body//*[not(self::",
-      paste(exclude_tags, collapse = " or self::"),
-      ")]",
-      sep = ""
-    )) |>
+    rvest::html_nodes(xpath = "body") |>
+    # rvest::html_nodes(xpath = paste("//body//*[not(self::",
+    #   paste(exclude_tags, collapse = " or self::"),
+    #   ")]",
+    #   sep = ""
+    # )) |>
     rvest::html_text2() |>
     remove_new_lines()
   if ("You need to enable JavaScript to run this app." %in% text) {
@@ -166,107 +167,4 @@ scrape_url <- function(url) {
   } else {
     text
   }
-}
-
-#' Process text files
-#'
-#' @param domain Character. The name of the directory containing the text files.
-#'
-#' @return A data frame containing the processed text files
-process_text_files <- function(domain) {
-  file_names <- list.files(paste0("text/", domain), full.names = TRUE)
-
-  texts <- purrr::map(file_names, \(file){
-    tibble::tibble(
-      fname = basename(file),
-      text = readr::read_lines(file) |> unique() |> paste(collapse = " ")
-    )
-  }) |>
-    dplyr::bind_rows()
-
-  readr::write_csv(texts, paste0("processed/", domain, ".csv"))
-  texts
-}
-
-#' Create Llama Index
-#'
-#' Create a Llama index for a given domain
-#'
-#' @param domain character string specifying the domain to create an index for
-#' @param index_type character string specifying the type of index to create
-#' @param input_dir character string specifying input directory
-#'
-#' @return the index created
-#'
-#' @examples
-#' \dontrun{
-#' create_llama_index("movies")
-#' create_llama_index("books", index_type = "faiss")
-#' }
-create_llama_index <- function(domain, input_dir = "text", index_type = "simple") {
-  check_python_configuration()
-  llama <- reticulate::import("llama_index")
-  index_text <-
-    switch(index_type,
-      "simple"   = llama$GPTSimpleVectorIndex,
-      "faiss"    = llama$GPTFaissIndex
-    )
-  simple_directory_reader <- llama$SimpleDirectoryReader
-  docs_to_load <- simple_directory_reader(
-    input_dir = glue::glue("{input_dir}/{domain}")
-  )
-  documents <- docs_to_load$load_data()
-  index <- index_text(documents)
-  index$save_to_disk(glue::glue("indices/{domain}.json"))
-}
-
-#' Load Llama Index
-#'
-#' This function loads a Llama index from disk.
-#'
-#' @param domain The domain to load the index from.
-#'
-#' @return A GPTSimpleVectorIndex object.
-load_llama_index <- function(domain) {
-  check_python_configuration()
-  llama <- reticulate::import("llama_index")
-  gpt_simple_vector_index <- llama$GPTSimpleVectorIndex
-  gpt_simple_vector_index$load_from_disk(glue::glue("indices/{domain}.json"))
-}
-
-#' Query the Llama Index
-#'
-#' This function queries the Llama Index using a query string.
-#'
-#' @param index The Llama Index object.
-#' @param query The query string.
-#'
-#' @return The result of the query.
-#'
-#' @export
-query_llama_index <- function(index, query) {
-  check_python_configuration()
-  index$query(query, mode = "embedding")
-}
-
-#' Check Python Configuration
-#'
-#' Check if the required Python modules are installed.
-#'
-#' @return Returns TRUE if the modules are installed, otherwise throws an error.
-#' @export
-check_python_configuration <- function() {
-  rlang::check_installed("reticulate")
-  modules <- c("llama_index")
-  purrr::walk(modules, \(mod) {
-    if (!reticulate::py_module_available(mod)) {
-      cli::cli_abort(
-        c(
-          "!" = "Python module {mod} is required but not found.",
-          "i" = "See reticulate documentation for installation help:
-          {.url https://rstudio.github.io/reticulate/}."
-        )
-      )
-    }
-  })
 }
