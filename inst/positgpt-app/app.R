@@ -90,7 +90,11 @@ server <- function(input, output, session) {
     prompt <- glue(r$all_chats, new_prompt, .sep = " ")
     cli_rule("Prompt")
     cat_print(prompt)
-    interim <- query_index(index(), query = prompt, task = input$task)
+    interim <- query_index(index(),
+      query = prompt,
+      task = input$task,
+      k = input$n_docs
+    )
     cli_inform(c("i" = "Response received."))
     new_response <- interim[[3]]$choices$text
     cli_rule("Response")

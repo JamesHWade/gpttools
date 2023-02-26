@@ -59,7 +59,7 @@ chat_card <- card(
       ),
       sliderInput(
         "n_docs", "Number of Documents to Include",
-        min = 0, max = 40, value = 4, width = "90%"
+        min = 0, max = 20, value = 3, width = "90%"
       )
     )
   )

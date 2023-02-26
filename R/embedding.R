@@ -180,13 +180,21 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
                    ---\n\nSummary:"),
     )
 
-  n_tokens <- tokenizers::count_characters(instructions) / 4
-  n_tokens <- min(3500L, as.integer(n_tokens))
-  answer <- openai_create_completion(
-    model = "text-davinci-003",
-    prompt = instructions,
-    max_tokens = as.integer(4000L - n_tokens)
-  )
+  n_tokens <- tokenizers::count_characters(instructions) %/% 4
+  if (n_tokens > 3500) {
+    answer <-
+      list(
+        choice = list(
+          text = "Too many tokens. Please lower the number of documents (k)."
+        )
+      )
+  } else {
+    answer <- openai_create_completion(
+      model = "text-davinci-003",
+      prompt = instructions,
+      max_tokens = as.integer(4000L - n_tokens)
+    )
+  }
   list(instructions, context, answer)
 }
 
