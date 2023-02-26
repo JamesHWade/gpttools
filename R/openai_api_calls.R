@@ -138,9 +138,6 @@ query_openai_api <- function(body, openai_api_key, task) {
       "i" = glue("Error message: {parsed$error$message}")
     ))
   }
-
-  cli_inform("Status code: {httr::status_code(response)}")
-
   parsed
 }
 

@@ -9,7 +9,7 @@
       -- RStudio API -----------------------------------------------------------------
       -- Settings for gpttools -------------------------------------------------------
       i Max tokens set to 500
-      i Code style is set to tidyverse
+      i Code style is set to
 
 # Sitrep works with local options
 

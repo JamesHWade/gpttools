@@ -1,51 +1,62 @@
-split_text_files <- function(domain) {
+prepare_scraped_files <- function(domain) {
   file_names <- fs::dir_ls(glue::glue("text/{domain}"), recurse = TRUE)
 
-  purrr::map(file_names, \(file){
+  purrr::map(file_names, \(file) {
     tibble::tibble(
       fname = basename(file),
       text = readr::read_lines(file) |> unique() |> paste(collapse = " ")
     )
-  }) |>
+  }, .progress = TRUE) |>
     dplyr::bind_rows() |>
-    dplyr::mutate(chunks = purrr::map(text, \(x){
-      tokenizers::chunk_text(x, chunk_size = 500)
-    })) |>
+    dplyr::mutate(
+      chunks = purrr::map(text, \(x) {
+        chunk_with_overlap(x,
+          chunk_size = 500,
+          overlap_size = 50,
+          doc_id = domain,
+          lowercase = FALSE,
+          strip_punct = FALSE,
+          strip_numeric = FALSE,
+          stopwords = NULL
+        )
+      })
+    ) |>
     tidyr::unnest(chunks) |>
     tidyr::unnest(chunks) |>
     dplyr::rename(original_text = text) |>
-    dplyr::mutate(n_words = tokenizers::count_words(chunks))
+    dplyr::mutate(n_tokens = tokenizers::count_characters(chunks) %/% 4)
 }
 
-create_openai_embedding <- function(input_text,
-                                    model = "text-embedding-ada-002",
-                                    openai_api_key = Sys.getenv("OPENAI_API_KEY")) {
-  body <- list(
-    model = model,
-    input = input_text
-  )
-  embedding <- query_openai_api(body, openai_api_key, task = "embeddings")
-  embedding$usage$total_tokens
-  tibble::tibble(
-    usage = embedding$usage$total_tokens,
-    embedding = embedding$data$embedding
-  )
-}
+create_openai_embedding <-
+  function(input_text,
+           model = "text-embedding-ada-002",
+           openai_api_key = Sys.getenv("OPENAI_API_KEY")) {
+    body <- list(
+      model = model,
+      input = input_text
+    )
+    embedding <- query_openai_api(body, openai_api_key, task = "embeddings")
+    embedding$usage$total_tokens
+    tibble::tibble(
+      usage = embedding$usage$total_tokens,
+      embedding = embedding$data$embedding
+    )
+  }
 
 add_embeddings <- function(index) {
   index |>
-    dplyr::rowwise() |>
     dplyr::mutate(
-      embeddings = create_openai_embedding(chunks),
-      usage = embeddings |> dplyr::pull(usage),
-      embedding = embeddings |> dplyr::pull(embedding)
+      embeddings = purrr::map(
+        .x = chunks,
+        .f = create_openai_embedding,
+        .progress = "Create Embeddings"
+      )
     ) |>
-    dplyr::select(-embeddings) |>
-    dplyr::ungroup()
+    tidyr::unnest(embeddings)
 }
 
 create_index <- function(domain) {
-  index <- split_text_files(domain = domain) |>
+  index <- prepare_scraped_files(domain = domain) |>
     add_embeddings()
   arrow::write_feather(index, sink = glue::glue("indices/{domain}.feather"))
   index
@@ -62,6 +73,43 @@ get_top_matches <- function(index, query_embedding, k = 5) {
     head(k)
 }
 
+#' Load Index Data for a Domain
+#'
+#' This function loads the index data for a given domain from a Feather file.
+#'
+#' @param domain A character string indicating the name of the domain.
+#'
+#' @return A data frame containing the index data for the specified domain.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' load_index("example_domain")
+#' }
+load_index <- function(domain) {
+  arrow::read_feather(glue("indices/{domain}.feather"))
+}
+
+
+#' Query an Index
+#'
+#' This function queries an index with a given question or prompt and returns a set
+#' of suggested answers.
+#'
+#' @param index A pre-built index of text data.
+#' @param query A character string representing the question or prompt to query the index with.
+#' @param task A character string indicating the task to perform, such as "conservative q&a".
+#' @param k An integer specifying the number of top matches to retrieve.
+#'
+#' @return A list containing the instructions for answering the question, the context
+#'   in which the question was asked, and the suggested answer.
+#'
+#' @examples
+#' \dontrun{
+#' index <- build_index(data)
+#' query_index(index, "What is the capital of France?")
+#' }
 query_index <- function(index, query, task = "conservative q&a", k = 4) {
   arg_match(
     task,
@@ -77,7 +125,10 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
     dplyr::pull(embedding) |>
     unlist()
 
-  context <- get_top_matches(index, query_embedding, k = k) |>
+  full_context <- get_top_matches(index, query_embedding, k = k)
+
+  context <-
+    full_context |>
     dplyr::pull(chunks) |>
     paste(collapse = "\n\n")
 
@@ -134,5 +185,37 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
     prompt = instructions,
     max_tokens = as.integer(4000L - n_tokens)
   )
-  list(instructions, answer)
+  list(instructions, context, answer)
+}
+
+
+chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
+  stopifnot(is.character(x), length(x) == 1)
+  words <- tokenizers::tokenize_words(x, simplify = TRUE, ...)
+  chunks <- list()
+  start <- 1
+  end <- chunk_size
+  while (start <= length(words)) {
+    if (end > length(words)) {
+      end <- length(words)
+    }
+    chunk <- words[start:end]
+    if (length(chunk) > 0) {
+      chunks[[start]] <- chunk
+    }
+    start <- start + (chunk_size - overlap_size)
+    end <- end + (chunk_size - overlap_size)
+  }
+  if (!is.null(doc_id)) {
+    num_chars <- stringi::stri_length(length(chunks))
+    chunk_ids <- stringi::stri_pad_left(seq_along(chunks),
+      width = num_chars, pad = "0"
+    )
+    names(chunks) <- stringi::stri_c(doc_id, chunk_ids, sep = "-")
+  } else {
+    names(chunks) <- NULL
+  }
+  chunks <- purrr::compact(chunks)
+  out <- lapply(chunks, stringi::stri_c, collapse = " ")
+  out
 }

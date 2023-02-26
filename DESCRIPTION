@@ -11,13 +11,17 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: R (>= 3.5)
 Imports: 
+    arrow,
     assertthat,
+    bslib,
     cli,
     dplyr,
+    fs,
     glue,
     httr,
     jsonlite,
     lifecycle,
+    lsa,
     magrittr,
     miniUI,
     purrr,
@@ -27,8 +31,11 @@ Imports:
     shiny,
     skimr,
     stats,
+    stringi,
     stringr,
     tibble,
+    tidyr,
+    tokenizers,
     urltools,
     usethis
 Suggests: 
@@ -39,7 +46,6 @@ Suggests:
     shinytest2,
     spelling,
     roxygen2,
-    reticulate,
     rvest,
     withr
 Config/testthat/edition: 3

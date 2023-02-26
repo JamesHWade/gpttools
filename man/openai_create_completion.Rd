@@ -5,7 +5,7 @@
 \title{Generate text completions using OpenAI's API}
 \usage{
 openai_create_completion(
-  model,
+  model = "text_davinci-003",
   prompt = "<|endoftext|>",
   suffix = NULL,
   max_tokens = 16,

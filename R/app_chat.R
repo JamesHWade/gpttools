@@ -25,7 +25,6 @@ run_chat_gpt <- function() {
 
   model_settings_card <- bslib::card(
     height = "320px",
-    # class = "bg-light",
     bslib::card_header("Model Input Settings", class = "bg-secondary"),
     bslib::card_body(
       shiny::selectInput(

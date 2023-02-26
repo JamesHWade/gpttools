@@ -16,3 +16,4 @@
 ^text$
 ^processed$
 ^indices$
+^inst/positgpt-app/indices$

@@ -78,7 +78,7 @@ crawl <- function(url) {
       stringr::str_replace(url, "^https?://", "") |>
       stringr::str_replace_all("/", "_")
     text_file <- glue::glue("text/{local_domain}/{filename}.txt")
-    if (any(url %in% seen) | file.exists(text_file)) {
+    if (any(url %in% seen) || file.exists(text_file)) {
       cli::cli_inform(c(
         "!" = "Skipped {url}",
         "i" = "Already seen."
@@ -134,11 +134,9 @@ remove_new_lines <- function(serie) {
     unique()
 }
 
-
-
 #' Scrape text from a URL
 #'
-#' This function scrapes the text from a URL and returns it as a character vector.
+#' This function scrapes the text from a URL and returns a character vector.
 #'
 #' @param url A character string containing a valid URL.
 #'
@@ -149,12 +147,11 @@ scrape_url <- function(url) {
   rlang::check_installed("rvest")
   exclude_tags <- c("style", "script", "head", "meta", "link", "button")
   text <- rvest::read_html(url) |>
-    rvest::html_nodes(xpath = "body") |>
-    # rvest::html_nodes(xpath = paste("//body//*[not(self::",
-    #   paste(exclude_tags, collapse = " or self::"),
-    #   ")]",
-    #   sep = ""
-    # )) |>
+    rvest::html_nodes(xpath = paste("//body//*[not(self::",
+      paste(exclude_tags, collapse = " or self::"),
+      ")]",
+      sep = ""
+    )) |>
     rvest::html_text2() |>
     remove_new_lines()
   if ("You need to enable JavaScript to run this app." %in% text) {

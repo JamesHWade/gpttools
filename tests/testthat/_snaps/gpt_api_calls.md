@@ -5,7 +5,6 @@
         openai_api_key = sample_key)
     Message
       ! OpenAI API request failed [401].Error message: Incorrect API key provided: 4f9bb533************************cc24. You can find your API key at https://platform.openai.com/account/api-keys.
-      Status code: 401
     Output
       $error
       $error$message
@@ -29,7 +28,6 @@
         temperature = 1, instruction = "fix the grammar", openai_api_key = sample_key)
     Message
       ! OpenAI API request failed [401].Error message: Incorrect API key provided: 4f9bb533************************cc24. You can find your API key at https://platform.openai.com/account/api-keys.
-      Status code: 401
     Output
       $error
       $error$message
@@ -56,7 +54,6 @@
       Specify either temperature or top_p, not both.
     Message
       ! OpenAI API request failed [401].Error message: Incorrect API key provided: 4f9bb533************************cc24. You can find your API key at https://platform.openai.com/account/api-keys.
-      Status code: 401
     Output
       $error
       $error$message
