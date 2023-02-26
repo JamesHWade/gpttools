@@ -1,3 +1,5 @@
+# gpttools 0.2.3
+
 # gpttools 0.2.2
 
 This is the first CRAN release of gpttools. The package includes models for:
