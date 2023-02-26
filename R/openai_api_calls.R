@@ -79,7 +79,7 @@ openai_create_edit <- function(model,
 #' }
 #' @export
 openai_create_completion <-
-  function(model,
+  function(model = "text_davinci-003",
            prompt = "<|endoftext|>",
            suffix = NULL,
            max_tokens = 16,
@@ -112,7 +112,7 @@ openai_create_completion <-
   }
 
 query_openai_api <- function(body, openai_api_key, task) {
-  arg_match(task, c("completions", "edits"))
+  arg_match(task, c("completions", "edits", "embeddings"))
 
   base_url <- glue("https://api.openai.com/v1/{task}")
 
@@ -138,9 +138,6 @@ query_openai_api <- function(body, openai_api_key, task) {
       "i" = glue("Error message: {parsed$error$message}")
     ))
   }
-
-  cli_inform("Status code: {httr::status_code(response)}")
-
   parsed
 }
 

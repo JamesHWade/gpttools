@@ -13,3 +13,7 @@
 ^pkgdown$
 ^revdep$
 ^.lintr$
+^text$
+^processed$
+^indices$
+^inst/positgpt-app/indices$

@@ -11,22 +11,33 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: R (>= 3.5)
 Imports: 
+    arrow,
     assertthat,
+    bslib,
     cli,
+    dplyr,
+    fs,
     glue,
     httr,
     jsonlite,
     lifecycle,
+    lsa,
     magrittr,
     miniUI,
     purrr,
+    readr,
     rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
     shiny,
     skimr,
     stats,
-    usethis,
-    withr
+    stringi,
+    stringr,
+    tibble,
+    tidyr,
+    tokenizers,
+    urltools,
+    usethis
 Suggests: 
     covr,
     mockr,
@@ -34,7 +45,9 @@ Suggests:
     uuid,
     shinytest2,
     spelling,
-    roxygen2
+    roxygen2,
+    rvest,
+    withr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 URL: https://github.com/JamesHWade/gpttools

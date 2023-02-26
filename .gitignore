@@ -5,6 +5,11 @@ docs
 .httr-oauth
 .DS_Store
 _site
+text/
+processed/
+indices/
+*~
+inst/streamlit-app/
 
 # History files
 .Rhistory
