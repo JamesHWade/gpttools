@@ -192,7 +192,7 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
     answer <- openai_create_completion(
       model = "text-davinci-003",
       prompt = instructions,
-      max_tokens = as.integer(4000L - n_tokens)
+      max_tokens = as.integer(3800L - n_tokens)
     )
   }
   list(instructions, context, answer)
