@@ -47,7 +47,9 @@ Suggests:
     spelling,
     roxygen2,
     rvest,
-    withr
+    withr,
+    shinyjs,
+    shinyWidgets
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 URL: https://github.com/JamesHWade/gpttools

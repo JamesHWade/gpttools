@@ -44,19 +44,23 @@ server <- function(input, output, session) {
   r <- reactiveValues()
   r$all_chats <- ""
   r$all_chats_formatted <- NULL
+  api_check <- reactive(
+    check_api_connection(Sys.getenv("OPENAI_API_KEY"),
+      update_api = FALSE
+    )
+  )
 
   observe({
-    if (check_api_connection(Sys.getenv("OPENAI_API_KEY"),
-      update_api = FALSE
-    )) {
+    if (rlang::is_true(api_check())) {
       shinyjs::hide("hide_if_api_valid")
       shinyjs::enable("chat_box")
     } else {
       shinyjs::disable("chat_box")
-      shinyWidgets::sendSweetAlert(
-        title = "Invalid Key",
-        text  = "API Key was not validated. Please enter a valid key."
-      )
+    }
+    if (input$chat_input != "") {
+      shinyjs::enable("chat")
+    } else {
+      shinyjs::disable("chat")
     }
   })
 

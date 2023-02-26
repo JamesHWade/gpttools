@@ -105,6 +105,8 @@ load_index <- function(domain) {
 #' @return A list containing the instructions for answering the question, the context
 #'   in which the question was asked, and the suggested answer.
 #'
+#' @export
+#'
 #' @examples
 #' \dontrun{
 #' index <- build_index(data)
