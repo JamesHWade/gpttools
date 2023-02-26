@@ -12,24 +12,29 @@ ui <- fluidPage(
   tags$script(HTML(js)),
   br(),
   useShinyjs(),
-  div(id = "hide_if_api_valid",
-      card(
-        card_header("OpenAI API Key", class = "bg-primary"),
-        card_body(
-          fluidRow(
-            textInput("api_key", "Enter your OpenAI API key:",
-                      placeholder = "API Key", width = "100%"),
-            actionButton("submit", "Submit", icon = icon("check"),
-                         width = "100%", class = "btn-primary")
+  div(
+    id = "hide_if_api_valid",
+    card(
+      card_header("OpenAI API Key", class = "bg-primary"),
+      card_body(
+        fluidRow(
+          textInput("api_key", "Enter your OpenAI API key:",
+            placeholder = "API Key", width = "100%"
           ),
-        )
+          actionButton("submit", "Submit",
+            icon = icon("check"),
+            width = "100%", class = "btn-primary"
+          )
+        ),
       )
+    )
   ),
   layout_column_wrap(
     width = 1 / 2,
     fill = TRUE,
-    div(id = "chat_box",
-        chat_card
+    div(
+      id = "chat_box",
+      chat_card
     ),
     uiOutput("all_chats_box")
   )
@@ -42,7 +47,8 @@ server <- function(input, output, session) {
 
   observe({
     if (check_api_connection(Sys.getenv("OPENAI_API_KEY"),
-                             update_api = FALSE)) {
+      update_api = FALSE
+    )) {
       shinyjs::hide("hide_if_api_valid")
       shinyjs::enable("chat_box")
     } else {
@@ -57,7 +63,8 @@ server <- function(input, output, session) {
   observeEvent(input$submit, {
     Sys.setenv(OPENAI_API_KEY = input$api_key)
     if (check_api_connection(Sys.getenv("OPENAI_API_KEY"),
-                             update_api = FALSE)) {
+      update_api = FALSE
+    )) {
       shinyjs::hide("hide_if_api_valid")
       shinyWidgets::sendSweetAlert(
         title = "Valid Key",

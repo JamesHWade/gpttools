@@ -39,10 +39,12 @@ chat_card <- card(
     fluidRow(
       selectInput(
         "source", "Data Source",
-        choices = c("Posit Docs"      = "docs.posit.co",
-                    "Posit Solutions" = "solutions.posit.co",
-                    "Quarto"          = "quarto.org",
-                    "R4DS"            = "r4ds.hadley.nz"),
+        choices = c(
+          "Posit Docs" = "docs.posit.co",
+          "Posit Solutions" = "solutions.posit.co",
+          "Quarto" = "quarto.org",
+          "R4DS" = "r4ds.hadley.nz"
+        ),
         width = "50%"
       ),
       selectInput(
