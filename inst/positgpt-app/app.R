@@ -12,20 +12,22 @@ ui <- fluidPage(
   tags$script(HTML(js)),
   br(),
   useShinyjs(),
-  div(
-    id = "hide_if_api_valid",
-    card(
-      card_header("OpenAI API Key", class = "bg-primary"),
-      card_body(
-        fluidRow(
-          textInput("api_key", "Enter your OpenAI API key:",
-            placeholder = "API Key", width = "100%"
-          ),
-          actionButton("submit", "Submit",
-            icon = icon("check"),
-            width = "100%", class = "btn-primary"
+  shinyjs::hidden(
+    div(
+      id = "hide_if_api_valid",
+      card(
+        card_header("OpenAI API Key", class = "bg-primary"),
+        card_body(
+          fluidRow(
+            textInput("api_key", "Enter your OpenAI API key:",
+              placeholder = "API Key", width = "100%"
+            ),
+            actionButton("submit", "Submit",
+              icon = icon("check"),
+              width = "100%", class = "btn-primary"
+            )
           )
-        ),
+        )
       )
     )
   ),
@@ -56,6 +58,7 @@ server <- function(input, output, session) {
       shinyjs::enable("chat_box")
     } else {
       shinyjs::disable("chat_box")
+      shinyjs::show("hide_if_api_valid")
     }
     if (input$chat_input != "") {
       shinyjs::enable("chat")
