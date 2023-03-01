@@ -9,19 +9,21 @@ query_index(index, query, task = "conservative q&a", k = 4)
 \arguments{
 \item{index}{A pre-built index of text data.}
 
-\item{query}{A character string representing the question or prompt to query the index with.}
+\item{query}{A character string representing the question or prompt to query
+the index with.}
 
-\item{task}{A character string indicating the task to perform, such as "conservative q&a".}
+\item{task}{A character string indicating the task to perform, such as
+"conservative q&a".}
 
 \item{k}{An integer specifying the number of top matches to retrieve.}
 }
 \value{
-A list containing the instructions for answering the question, the context
-in which the question was asked, and the suggested answer.
+A list containing the instructions for answering the question, the
+context in which the question was asked, and the suggested answer.
 }
 \description{
-This function queries an index with a given question or prompt and returns a set
-of suggested answers.
+This function queries an index with a given question or prompt and returns a
+set of suggested answers.
 }
 \examples{
 \dontrun{

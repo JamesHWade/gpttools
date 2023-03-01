@@ -94,7 +94,7 @@ server <- function(input, output, session) {
     )
     cli_inform(c("i" = "Response received."))
     new_response <- interim[[3]]$choices$text
-    r$context_links <- interim[[2]]$link
+    r$context_links <- c(r$context_links, interim[[2]]$link)
     cli_rule("Response")
     r$all_chats <- glue(r$all_chats, new_prompt, new_response)
     print(r$all_chats)

@@ -57,12 +57,10 @@ create_index <- function(domain) {
 
 get_top_matches <- function(index, query_embedding, k = 5) {
   index |>
-    dplyr::rowwise() |>
-    dplyr::mutate(similarity = lsa::cosine(
-      query_embedding,
-      embedding |> unlist()
-    )) |>
-    dplyr::arrange(desc(similarity)) |>
+    mutate(similarity = map_dbl(embedding, \(x) {
+      lsa::cosine(query_embedding, unlist(x))
+    })) |>
+    arrange(desc(similarity)) |>
     head(k)
 }
 
@@ -81,7 +79,7 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' load_index("example_domain")
 #' }
 load_index <- function(domain) {
-  arrow::read_feather(glue("indices/{domain}.feather"))
+  arrow::read_feather(glue("indices/{domain}.feather"), as_data_frame = FALSE)
 }
 
 
@@ -166,7 +164,7 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
         glue::glue("Write a list of libraries and tools present in the context
                    below\"\n\nContext:\n{context}\n\n---\n\n"),
       "simple instructions" =
-        glue::glue("{query} given the common questions and answers below \n\n
+        glue::glue("{query} given the context below \n\n
                    {context}\n\n---\n\n"),
       "summarize" =
         glue::glue("Write an elaborate, paragraph long summary about
