@@ -1,13 +1,5 @@
 prepare_scraped_files <- function(domain) {
-  file_names <- fs::dir_ls(glue::glue("text/{domain}"), recurse = TRUE)
-
-  purrr::map(file_names, \(file) {
-    tibble::tibble(
-      fname = basename(file),
-      text = readr::read_lines(file) |> unique() |> paste(collapse = " ")
-    )
-  }, .progress = TRUE) |>
-    dplyr::bind_rows() |>
+  arrow::read_parquet(glue("text/{domain}.parquet")) |>
     dplyr::mutate(
       chunks = purrr::map(text, \(x) {
         chunk_with_overlap(x,
@@ -56,7 +48,8 @@ add_embeddings <- function(index) {
 }
 
 create_index <- function(domain) {
-  index <- prepare_scraped_files(domain = domain) |>
+  index <-
+    prepare_scraped_files(domain = domain) |>
     add_embeddings()
   arrow::write_feather(index, sink = glue::glue("indices/{domain}.feather"))
   index
@@ -94,16 +87,18 @@ load_index <- function(domain) {
 
 #' Query an Index
 #'
-#' This function queries an index with a given question or prompt and returns a set
-#' of suggested answers.
+#' This function queries an index with a given question or prompt and returns a
+#' set of suggested answers.
 #'
 #' @param index A pre-built index of text data.
-#' @param query A character string representing the question or prompt to query the index with.
-#' @param task A character string indicating the task to perform, such as "conservative q&a".
+#' @param query A character string representing the question or prompt to query
+#'   the index with.
+#' @param task A character string indicating the task to perform, such as
+#'   "conservative q&a".
 #' @param k An integer specifying the number of top matches to retrieve.
 #'
-#' @return A list containing the instructions for answering the question, the context
-#'   in which the question was asked, and the suggested answer.
+#' @return A list containing the instructions for answering the question, the
+#'   context in which the question was asked, and the suggested answer.
 #'
 #' @export
 #'
@@ -195,7 +190,7 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
       max_tokens = as.integer(3800L - n_tokens)
     )
   }
-  list(instructions, context, answer)
+  list(instructions, full_context, answer)
 }
 
 

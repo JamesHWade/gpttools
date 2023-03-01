@@ -121,12 +121,13 @@ query_openai_api <- function(body, openai_api_key, task) {
     "Content-Type" = "application/json"
   )
 
-  response <- httr::POST(
-    url = base_url,
-    httr::add_headers(headers),
-    body = body,
-    encode = "json"
-  )
+  response <-
+    httr::RETRY("POST",
+      url = base_url,
+      httr::add_headers(headers), body = body,
+      encode = "json",
+      quiet = TRUE
+    )
 
   parsed <- response %>%
     httr::content(as = "text", encoding = "UTF-8") %>%

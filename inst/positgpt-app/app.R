@@ -6,6 +6,8 @@ library(glue)
 library(gpttools)
 source("helper.R")
 
+api_start <- check_api()
+
 ui <- fluidPage(
   theme = bs_theme(bootswatch = "morph", version = 5),
   title = "PositGPT",
@@ -46,32 +48,24 @@ server <- function(input, output, session) {
   r <- reactiveValues()
   r$all_chats <- ""
   r$all_chats_formatted <- NULL
-  api_check <- reactive(
-    check_api_connection(Sys.getenv("OPENAI_API_KEY"),
-      update_api = FALSE
-    )
-  )
 
   observe({
-    if (rlang::is_true(api_check())) {
+    if (rlang::is_true(api_start)) {
       shinyjs::hide("hide_if_api_valid")
       shinyjs::enable("chat_box")
     } else {
       shinyjs::disable("chat_box")
       shinyjs::show("hide_if_api_valid")
     }
-    if (input$chat_input != "") {
-      shinyjs::enable("chat")
-    } else {
-      shinyjs::disable("chat")
-    }
   })
 
   observeEvent(input$submit, {
     Sys.setenv(OPENAI_API_KEY = input$api_key)
-    if (check_api_connection(Sys.getenv("OPENAI_API_KEY"),
+    api_check <- check_api_connection(Sys.getenv("OPENAI_API_KEY"),
       update_api = FALSE
-    )) {
+    )
+    if (rlang::is_true(api_check)) {
+      cli::cli_inform("API checked and validated.")
       shinyjs::hide("hide_if_api_valid")
       shinyWidgets::sendSweetAlert(
         title = "Valid Key",
@@ -100,25 +94,29 @@ server <- function(input, output, session) {
     )
     cli_inform(c("i" = "Response received."))
     new_response <- interim[[3]]$choices$text
+    r$context_links <- interim[[2]]$link
     cli_rule("Response")
-    cat_print(new_response)
     r$all_chats <- glue(r$all_chats, new_prompt, new_response)
+    print(r$all_chats)
     cat_print(r$all_chats)
     r$all_chats_formatted <-
       make_chat_history(r$all_chats_formatted, input$chat_input, new_response)
-    output$all_chats_box <- renderUI(
-      card(
-        card_header("Chat History", class = "bg-primary"),
-        card_body(
-          fill = TRUE,
-          r$all_chats_formatted
-        )
-      )
-    )
     updateTextAreaInput(session, "chat_input", value = "")
   }) |>
     bindEvent(input$chat)
 
+  output$all_chats_box <- renderUI({
+    req(length(r$context_links) > 0)
+    card(
+      card_header("Chat History", class = "bg-primary"),
+      card_body(
+        fill = TRUE,
+        r$all_chats_formatted,
+        markdown("**Sources**"),
+        markdown(paste0("* ", unique(r$context_links), collapse = "\n"))
+      )
+    )
+  })
   observeEvent(input$cancel, stopApp())
 }
 
