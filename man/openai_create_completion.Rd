@@ -11,7 +11,8 @@ openai_create_completion(
   max_tokens = 16,
   temperature = NULL,
   top_p = NULL,
-  openai_api_key = Sys.getenv("OPENAI_API_KEY")
+  openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+  task = "completions"
 )
 }
 \arguments{
@@ -34,6 +35,9 @@ specify temperature and top_p at a time.}
 
 \item{openai_api_key}{The API key for accessing OpenAI's API. By default, the
 function will try to use the \code{OPENAI_API_KEY} environment variable.}
+
+\item{task}{The task that specifies the API url to use, defaults to
+"completions" and "chat/completions" is required for ChatGPT model.}
 }
 \value{
 A list with the generated completions and other information returned

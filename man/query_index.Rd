@@ -4,13 +4,15 @@
 \alias{query_index}
 \title{Query an Index}
 \usage{
-query_index(index, query, task = "conservative q&a", k = 4)
+query_index(index, query, history, task = "conservative q&a", k = 4)
 }
 \arguments{
 \item{index}{A pre-built index of text data.}
 
 \item{query}{A character string representing the question or prompt to query
 the index with.}
+
+\item{history}{A list of the previous chat responses}
 
 \item{task}{A character string indicating the task to perform, such as
 "conservative q&a".}

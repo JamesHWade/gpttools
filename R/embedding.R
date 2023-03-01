@@ -91,6 +91,7 @@ load_index <- function(domain) {
 #' @param index A pre-built index of text data.
 #' @param query A character string representing the question or prompt to query
 #'   the index with.
+#' @param history A list of the previous chat responses
 #' @param task A character string indicating the task to perform, such as
 #'   "conservative q&a".
 #' @param k An integer specifying the number of top matches to retrieve.
@@ -105,7 +106,7 @@ load_index <- function(domain) {
 #' index <- build_index(data)
 #' query_index(index, "What is the capital of France?")
 #' }
-query_index <- function(index, query, task = "conservative q&a", k = 4) {
+query_index <- function(index, query, history, task = "conservative q&a", k = 4) {
   arg_match(
     task,
     c(
@@ -116,6 +117,7 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
       "simple instructions", "summarize"
     )
   )
+
   query_embedding <- create_openai_embedding(input_text = query) |>
     dplyr::pull(embedding) |>
     unlist()
@@ -130,65 +132,75 @@ query_index <- function(index, query, task = "conservative q&a", k = 4) {
   instructions <-
     switch(task,
       "conservative q&a" =
-        glue::glue(
-          "Answer the question based on the context below, and if the question
-          can't be answered based on the context, say \"I don't know\"\n\n
-          Context:\n{context}\n\n---\n\nQuestion: {query}\nAnswer:"
+        list(
+          list(
+            role = "system",
+            content =
+              glue(
+                "You are a helpful chat bot that answere questions based on the
+                context provided by the user. If the user does not provide
+                context, say \"I am not able to answer that question. Maybe
+                try rephrasing your question in a different way.\"\n\n
+                Context: {context}"
+              )
+          ),
+          list(
+            role = "user",
+            content = glue("{query}")
+          )
         ),
       "permissive q&a" =
         glue::glue(
           "Answer the question based on the context below, and if the question
           can't be answered based on the context, say \"This is a tough
           question but I can answer anyway.\"\n\n
-          Context:\n{context}\n\n---\n\nQuestion: {query}\nAnswer:"
+          Context:\n{context}\n\n{query}"
         ),
       "paragraph about a question" =
         glue::glue(
           "Write a paragraph, addressing the question, and use the text below
           to obtain relevant information\"\n\nContext:\n
-          {context}\n\n---\n\nQuestion: {query}\nParagraph long Answer:"
+          {context}\n\n{query}"
         ),
       "bullet points" =
         glue::glue(
           "Write a bullet point list of possible answers, addressing the
-          question, and use the text below to obtain relevant information\"\n\nC
-          ontext:\n{context}\n\n---\n\nQuestion: {query}\nBullet point
-          Answer:"
+          question, and use the text below to obtain relevant information\"
+          \n\nContext:\n{context}\n\n{query}"
         ),
       "summarize problems given a topic" =
         glue::glue(
           "Write a summary of the problems addressed by the questions below\"\n
-          \n{context}\n\n---\n\n"
+          \n{context}"
         ),
       "extract key libraries and tools" =
-        glue::glue("Write a list of libraries and tools present in the context
-                   below\"\n\nContext:\n{context}\n\n---\n\n"),
+        glue::glue(
+          "Write a list of libraries and tools present in the context below\"
+          \n\nContext:\n{context}"
+        ),
       "simple instructions" =
-        glue::glue("{query} given the context below \n\n
-                   {context}\n\n---\n\n"),
+        glue::glue(
+          "{query} given the context below \n\n{context}"
+        ),
       "summarize" =
-        glue::glue("Write an elaborate, paragraph long summary about
-                   \"{query}\" given the questions and answers from a public
-                   forum or documentation page on this topic\n\n{context}\n\n
-                   ---\n\nSummary:"),
+        glue::glue(
+          "Write an elaborate, paragraph long summary about \"{query}\" given
+          the questions and answers from a public forum or documentation page
+          on this topic\n\n{context}"
+        ),
     )
 
-  n_tokens <- tokenizers::count_characters(instructions) %/% 4
-  if (n_tokens > 3500) {
-    answer <-
-      list(
-        choice = list(
-          text = "Too many tokens. Please lower the number of documents (k)."
-        )
-      )
-  } else {
-    answer <- openai_create_completion(
-      model = "text-davinci-003",
-      prompt = instructions,
-      max_tokens = as.integer(3800L - n_tokens)
-    )
-  }
-  list(instructions, full_context, answer)
+  cli_inform("Embedding...")
+
+  history <-
+    purrr::map(history, \(x) if (x$role == "system") NULL else x) |>
+    purrr::compact()
+
+  prompt <- c(history, instructions)
+
+  answer <- openai_create_chat_completion(prompt)
+
+  list(prompt, full_context, answer)
 }
 
 
