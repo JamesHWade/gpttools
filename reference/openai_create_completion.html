@@ -58,7 +58,8 @@
 <span>  max_tokens <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>  temperature <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  top_p <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  openai_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"OPENAI_API_KEY"</span><span class="op">)</span></span>
+<span>  openai_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"OPENAI_API_KEY"</span><span class="op">)</span>,</span>
+<span>  task <span class="op">=</span> <span class="st">"completions"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,6 +97,11 @@ specify temperature and top_p at a time.</p></dd>
 <dt>openai_api_key</dt>
 <dd><p>The API key for accessing OpenAI's API. By default, the
 function will try to use the <code>OPENAI_API_KEY</code> environment variable.</p></dd>
+
+
+<dt>task</dt>
+<dd><p>The task that specifies the API url to use, defaults to
+"completions" and "chat/completions" is required for ChatGPT model.</p></dd>
 
 </dl></div>
     <div class="section level2">
