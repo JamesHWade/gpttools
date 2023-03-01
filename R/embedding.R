@@ -79,7 +79,7 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' load_index("example_domain")
 #' }
 load_index <- function(domain) {
-  arrow::read_feather(glue("indices/{domain}.feather"), as_data_frame = FALSE)
+  arrow::read_feather(glue("indices/{domain}.feather"))
 }
 
 
