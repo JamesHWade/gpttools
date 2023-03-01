@@ -35,7 +35,9 @@ ui <- fluidPage(
   ),
   layout_column_wrap(
     width = 1 / 2,
-    fill = TRUE,
+    fill = FALSE,
+    height = "1200px",
+    heights_equal = "row",
     div(
       id = "chat_box",
       chat_card
@@ -46,8 +48,8 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   r <- reactiveValues()
-  r$all_chats <- ""
   r$all_chats_formatted <- NULL
+  r$all_chats <- NULL
 
   observe({
     if (rlang::is_true(api_start)) {
@@ -83,24 +85,32 @@ server <- function(input, output, session) {
   index <- reactive(load_index(input$source))
   observe({
     cli_inform(c("i" = "Querying OpenAI's API..."))
-    new_prompt <- input$chat_input
-    prompt <- glue(r$all_chats, new_prompt, .sep = " ")
     cli_rule("Prompt")
-    cat_print(prompt)
+    cat_print(input$chat_input)
+    cli_rule("All chats")
+    cat_print(r$all_chats)
     interim <- query_index(index(),
-      query = prompt,
+      query = input$chat_input,
+      history = r$all_chats,
       task = input$task,
       k = input$n_docs
     )
     cli_inform(c("i" = "Response received."))
-    new_response <- interim[[3]]$choices$text
+    new_response <- interim[[3]]$choices
     r$context_links <- c(r$context_links, interim[[2]]$link)
     cli_rule("Response")
-    r$all_chats <- glue(r$all_chats, new_prompt, new_response)
-    print(r$all_chats)
-    cat_print(r$all_chats)
-    r$all_chats_formatted <-
-      make_chat_history(r$all_chats_formatted, input$chat_input, new_response)
+    cli_inform(interim[[3]]$choices$message.content)
+    r$all_chats <-
+      c(
+        interim[[1]],
+        list(
+          list(
+            role    = new_response$message.role,
+            content = new_response$message.content
+          )
+        )
+      )
+    r$all_chats_formatted <- make_chat_history(r$all_chats)
     updateTextAreaInput(session, "chat_input", value = "")
   }) |>
     bindEvent(input$chat)

@@ -5,19 +5,18 @@ js <- '
   }
 });
 '
-make_chat_history <- function(history, new_prompt, new_response) {
-  new_response <-
+make_chat_history <- function(history) {
+  cli_inform("Making history...")
+  history <-
+    purrr::map(history, \(x) if (x$role == "system") NULL else x) |>
+    purrr::compact()
+
+  purrr::map(history, \(x) {
     list(
-      strong("Question"),
-      markdown(new_prompt),
-      strong("Response"),
-      markdown(new_response)
+      strong(toupper(x$role)),
+      markdown(x$content)
     )
-  if (rlang::is_null(history)) {
-    new_response
-  } else {
-    c(history, new_response)
-  }
+  })
 }
 
 chat_card <- card(
