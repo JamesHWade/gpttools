@@ -4,7 +4,7 @@
 \alias{query_index}
 \title{Query an Index}
 \usage{
-query_index(index, query, history, task = "conservative q&a", k = 4)
+query_index(index, query, history, task = "Context Only", k = 4)
 }
 \arguments{
 \item{index}{A pre-built index of text data.}

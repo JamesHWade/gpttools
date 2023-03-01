@@ -49,12 +49,9 @@ chat_card <- card(
       selectInput(
         "task", "Task",
         choices = c(
-          "conservative q&a", "permissive q&a",
-          "paragraph about a question", "bullet points",
-          "summarize problems given a topic",
-          "extract key libraries and tools",
-          "simple instructions", "summarize"
-        ), width = "50%"
+          "Context Only", "Permissive Chat"
+        ),
+        width = "50%"
       ),
       sliderInput(
         "n_docs", "Number of Documents to Include",
