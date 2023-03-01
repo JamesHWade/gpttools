@@ -57,10 +57,10 @@ create_index <- function(domain) {
 
 get_top_matches <- function(index, query_embedding, k = 5) {
   index |>
-    mutate(similarity = map_dbl(embedding, \(x) {
+    dplyr::mutate(similarity = purrr::map_dbl(embedding, \(x) {
       lsa::cosine(query_embedding, unlist(x))
     })) |>
-    arrange(desc(similarity)) |>
+    dplyr::arrange(dplyr::desc(similarity)) |>
     head(k)
 }
 
