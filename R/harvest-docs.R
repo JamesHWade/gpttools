@@ -1,14 +1,16 @@
-# Function to get the hyperlinks from a URL
 get_hyperlinks <- function(url) {
   rlang::check_installed("rvest")
   status <- httr::GET(url) |> httr::status_code()
   if (identical(status, 200L)) {
-    rvest::read_html(url) |>
-      rvest::html_nodes("a[href]") |>
-      rvest::html_attr("href") |>
-      unique()
+    tibble::tibble(
+      parent = url,
+      link = rvest::read_html(url) |>
+        rvest::html_nodes("a[href]") |>
+        rvest::html_attr("href") |>
+        unique()
+    )
   } else {
-    cli::cli_abort(c(
+    cli::cli_warn(c(
       "!" = "URL not valid.",
       "i" = "Tried to scrape {url}",
       "i" = "Status code: {status}"
@@ -20,99 +22,100 @@ check_url <- function(url) {
   httr::GET(url) |> httr::status_code()
 }
 
-get_domain_hyperlinks <- function(local_domain, url) {
-  links <- get_hyperlinks(url)
-  purrr::map(links, \(link) {
-    clean_link <- NULL
-    if (stringr::str_detect(link, paste0("^https?://", local_domain))) {
-      clean_link <- link
-    } else if (stringr::str_detect(link, "^/[^/]|^/+$|^\\./|^[[:alnum:]]") &&
-      !stringr::str_detect(link, "^https?://|\\.\\.|#|mailto:") &&
-      !(link == "_")) {
-      if (stringr::str_detect(link, "^\\./")) {
-        link <- stringr::str_replace(link, "^\\./", "/")
-      } else if (stringr::str_detect(link, "^[[:alnum:]]")) {
-        link <- glue::glue("/", link)
-      }
-      clean_link <- glue::glue("https://{local_domain}{link}")
-      if (identical(check_url(clean_link), 404L)) {
-        url_path <- urltools::url_parse(url)$path |>
-          stringr::str_split("/") |>
-          unlist()
-        url_path1 <- url_path[1]
-        clean_link <- glue::glue("https://{local_domain}/{url_path1}{link}")
-        if (identical(check_url(clean_link), 404L)) {
-          if (length(url_path) > 1) {
-            url_path2 <- paste0(url_path[1:2], collapse = "/")
-            clean_link <- glue::glue("https://{local_domain}/{url_path2}{link}")
-          } else {
-            cli::cli_warn(c(
-              "!" = "Still not found: {clean_link}",
-              "i" = "URL Path: {url_path}"
-            ))
-          }
-        }
+validate_link <- function(link, original_link, try_fix = TRUE) {
+  if (is_null(link)) {
+    return(invisible())
+  }
+  status <- check_url(link)
+  if (!is.null(link) && identical(status, 200L)) {
+    if (stringr::str_ends(link, "/")) {
+      link <- stringr::str_sub(link, end = -2)
+    }
+    link
+  } else {
+    if (try_fix) {
+      link <- stringr::str_remove(link, "\\/[\\w-\\.]+\\.html")
+      if (identical(check_url(link), 200L)) {
+        return(link)
       }
     }
-    if (!is.null(clean_link) && identical(check_url(clean_link), 200L)) {
-      if (stringr::str_ends(clean_link, "/")) {
-        clean_link <- stringr::str_sub(clean_link, end = -2)
-      }
-      clean_link
-    } else {
-      clean_link <- NULL
-    }
-  }) |>
-    unlist()
-}
-
-crawl <- function(url) {
-  local_domain <- urltools::url_parse(url)$domain
-  queue <- url
-  seen <- character()
-  write_scrape_dirs(local_domain)
-  while (length(queue) > 0) {
-    url <- queue[length(queue)]
-    cli::cli_inform(c("i" = "Url: {url}"))
-    filename <-
-      stringr::str_replace(url, "^https?://", "") |>
-      stringr::str_replace_all("/", "_")
-    text_file <- glue::glue("text/{local_domain}/{filename}.txt")
-    if (any(url %in% seen) || file.exists(text_file)) {
-      cli::cli_inform(c(
-        "!" = "Skipped {url}",
-        "i" = "Already seen."
-      ))
-      queue <- queue[!(queue %in% url)]
-    } else if (identical(check_url(url), 200L)) {
-      text <- scrape_url(url)
-      if (!rlang::is_null(text)) {
-        seen <- c(seen, url) |> unique()
-        readr::write_lines(text, text_file)
-        links <- get_domain_hyperlinks(local_domain, url)
-        links <- links[!(links %in% seen)]
-        queue <- c(queue, links) |>
-          unlist() |>
-          unique()
-        cli::cli_inform(c("i" = "Queue: {length(queue)}"))
-        cli::cli_inform(c("i" = "Seen: {length(seen)}"))
-        queue <- queue[!(queue %in% seen)]
-      }
-    } else {
-      cli::cli_inform(c(
-        "!" = "Skipped {url}",
-        "i" = "Status code: {status}"
-      ))
-      queue <- queue[!(url %in% queue)]
-    }
+    cli::cli_warn(c(
+      "!" = "URL not valid.",
+      "i" = "Tried to scrape {link}",
+      "i" = "Original link: {original_link}",
+      "i" = "Status code: {status}"
+    ))
+    NULL
   }
 }
 
-write_scrape_dirs <- function(local_domain) {
+recursive_hyperlinks <- function(local_domain, url, checked_urls = NULL) {
+  links <- url[!(url %in% checked_urls)]
+  if (length(links) < 1) {
+    return(checked_urls)
+  }
+  checked_urls <- c(checked_urls, links)
+  links_df <- purrr::map(links, get_hyperlinks) |>
+    dplyr::bind_rows() |>
+    dplyr::filter(!stringr::str_detect(link, "^\\.$|mailto:|^\\.\\.|\\#|^\\_$"))
+
+  new_links <-
+    purrr::pmap(as.list(links_df), \(parent, link) {
+      clean_link <- NULL
+      if (stringr::str_detect(link, paste0("^https?://", local_domain))) {
+        clean_link <- link
+      } else if (stringr::str_detect(link, "^/[^/]|^/+$|^\\./|^[[:alnum:]]") &&
+        !stringr::str_detect(link, "^https?://")) {
+        if (stringr::str_detect(link, "^\\./")) {
+          clean_link <- stringr::str_replace(link, "^\\./", "/")
+        } else if (stringr::str_detect(link, "^[[:alnum:]]")) {
+          clean_link <- glue::glue("/", link)
+        } else {
+          clean_link <- link
+        }
+        clean_link <- glue::glue("{parent}{clean_link}")
+      }
+      validate_link(clean_link, link)
+    }, .progress = "Collect Links") |>
+    unlist()
+  recursive_hyperlinks(local_domain, unique(new_links), checked_urls)
+}
+
+#' Scrape and process all hyperlinks within a given URL
+#'
+#' This function scrapes all hyperlinks within a given URL and processes the
+#' data into a tibble format. It saves the resulting tibble into a parquet file.
+#'
+#' @param url A character string with the URL to be scraped.
+#'
+#' @return NULL. The resulting tibble is saved into a parquet file.
+#'
+#' @export
+crawl <- function(url) {
+  local_domain <- urltools::url_parse(url)$domain
   if (!dir.exists("text")) dir.create("text")
-  scrape_dir <- paste0("text/", local_domain)
-  if (!dir.exists(scrape_dir)) dir.create(scrape_dir)
-  if (!dir.exists("processed")) dir.create("processed")
+  links <- recursive_hyperlinks(local_domain, url) |> unique()
+  scraped_data <-
+    purrr::map(links, \(x) {
+      if (identical(check_url(x), 200L)) {
+        tibble::tibble(
+          link    = x,
+          text    = paste(scrape_url(x), collapse = " "),
+          n_words = tokenizers::count_words(text)
+        )
+      } else {
+        cli::cli_inform(c(
+          "!" = "Skipped {url}",
+          "i" = "Status code: {status}"
+        ))
+      }
+    }, .progress = "Scrape URLs") |>
+    dplyr::bind_rows() |>
+    dplyr::distinct()
+  arrow::write_parquet(
+    scraped_data,
+    glue("text/{local_domain}.parquet")
+  )
 }
 
 #' Remove new lines from a character vector.
