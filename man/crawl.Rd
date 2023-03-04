@@ -4,7 +4,7 @@
 \alias{crawl}
 \title{Scrape and process all hyperlinks within a given URL}
 \usage{
-crawl(url)
+crawl(url, index_create = FALSE)
 }
 \arguments{
 \item{url}{A character string with the URL to be scraped.}

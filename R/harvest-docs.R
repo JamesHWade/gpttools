@@ -49,11 +49,21 @@ validate_link <- function(link, original_link, try_fix = TRUE) {
   }
 }
 
-recursive_hyperlinks <- function(local_domain, url, checked_urls = NULL) {
+recursive_hyperlinks <- function(local_domain,
+                                 url,
+                                 checked_urls = NULL,
+                                 aggressive = FALSE) {
   links <- url[!(url %in% checked_urls)]
   if (length(links) < 1) {
     return(checked_urls)
   }
+
+  if (aggressive) {
+    domain_pattern <- glue("^https?://(?:.*\\.)?{local_domain}/?")
+  } else {
+    domain_pattern <- glue("^https?://{local_domain}/?")
+  }
+
   checked_urls <- c(checked_urls, links)
   links_df <- purrr::map(links, get_hyperlinks) |>
     dplyr::bind_rows() |>
@@ -62,7 +72,7 @@ recursive_hyperlinks <- function(local_domain, url, checked_urls = NULL) {
   new_links <-
     purrr::pmap(as.list(links_df), \(parent, link) {
       clean_link <- NULL
-      if (stringr::str_detect(link, paste0("^https?://", local_domain))) {
+      if (stringr::str_detect(link, domain_pattern)) {
         clean_link <- link
       } else if (stringr::str_detect(link, "^/[^/]|^/+$|^\\./|^[[:alnum:]]") &&
         !stringr::str_detect(link, "^https?://")) {
@@ -91,10 +101,22 @@ recursive_hyperlinks <- function(local_domain, url, checked_urls = NULL) {
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
 #' @export
-crawl <- function(url) {
+crawl <- function(url, index_create = FALSE, aggressive = FALSE) {
   local_domain <- urltools::url_parse(url)$domain
   if (!dir.exists("text")) dir.create("text")
-  links <- recursive_hyperlinks(local_domain, url) |> unique()
+  withr::local_options(list(
+    cli.progress_show_after = 0,
+    cli.progress_clear = FALSE
+  ))
+  cli_rule("Crawling {.url {url}}")
+  cli_inform(c(
+    "i" = "This may take a while.",
+    "i" = "Gathering links to scrape"
+  ))
+  links <-
+    recursive_hyperlinks(local_domain, url, aggressive = aggressive) |>
+    unique()
+  cli_inform(c("i" = "Scraping validated links"))
   scraped_data <-
     purrr::map(links, \(x) {
       if (identical(check_url(x), 200L)) {
@@ -112,10 +134,14 @@ crawl <- function(url) {
     }, .progress = "Scrape URLs") |>
     dplyr::bind_rows() |>
     dplyr::distinct()
+  cli_inform(c("i" = "Saving scraped data"))
   arrow::write_parquet(
     scraped_data,
     glue("text/{local_domain}.parquet")
   )
+  if (index_create) {
+    create_index(local_domain)
+  }
 }
 
 #' Remove new lines from a character vector.
