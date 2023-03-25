@@ -9,7 +9,7 @@
 #' @export
 #'
 add_roxygen_addin <- function() {
-  gpt_insert(
+  gptstudio::gpt_insert(
     model = "text-davinci-003",
     prompt = "Insert a roxygen skeleton to document this function:\n\n",
     temperature = 0.5

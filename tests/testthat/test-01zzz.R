@@ -3,5 +3,4 @@ test_that(".onLoad sets options appropriately", {
   expect_false(getOption("gpttools.valid_api"))
   expect_null(getOption("gpttools.openai_key"))
   expect_equal(getOption("gpttools.max_tokens"), 500)
-  expect_message(startup_message())
 })

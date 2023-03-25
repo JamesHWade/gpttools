@@ -4,8 +4,8 @@
 #'
 #' @export
 document_data <- function() {
-  check_api()
-  withr::local_options(shiny.launch.browser = .rs.invokeShinyPaneViewer)
+  gptstudio::check_api()
+  withr::local_options(shiny.launch.browser = ".rs.invokeShinyPaneViewer")
   run_document_data()
 }
 
@@ -132,7 +132,7 @@ run_document_data <- function() {
         inputId = "prompt",
         value = prepped_prompt()
       )
-    }) %>%
+    }) |>
       shiny::bindEvent(input$update_prompt)
 
     shiny::observe({
@@ -148,10 +148,10 @@ run_document_data <- function() {
 
       cli_inform(c("i" = "Response received. Providng output text."))
       output$response <- shiny::renderText(interim$choices[1, 1])
-    }) %>%
+    }) |>
       shiny::bindEvent(input$query_gpt)
 
-    shiny::observe(shiny::stopApp()) %>% shiny::bindEvent(input$done)
+    shiny::observe(shiny::stopApp()) |> shiny::bindEvent(input$done)
   }
 
   shiny::shinyApp(ui, server)

@@ -5,7 +5,7 @@
     Message
       -- OpenAI API Status -----------------------------------------------------------
       x OpenAI API not validated.
-      i You can validate API by calling `check_api()`
+      i You can validate API by calling `gptstudio::check_api()`
       -- RStudio API -----------------------------------------------------------------
       -- Settings for gpttools -------------------------------------------------------
       i Max tokens set to 500

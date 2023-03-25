@@ -1,5 +1,6 @@
 prepare_scraped_files <- function(domain) {
-  arrow::read_parquet(glue("text/{domain}.parquet")) |>
+  scraped_dir <- tools::R_user_dir("gpttools", which = "data")
+  arrow::read_parquet(glue("{scraped_dir}/text/{domain}.parquet")) |>
     dplyr::mutate(
       chunks = purrr::map(text, \(x) {
         chunk_with_overlap(x,
@@ -47,12 +48,43 @@ add_embeddings <- function(index) {
     tidyr::unnest(embeddings)
 }
 
-create_index <- function(domain) {
-  index <-
-    prepare_scraped_files(domain = domain) |>
-    add_embeddings()
-  arrow::write_feather(index, sink = glue::glue("indices/{domain}.feather"))
-  index
+create_index <- function(domain, overwrite = FALSE) {
+  index_dir <-
+    file.path(tools::R_user_dir("gpttools", which = "data"), "index")
+  index_file <-
+    glue::glue("{index_dir}/{domain}.parquet")
+
+  if (file.exists(index_file) && rlang::is_false(overwrite)) {
+    cli::cli_abort(
+      c(
+        "!" = "Index already exists for this domain.",
+        "i" = "Use {.code overwrite = TRUE} to overwrite index."
+      )
+    )
+  }
+  cli::cli_inform(c(
+    "!" = "You are about to create embeddings for {domain}.",
+    "i" = "This will use many tokens. Only proceed if you understand the cost.",
+    "i" = "Read more about embeddings at {.url
+      https://platform.openai.com/docs/guides/embeddings}."
+  ))
+  ask_user <- usethis::ui_yeah(
+    "Would you like to continue with creating embeddings?"
+  )
+  if (rlang::is_true(ask_user)) {
+    index <-
+      prepare_scraped_files(domain = domain) |>
+      add_embeddings()
+    if (rlang::is_false(dir.exists(index_dir))) {
+      dir.create(index_dir, recursive = TRUE)
+    }
+    arrow::write_parquet(
+      x    = index,
+      sink = index_file
+    )
+  } else {
+    cli_inform("No index was creates for {domain}")
+  }
 }
 
 get_top_matches <- function(index, query_embedding, k = 5) {
@@ -79,7 +111,8 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' load_index("example_domain")
 #' }
 load_index <- function(domain) {
-  arrow::read_feather(glue("indices/{domain}.feather"))
+  data_dir <- tools::R_user_dir("gpttools", which = "data")
+  arrow::read_parquet(glue("{data_dir}/index/{domain}.parquet"))
 }
 
 
@@ -169,7 +202,7 @@ query_index <- function(index, query, history, task = "Context Only", k = 4) {
 
   prompt <- c(history, instructions)
 
-  answer <- openai_create_chat_completion(prompt)
+  answer <- gptstudio::openai_create_chat_completion(prompt)
 
   list(prompt, full_context, answer)
 }
@@ -204,4 +237,41 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
   chunks <- purrr::compact(chunks)
   out <- lapply(chunks, stringi::stri_c, collapse = " ")
   out
+}
+
+query_openai_api <- function(body, openai_api_key, task) {
+  arg_match(task, c("completions", "chat/completions", "edits", "embeddings"))
+
+  base_url <- glue("https://api.openai.com/v1/{task}")
+
+  headers <- c(
+    "Authorization" = glue("Bearer {openai_api_key}"),
+    "Content-Type" = "application/json"
+  )
+
+  response <-
+    httr::RETRY("POST",
+      url = base_url,
+      httr::add_headers(headers), body = body,
+      encode = "json",
+      quiet = TRUE
+    )
+
+  parsed <- response |>
+    httr::content(as = "text", encoding = "UTF-8") |>
+    jsonlite::fromJSON(flatten = TRUE)
+
+  if (httr::http_error(response)) {
+    cli_alert_warning(c(
+      "x" = glue("OpenAI API request failed [{httr::status_code(response)}]."),
+      "i" = glue("Error message: {parsed$error$message}")
+    ))
+  }
+  parsed
+}
+
+list_index <- function() {
+  list.files(
+    file.path(tools::R_user_dir("gpttools", "data"), "index")
+  )
 }

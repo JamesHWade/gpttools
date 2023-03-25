@@ -97,17 +97,39 @@ recursive_hyperlinks <- function(local_domain,
 #' data into a tibble format. It saves the resulting tibble into a parquet file.
 #'
 #' @param url A character string with the URL to be scraped.
+#' @param index_create A logical value indicating whether to create an index.
+#' Default is TRUE.
+#' @param aggressive A logical value indicating whether to use aggressive link
+#' crawling. Default is FALSE.
+#' @param overwrite A logical value indicating whether to overwrite scraped
+#' pages and index if they already exist. Default is FALSE.
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
 #' @export
-crawl <- function(url, index_create = FALSE, aggressive = FALSE) {
+crawl <- function(url,
+                  index_create = TRUE,
+                  aggressive = FALSE,
+                  overwrite = FALSE) {
   local_domain <- urltools::url_parse(url)$domain
-  if (!dir.exists("text")) dir.create("text")
   withr::local_options(list(
     cli.progress_show_after = 0,
     cli.progress_clear = FALSE
   ))
+  scraped_data_dir <-
+    file.path(tools::R_user_dir("gpttools", which = "data"), "text")
+  scraped_text_file <-
+    glue::glue("{scraped_data_dir}/{local_domain}.parquet")
+
+  if (file.exists(scraped_text_file) && rlang::is_false(overwrite)) {
+    cli::cli_abort(
+      c(
+        "!" = "Scraped data already exists for this domain.",
+        "i" = "Use {.code crawl(<url>, overwrite = TRUE)} to overwrite."
+      )
+    )
+  }
+
   cli_rule("Crawling {.url {url}}")
   cli_inform(c(
     "i" = "This may take a while.",
@@ -135,12 +157,15 @@ crawl <- function(url, index_create = FALSE, aggressive = FALSE) {
     dplyr::bind_rows() |>
     dplyr::distinct()
   cli_inform(c("i" = "Saving scraped data"))
+  if (rlang::is_false(dir.exists(scraped_data_dir))) {
+    dir.create(scraped_data_dir, recursive = TRUE)
+  }
   arrow::write_parquet(
-    scraped_data,
-    glue("text/{local_domain}.parquet")
+    x    = scraped_data,
+    sink = scraped_text_file
   )
   if (index_create) {
-    create_index(local_domain)
+    create_index(local_domain, overwrite = overwrite)
   }
 }
 

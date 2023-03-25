@@ -1,0 +1,24 @@
+#' Run Chat GPT with Retreival
+#' Run the ChatGPT shiny app with semantic search and document retrieval
+#'
+#' @export
+#'
+#' @return This function has no return value.
+#'
+#' @examples
+#' # Call the function as an RStudio addin
+#' \dontrun{
+#' addin_chatgpt()
+#' }
+addin_run_retriever <- function() {
+  gptstudio::check_api()
+  indices <- list_index()
+  if (length(indices) == 0) {
+    cli::cli_abort(
+      "No index was found. Create an index with {.code crawl(<url>)}."
+    )
+  }
+  withr::local_options(shiny.launch.browser = ".rs.invokeShinyPaneViewer")
+  app_dir <- system.file("retriever", package = "gpttools")
+  shiny::shinyAppDir(app_dir)
+}

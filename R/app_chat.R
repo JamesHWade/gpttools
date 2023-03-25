@@ -96,7 +96,7 @@ run_chat_gpt <- function() {
         )
       )
       shiny::updateTextAreaInput(session, "chat_input", value = "")
-    }) %>%
+    }) |>
       shiny::bindEvent(input$chat)
 
     shiny::observeEvent(input$cancel, shiny::stopApp())

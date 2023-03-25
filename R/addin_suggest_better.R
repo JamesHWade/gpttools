@@ -5,7 +5,7 @@
 #'
 #' @export
 suggest_code_improvements <- function() {
-  gpt_insert(
+  gptstudio::gpt_insert(
     model = "text-davinci-003",
     prompt = glue::glue(
       "I'm writing R code for use in a package.",

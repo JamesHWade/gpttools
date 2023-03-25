@@ -23,7 +23,7 @@ gpt_sitrep <- function() {
   } else {
     cli_inform(c(
       "x" = "OpenAI API not validated.",
-      "i" = "You can validate API by calling {.code check_api()}"
+      "i" = "You can validate API by calling {.code gptstudio::check_api()}"
     ))
   }
   cli_rule("RStudio API")
@@ -36,4 +36,17 @@ gpt_sitrep <- function() {
   cli_inform(c("i" = "Max tokens set to {col_br_yellow(max_tokens)}"))
   code_style <- getOption("gpttools.code_style")
   cli_inform(c("i" = "Code style is set to {col_br_green(code_style)}"))
+}
+
+obscure_key <- function(api_key) {
+  if (nchar(api_key) == 0) {
+    "no key provided"
+  } else if (nchar(api_key) > 8) {
+    api_start <- substr(api_key, 1, 4)
+    api_mid <- paste0(rep("*", nchar(api_key) - 8), collapse = "")
+    api_end <- substr(api_key, nchar(api_key) - 3, nchar(api_key))
+    paste0(api_start, api_mid, api_end)
+  } else {
+    "<hidden> (too short to obscure)"
+  }
 }

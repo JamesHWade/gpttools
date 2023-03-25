@@ -4,11 +4,11 @@
 \name{gpttools-package}
 \alias{gpttools}
 \alias{gpttools-package}
-\title{gpttools: Extends gptstudio for package development to help you document code, write tests, or even explain code}
+\title{gpttools: Extensions and Tools for gptstudio}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-gpttools is an R package that extends gptstudio to provide devtools-like functionality using the latest natural language processing (NLP) models. It is designed to make package development easier by providing a range of tools and functions that can be used to improve the quality of your package's documentation, testing, and maybe even functionality.
+gpttools is an R package that provides extensions to gptstudio to provide devtools-like functionality using the latest natural language processing (NLP) models. It is designed to make package development easier by providing a range of tools and functions that can be used to improve the quality of your package's documentation, testing, and maybe even functionality.
 }
 \seealso{
 Useful links:

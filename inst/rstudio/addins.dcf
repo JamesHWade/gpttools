@@ -1,7 +1,7 @@
-Name: Comment your code
-Description: Uses OpenAI's GPT-3.5 to generate comments for your code
-Binding: comment_code_addin
-Interactive: false
+Name: ChatGPT with Retrieval
+Description: Semantic search and document retrieval for use with ChatGPT
+Binding: addin_run_retriever
+Interactive: true
 
 Name: Convert script to function
 Description: Uses OpenAI's GPT-3.5 to generate comments for your code
@@ -18,11 +18,6 @@ Description: Suggest a unit test with testthat for your functions
 Binding: suggest_unit_test_addin
 Interactive: false
 
-Name: Freeform GPT editor
-Description: Uses OpenAI's GPT-3.5 perform a user specified edit to the selected text or code
-Binding: gpt_addin
-Interactive: true
-
 Name: Document Data
 Description: Uses OpenAI's GPT-3.5 to document data for a package with help from the user
 Binding: document_data
@@ -32,4 +27,3 @@ Name: Suggest Improvements
 Description: Uses OpenAI's GPT-3.5 to make suggestions to improve user selected code
 Binding: suggest_code_improvements
 Interactive: false
-

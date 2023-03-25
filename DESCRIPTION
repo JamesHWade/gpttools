@@ -1,27 +1,26 @@
 Package: gpttools
-Title: Extends gptstudio for package development to help you document code, write tests, or even explain code
-Version: 0.2.3
+Title: Extensions and Tools for gptstudio
+Version: 0.0.4
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9740-1905"))
-Description: gpttools is an R package that extends gptstudio to provide devtools-like functionality using the latest natural language processing (NLP) models. It is designed to make package development easier by providing a range of tools and functions that can be used to improve the quality of your package's documentation, testing, and maybe even functionality.
+Description: gpttools is an R package that provides extensions to gptstudio to provide devtools-like functionality using the latest natural language processing (NLP) models. It is designed to make package development easier by providing a range of tools and functions that can be used to improve the quality of your package's documentation, testing, and maybe even functionality.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Depends: R (>= 3.5)
+Depends: R (>= 4.1)
 Imports: 
     arrow,
     assertthat,
-    bslib,
+    bslib (>= 0.4.2),
     cli,
     dplyr,
     glue,
+    gptstudio,
     httr,
     jsonlite,
-    lifecycle,
     lsa,
-    magrittr,
     miniUI,
     purrr,
     rlang (>= 0.4.11),
@@ -33,6 +32,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
+    tools,
     tokenizers,
     urltools,
     usethis
@@ -46,8 +46,7 @@ Suggests:
     roxygen2,
     rvest,
     withr,
-    shinyjs,
-    shinyWidgets
+    shinyjs
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 URL: https://github.com/JamesHWade/gpttools

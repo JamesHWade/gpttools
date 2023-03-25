@@ -14,7 +14,7 @@ test_that("Summarize airquality works", {
 
 test_that("Collect dataframes works", {
   data(mtcars)
-  expect_snapshot(collect_dataframes() %>% as.character())
+  expect_snapshot(collect_dataframes() |> as.character())
   expect_snapshot(collect_column_types(mtcars))
 })
 

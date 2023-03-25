@@ -4,7 +4,7 @@
 #'
 #' @export
 suggest_unit_test_addin <- function() {
-  gpt_insert(
+  gptstudio::gpt_insert(
     model = "text-davinci-003",
     prompt = "Suggest a unit test for this function with R package testthat",
     temperature = 0.5,

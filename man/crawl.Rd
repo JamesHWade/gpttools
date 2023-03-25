@@ -4,10 +4,19 @@
 \alias{crawl}
 \title{Scrape and process all hyperlinks within a given URL}
 \usage{
-crawl(url, index_create = FALSE)
+crawl(url, index_create = FALSE, aggressive = FALSE, overwrite = FALSE)
 }
 \arguments{
 \item{url}{A character string with the URL to be scraped.}
+
+\item{index_create}{A logical value indicating whether to create an index.
+Default is FALSE.}
+
+\item{aggressive}{A logical value indicating whether to use aggressive link
+crawling. Default is FALSE.}
+
+\item{overwrite}{A logical value indicating whether to overwrite scraped
+pages and index if they already exist. Default is FALSE.}
 }
 \value{
 NULL. The resulting tibble is saved into a parquet file.
