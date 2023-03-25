@@ -42,11 +42,11 @@ very active discussion.
 
 ## Installation
 
-### Install from GitHub with `{remotes}`
+### Install from GitHub with `{pak}`
 
 ``` r
-require(remotes)
-remotes::install_github("JamesHWade/gpttools")
+# install.packages("pak")
+pak::pak("JamesHWade/gpttools")
 ```
 
 ### Install from [R-Universe](https://r-universe.dev/)
@@ -63,38 +63,39 @@ install.packages("gpttools")
 help(package = "gpttools")
 ```
 
-## Privacy Notice
+## Privacy Notice for gpttools
+This privacy notice is applicable to the R package that utilizes the GPT-3 and GPT-3.5 API provided by OpenAI. By using this package, you agree to adhere to the privacy terms and conditions set by OpenAI.
 
-These functions work by taking the text or code you have highlighted or selected with the cursor, or your prompt if you use one of the built-in apps, and send these to OpenAI as part of a prompt. Prompts fall under the privacy notice, rules, or exceptions you agreed to when making an OpenAI account. We cannot tell you or guarantee how secure these prompts are when sent to OpenAI. We do not know what OpenAI does with your prompts, but OpenAI is clear that they use prompts and results to improve their model unless you opt out explicitly by contacting them.
+### Data Sharing with OpenAI
+When using this R package, the text or code that you highlight/select with your cursor, or the prompt you enter within the built-in applications, will be sent to OpenAI as part of an API request. This data sharing is governed by the privacy notice, rules, and exceptions that you agreed to with OpenAI when creating an account.
 
-The code is designed to only share the highlighted or selected text, or a prompt you build with the help of one of our apps and no other elements of your R environment. Nonetheless, be sure you are aware of what you send to OpenAI and do not accidentally share sensitive data with OpenAI.
+### Security and Data Usage by OpenAI
+We cannot guarantee the security of the data you send to OpenAI via the API, nor can we provide details on how OpenAI processes or uses your data. However, OpenAI has stated that they utilize prompts and results to enhance their AI models, as outlined in their terms of use. You can opt-out of this data usage by contacting OpenAI directly and making an explicit request.
 
-**DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD REMAIN PRIVATE**
+### Limiting Data Sharing
+The R package is designed to share only the text or code that you specifically highlight/select or include in a prompt through our built-in applications. No other elements of your R environment will be shared. It is your responsibility to ensure that you do not accidentally share sensitive data with OpenAI.
 
-See OpenAI's Terms of Use at <https://openai.com/terms> for more details.
+**IMPORTANT: To maintain the privacy of your data, do not highlight, include in a prompt, or otherwise upload any sensitive data, code, or text that should remain confidential.**
+
 
 ## Prerequisites
 
-1.  Make an OpenAI account. As of now, the free one will do.
+1.  Make an OpenAI account.
 
-2.  [Create an OpenAI API key](https://beta.openai.com/account/api-keys)
+2.  [Create an OpenAI API key](https://platform.openai.com/account/api-keys) to use with the package.
 
-3.  Set the API key up in RStudio in one of two ways:
+3.  Set the API key up in Rstudio
 
--   By default, API calls will look for `OPENAI_API_KEY`
-environment variable. If you want to set a global environment
-variable, you can use the following command, where `"<APIKEY>"`
-should be replaced with your actual key:
+### Setting OpenAI API Key
+
+By default, API calls will look for `OPENAI_API_KEY` environment variable. If you want to set a global environment variable, you can use the following command, where `"<APIKEY>"` should be replaced with your actual key:
 
 ```{r}
 #| eval: false
-Sys.setenv(OPENAI_API_KEY = "<OPENAI_API_KEY>")
+Sys.setenv(OPENAI_API_KEY = "<APIKEY>")
 ```
 
--   Alternatively, you can set the key in your .Renviron file.
-
-Otherwise, you can add the key to the .Renviron file of the project. The
-following commands will open .Renviron for editing:
+Otherwise, you can add the key to the .Renviron file of the project. The following commands will open .Renviron for editing:
 
 ```{r}
 #| eval: false
@@ -102,17 +103,13 @@ require(usethis)
 edit_r_environ(scope = "project")
 ```
 
-You can add the following line to the file (again, replace
-`<api_key>` with your actual
-key):
+You can add the following line to .Renviron (again, replace `"<APIKEY>"` with your actual key):
 
 ``` bash
-OPENAI_API_KEY=<api_key>
+OPENAI_API_KEY= "<APIKEY>")
 ```
 
-This now set the API key every time you start up this particular
-project. Note: If you are using GitHub/Gitlab, do not forget to add
-.Renviron to .gitignore!
+This now set the API key every time you start up this particular project. Note: If you are using GitHub/Gitlab, do not forget to add .Renviron to .gitignore!
 
 ## Usage
 
