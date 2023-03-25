@@ -75,19 +75,17 @@
 </div>
 <!-- badges: start -->
 
-<!-- badges: end -->
 <p>The goal of gpttools is to extend gptstudio for R package developers to more easily incorporate use of large language models (LLMs) into their project workflows. These models appear to be a step change in our use of text for knowledge work, but you should carefully consider ethical implications of using these models. Ethics of LLMs (also called <a href="https://arxiv.org/abs/2108.07258" class="external-link">Foundation Models</a>) is an area of very active discussion.</p>
-<p>If you like this package, you may also like <a href="https://github.com/MichelNivard/gptstudio" class="external-link"><code>{gptstudio}</code></a>. This package is an extension of that one and maintained by the same developers.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="section level3">
-<h3 id="install-from-github-with-remotes">Install from GitHub with <code>{remotes}</code>
-<a class="anchor" aria-label="anchor" href="#install-from-github-with-remotes"></a>
+<h3 id="install-from-github-with-pak">Install from GitHub with <code>{pak}</code>
+<a class="anchor" aria-label="anchor" href="#install-from-github-with-pak"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"JamesHWade/gpttools"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="http://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"JamesHWade/gpttools"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="install-from-r-universe">Install from <a href="https://r-universe.dev/" class="external-link">R-Universe</a>
@@ -106,36 +104,48 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="privacy-notice-for-use-of-openai-models">Privacy Notice for use of OpenAI Models<a class="anchor" aria-label="anchor" href="#privacy-notice-for-use-of-openai-models"></a>
+<h2 id="privacy-notice-for-gpttools">Privacy Notice for gpttools<a class="anchor" aria-label="anchor" href="#privacy-notice-for-gpttools"></a>
 </h2>
-<p>These functions work by taking the text or code you have highlighted or selected with the cursor, or your prompt if you use one of the built-in apps, and send these to OpenAI as part of a prompt. Prompts fall under the privacy notice, rules, or exceptions you agreed to when making an OpenAI account. We cannot tell you or guarantee how secure these prompts are when sent to OpenAI. We do not know what OpenAI does with your prompts, but OpenAI is clear that they use prompts and results to improve their model unless you opt out explicitly by contacting them.</p>
-<p>The code is designed to only share the highlighted or selected text, or a prompt you build with the help of one of our apps and no other elements of your R environment. Nonetheless, be sure you are aware of what you send to OpenAI and do not accidentally share sensitive data with OpenAI.</p>
-<p><strong>DO NOT HIGHLIGHT AND THEREFORE UPLOAD DATA, CODE, OR TEXT THAT SHOULD REMAIN PRIVATE</strong></p>
-<p>See OpenAI’s Terms of Use at <a href="https://openai.com/terms" class="external-link uri">https://openai.com/terms</a> for more details.</p>
+<p>This privacy notice is applicable to the R package that utilizes the GPT-3 and GPT-3.5 API provided by OpenAI. By using this package, you agree to adhere to the privacy terms and conditions set by OpenAI.</p>
+<div class="section level3">
+<h3 id="data-sharing-with-openai">Data Sharing with OpenAI<a class="anchor" aria-label="anchor" href="#data-sharing-with-openai"></a>
+</h3>
+<p>When using this R package, the text or code that you highlight/select with your cursor, or the prompt you enter within the built-in applications, will be sent to OpenAI as part of an API request. This data sharing is governed by the privacy notice, rules, and exceptions that you agreed to with OpenAI when creating an account.</p>
+</div>
+<div class="section level3">
+<h3 id="security-and-data-usage-by-openai">Security and Data Usage by OpenAI<a class="anchor" aria-label="anchor" href="#security-and-data-usage-by-openai"></a>
+</h3>
+<p>We cannot guarantee the security of the data you send to OpenAI via the API, nor can we provide details on how OpenAI processes or uses your data. However, OpenAI has stated that they utilize prompts and results to enhance their AI models, as outlined in their terms of use. You can opt-out of this data usage by contacting OpenAI directly and making an explicit request.</p>
+</div>
+<div class="section level3">
+<h3 id="limiting-data-sharing">Limiting Data Sharing<a class="anchor" aria-label="anchor" href="#limiting-data-sharing"></a>
+</h3>
+<p>The R package is designed to share only the text or code that you specifically highlight/select or include in a prompt through our built-in applications. No other elements of your R environment will be shared. It is your responsibility to ensure that you do not accidentally share sensitive data with OpenAI.</p>
+<p><strong>IMPORTANT: To maintain the privacy of your data, do not highlight, include in a prompt, or otherwise upload any sensitive data, code, or text that should remain confidential.</strong></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
 </h2>
 <ol style="list-style-type: decimal">
-<li><p>Make an OpenAI account. As of now, the free one will do.</p></li>
-<li><p><a href="https://beta.openai.com/account/api-keys" class="external-link">Create an OpenAI API key</a></p></li>
-<li><p>Set the API key up in RStudio in one of two ways:</p></li>
+<li><p>Make an OpenAI account.</p></li>
+<li><p><a href="https://platform.openai.com/account/api-keys" class="external-link">Create an OpenAI API key</a> to use with the package.</p></li>
+<li><p>Set the API key up in Rstudio</p></li>
 </ol>
-<ul>
-<li>By default, API calls will look for <code>OPENAI_API_KEY</code> environment variable. If you want to set a global environment variable, you can use the following command, where <code>"&lt;APIKEY&gt;"</code> should be replaced with your actual key:</li>
-</ul>
+<div class="section level3">
+<h3 id="setting-openai-api-key">Setting OpenAI API Key<a class="anchor" aria-label="anchor" href="#setting-openai-api-key"></a>
+</h3>
+<p>By default, API calls will look for <code>OPENAI_API_KEY</code> environment variable. If you want to set a global environment variable, you can use the following command, where <code>"&lt;APIKEY&gt;"</code> should be replaced with your actual key:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OPENAI_API_KEY <span class="op">=</span> <span class="st">"&lt;OPENAI_API_KEY&gt;"</span><span class="op">)</span></span></code></pre></div>
-<ul>
-<li>Alternatively, you can set the key in your .Renviron file.</li>
-</ul>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OPENAI_API_KEY <span class="op">=</span> <span class="st">"&lt;APIKEY&gt;"</span><span class="op">)</span></span></code></pre></div>
 <p>Otherwise, you can add the key to the .Renviron file of the project. The following commands will open .Renviron for editing:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://usethis.r-lib.org" class="external-link">usethis</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_environ</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"project"</span><span class="op">)</span></span></code></pre></div>
-<p>You can add the following line to the file (again, replace <code>&lt;api_key&gt;</code> with your actual key):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=&lt;</span>api_key<span class="op">&gt;</span></span></code></pre></div>
+<p>You can add the following line to .Renviron (again, replace <code>"&lt;APIKEY&gt;"</code> with your actual key):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span> <span class="st">"&lt;APIKEY&gt;"</span><span class="er">)</span></span></code></pre></div>
 <p>This now set the API key every time you start up this particular project. Note: If you are using GitHub/Gitlab, do not forget to add .Renviron to .gitignore!</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -149,7 +159,7 @@
 <li><p>A freeform addins that let’s you specify the prompt using the “edit” functionality of ChatGPT</p></li>
 </ul>
 <p>You can access these addins through the addin toolbar or use the command pallet: <code>CMD/CTRL+SHIFT+P</code>. Examples of each of the addins in action is below.</p>
-<p><img src="reference/figures/gpttools-addins.png"></p>
+<p><img src="reference/figures/image-1429395462.png"></p>
 <div class="section level3">
 <h3 id="comment-code">Comment Code<a class="anchor" aria-label="anchor" href="#comment-code"></a>
 </h3>
