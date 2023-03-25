@@ -1,12 +1,14 @@
 rlang::check_installed(
-  c("shiny", "cli", "glue", "gptstudio")
+  c("shiny", "cli", "glue", "gptstudio", "gpttools", "waiter")
 )
+library(waiter)
 
 rlang::check_installed("bslib", version = "0.4.2")
 gptstudio::check_api()
-indices <- gpttools:::list_index() |> tools::file_path_sans_ext()
+indices <- gpttools::list_index() |> tools::file_path_sans_ext()
 
 ui <- fluidPage(
+  useWaiter(),
   theme = bslib::bs_theme(bootswatch = "morph", version = 5),
   title = "Retreiver from gpttools",
   shiny::br(),
@@ -37,14 +39,14 @@ ui <- fluidPage(
             shiny::selectInput(
               "source", "Data Source",
               choices = indices,
-              width = "100%"
+              width = "50%"
             ),
             shiny::selectInput(
               "task", "Task",
               choices = c(
                 "Context Only", "Permissive Chat"
               ),
-              width = "100%"
+              width = "50%"
             ),
             shiny::sliderInput(
               "n_docs", "Number of Documents to Include",
@@ -65,7 +67,11 @@ server <- function(input, output, session) {
 
   index <- shiny::reactive(load_index(input$source))
   shiny::observe({
-    interim <- query_index(index(),
+    waiter::waiter_show(
+      html = shiny::tagList(spin_flower(), shiny::h3("Asking ChatGPT...")),
+      color = waiter::transparent(0.5)
+    )
+    interim <- gpttools::query_index(index(),
       query = input$chat_input,
       history = r$all_chats,
       task = input$task,
@@ -84,6 +90,7 @@ server <- function(input, output, session) {
         )
       )
     r$all_chats_formatted <- gptstudio::make_chat_history(r$all_chats)
+    waiter::waiter_hide()
     shiny::updateTextAreaInput(session, "chat_input", value = "")
   }) |>
     shiny::bindEvent(input$chat)
