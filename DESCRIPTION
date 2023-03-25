@@ -50,9 +50,12 @@ Suggests:
     rvest,
     withr,
     shinyjs,
-    waiter
+    waiter,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 URL: https://github.com/JamesHWade/gpttools
 BugReports: https://github.com/JamesHWade/gpttools/issues
 Language: en-US
+VignetteBuilder: knitr

@@ -60,3 +60,4 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+inst/doc
