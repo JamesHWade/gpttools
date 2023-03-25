@@ -31,40 +31,13 @@
     <loc>https://jameshwade.github.io/gpttools/reference/add_roxygen_addin.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/check_api.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/check_api_connection.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/check_api_key.html</loc>
-  </url>
-  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/collect_dataframes.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/comment_code_addin.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/crawl.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/document_data.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/get_selection.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/gpt_addin.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/gpt_create.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/gpt_edit.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/gpt_insert.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_sitrep.html</loc>
@@ -76,22 +49,7 @@
     <loc>https://jameshwade.github.io/gpttools/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/insert_text.html</loc>
-  </url>
-  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/load_index.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/openai_create_chat_completion.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/openai_create_completion.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/openai_create_edit.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/pipe.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/prep_data_prompt.html</loc>
@@ -104,9 +62,6 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/run_document_data.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/run_gpt_freeform.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/scrape_url.html</loc>
@@ -122,8 +77,5 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/summarize_data.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/tidyeval.html</loc>
   </url>
 </urlset>
