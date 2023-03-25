@@ -35,7 +35,10 @@ Imports:
     tools,
     tokenizers,
     urltools,
-    usethis
+    usethis,
+    furrr,
+    future,
+    xml2
 Suggests: 
     covr,
     mockr,

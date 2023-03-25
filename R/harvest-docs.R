@@ -65,29 +65,22 @@ recursive_hyperlinks <- function(local_domain,
   }
 
   checked_urls <- c(checked_urls, links)
-  links_df <- purrr::map(links, get_hyperlinks) |>
+  cli::cli_inform(c("i" = "Total urls: {length(checked_urls)}"))
+  links_df <- furrr::future_map(links, get_hyperlinks) |>
     dplyr::bind_rows() |>
     dplyr::filter(!stringr::str_detect(link, "^\\.$|mailto:|^\\.\\.|\\#|^\\_$"))
 
   new_links <-
-    purrr::pmap(as.list(links_df), \(parent, link) {
-      clean_link <- NULL
-      if (stringr::str_detect(link, domain_pattern)) {
-        clean_link <- link
-      } else if (stringr::str_detect(link, "^/[^/]|^/+$|^\\./|^[[:alnum:]]") &&
-        !stringr::str_detect(link, "^https?://")) {
-        if (stringr::str_detect(link, "^\\./")) {
-          clean_link <- stringr::str_replace(link, "^\\./", "/")
-        } else if (stringr::str_detect(link, "^[[:alnum:]]")) {
-          clean_link <- glue::glue("/", link)
-        } else {
-          clean_link <- link
-        }
-        clean_link <- glue::glue("{parent}{clean_link}")
+    furrr::future_pmap(as.list(links_df), \(parent, link) {
+      clean_link <- xml2::url_absolute(link, parent)
+      if (rlang::is_true(stringr::str_detect(clean_link, domain_pattern))) {
+        validate_link(clean_link, link)
+      } else {
+        NULL
       }
-      validate_link(clean_link, link)
-    }, .progress = "Collect Links") |>
+    }) |>
     unlist()
+
   recursive_hyperlinks(local_domain, unique(new_links), checked_urls)
 }
 
@@ -103,6 +96,8 @@ recursive_hyperlinks <- function(local_domain,
 #' crawling. Default is FALSE.
 #' @param overwrite A logical value indicating whether to overwrite scraped
 #' pages and index if they already exist. Default is FALSE.
+#' @param num_cores Number of cores to use. Defaults to
+#'  `parallel::detectCores() - 1`
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
@@ -110,12 +105,14 @@ recursive_hyperlinks <- function(local_domain,
 crawl <- function(url,
                   index_create = TRUE,
                   aggressive = FALSE,
-                  overwrite = FALSE) {
+                  overwrite = FALSE,
+                  num_cores = parallel::detectCores() - 1) {
   local_domain <- urltools::url_parse(url)$domain
   withr::local_options(list(
     cli.progress_show_after = 0,
     cli.progress_clear = FALSE
   ))
+  future::plan(future::multisession, workers = num_cores)
   scraped_data_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "text")
   scraped_text_file <-
@@ -140,7 +137,7 @@ crawl <- function(url,
     unique()
   cli_inform(c("i" = "Scraping validated links"))
   scraped_data <-
-    purrr::map(links, \(x) {
+    furrr::future_map(links, \(x) {
       if (identical(check_url(x), 200L)) {
         tibble::tibble(
           link    = x,
@@ -153,7 +150,7 @@ crawl <- function(url,
           "i" = "Status code: {status}"
         ))
       }
-    }, .progress = "Scrape URLs") |>
+    }) |>
     dplyr::bind_rows() |>
     dplyr::distinct()
   cli_inform(c("i" = "Saving scraped data"))

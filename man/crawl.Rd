@@ -4,19 +4,28 @@
 \alias{crawl}
 \title{Scrape and process all hyperlinks within a given URL}
 \usage{
-crawl(url, index_create = FALSE, aggressive = FALSE, overwrite = FALSE)
+crawl(
+  url,
+  index_create = TRUE,
+  aggressive = FALSE,
+  overwrite = FALSE,
+  num_cores = parallel::detectCores() - 1
+)
 }
 \arguments{
 \item{url}{A character string with the URL to be scraped.}
 
 \item{index_create}{A logical value indicating whether to create an index.
-Default is FALSE.}
+Default is TRUE.}
 
 \item{aggressive}{A logical value indicating whether to use aggressive link
 crawling. Default is FALSE.}
 
 \item{overwrite}{A logical value indicating whether to overwrite scraped
 pages and index if they already exist. Default is FALSE.}
+
+\item{num_cores}{Number of cores to use. Defaults to
+\code{parallel::detectCores() - 1}}
 }
 \value{
 NULL. The resulting tibble is saved into a parquet file.

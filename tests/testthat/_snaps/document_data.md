@@ -210,7 +210,7 @@
 # Collect dataframes works
 
     Code
-      collect_dataframes() %>% as.character()
+      as.character(collect_dataframes())
     Output
       [1] "mtcars"
 

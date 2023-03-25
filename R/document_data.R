@@ -9,13 +9,13 @@ collect_dataframes <- function() {
   objects <- names(rlang::global_env())
   purrr::map_chr(
     .x = objects,
-    .f = ~ if (is.data.frame(get(.x))) {
-      .x
+    .f = \(x) if (is.data.frame(get(x))) {
+      x
     } else {
       NA
     }
   ) |>
-    tidyr::drop_na()
+    stats::na.omit()
 }
 
 skim_lite <- function(data) {
