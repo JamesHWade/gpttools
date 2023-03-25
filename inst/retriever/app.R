@@ -65,7 +65,7 @@ server <- function(input, output, session) {
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
 
-  index <- shiny::reactive(load_index(input$source))
+  index <- shiny::reactive(gpttools::load_index(input$source))
   shiny::observe({
     waiter::waiter_show(
       html = shiny::tagList(spin_flower(), shiny::h3("Asking ChatGPT...")),
