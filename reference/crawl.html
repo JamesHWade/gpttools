@@ -54,7 +54,13 @@ data into a tibble format. It saves the resulting tibble into a parquet file.</p
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">crawl</span><span class="op">(</span><span class="va">url</span>, index_create <span class="op">=</span> <span class="cn">FALSE</span>, aggressive <span class="op">=</span> <span class="cn">FALSE</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">crawl</span><span class="op">(</span></span>
+<span>  <span class="va">url</span>,</span>
+<span>  index_create <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  aggressive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  num_cores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -65,7 +71,7 @@ data into a tibble format. It saves the resulting tibble into a parquet file.</p
 
 <dt>index_create</dt>
 <dd><p>A logical value indicating whether to create an index.
-Default is FALSE.</p></dd>
+Default is TRUE.</p></dd>
 
 
 <dt>aggressive</dt>
@@ -76,6 +82,11 @@ crawling. Default is FALSE.</p></dd>
 <dt>overwrite</dt>
 <dd><p>A logical value indicating whether to overwrite scraped
 pages and index if they already exist. Default is FALSE.</p></dd>
+
+
+<dt>num_cores</dt>
+<dd><p>Number of cores to use. Defaults to
+<code>parallel::detectCores() - 1</code></p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -31,6 +31,9 @@
     <loc>https://jameshwade.github.io/gpttools/reference/add_roxygen_addin.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/addin_run_retriever.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/collect_dataframes.html</loc>
   </url>
   <url>
@@ -40,6 +43,12 @@
     <loc>https://jameshwade.github.io/gpttools/reference/document_data.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/get_selection.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/gpt_insert.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_sitrep.html</loc>
   </url>
   <url>
@@ -47,6 +56,9 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/insert_text.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/load_index.html</loc>
