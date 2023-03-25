@@ -270,6 +270,19 @@ query_openai_api <- function(body, openai_api_key, task) {
   parsed
 }
 
+#' List Index Files
+#'
+#' @description
+#' This function lists the index files in the specified directory.
+#'
+#' @return A character vector containing the names of the index files found in
+#' the specified directory.
+#'
+#' @examples
+#' \dontrun{
+#' list_index()
+#' }
+#' @export
 list_index <- function() {
   list.files(
     file.path(tools::R_user_dir("gpttools", "data"), "index")

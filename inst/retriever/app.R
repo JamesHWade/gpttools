@@ -4,7 +4,7 @@ rlang::check_installed(
 
 rlang::check_installed("bslib", version = "0.4.2")
 gptstudio::check_api()
-indices <- list_index() |> tools::file_path_sans_ext()
+indices <- gpttools:::list_index() |> tools::file_path_sans_ext()
 
 ui <- fluidPage(
   theme = bslib::bs_theme(bootswatch = "morph", version = 5),
@@ -37,14 +37,14 @@ ui <- fluidPage(
             shiny::selectInput(
               "source", "Data Source",
               choices = indices,
-              width = "50%"
+              width = "100%"
             ),
             shiny::selectInput(
               "task", "Task",
               choices = c(
                 "Context Only", "Permissive Chat"
               ),
-              width = "50%"
+              width = "100%"
             ),
             shiny::sliderInput(
               "n_docs", "Number of Documents to Include",
