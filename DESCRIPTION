@@ -38,7 +38,8 @@ Imports:
     usethis,
     furrr,
     future,
-    xml2
+    xml2,
+    lubridate
 Suggests: 
     covr,
     mockr,
