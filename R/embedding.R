@@ -88,6 +88,7 @@ create_index <- function(domain, overwrite = FALSE) {
 }
 
 get_top_matches <- function(index, query_embedding, k = 5) {
+  k <- min(k, nrow(index))
   index |>
     dplyr::mutate(similarity = purrr::map_dbl(embedding, \(x) {
       lsa::cosine(query_embedding, unlist(x))
@@ -112,7 +113,11 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' }
 load_index <- function(domain) {
   data_dir <- tools::R_user_dir("gpttools", which = "data")
-  arrow::read_parquet(glue("{data_dir}/index/{domain}.parquet"))
+  if (domain == "All") {
+    arrow::open_dataset(glue("{data_dir}/index")) |> tibble::as_tibble()
+  } else {
+    arrow::read_parquet(glue("{data_dir}/index/{domain}.parquet"))
+  }
 }
 
 
@@ -193,9 +198,6 @@ query_index <- function(index, query, history, task = "Context Only", k = 4) {
           )
         )
     )
-
-  cli_inform("Embedding...")
-
   history <-
     purrr::map(history, \(x) if (x$role == "system") NULL else x) |>
     purrr::compact()
