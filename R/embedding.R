@@ -198,9 +198,6 @@ query_index <- function(index, query, history, task = "Context Only", k = 4) {
           )
         )
     )
-
-  cli_inform("Embedding...")
-
   history <-
     purrr::map(history, \(x) if (x$role == "system") NULL else x) |>
     purrr::compact()

@@ -98,11 +98,8 @@ server <- function(input, output, session) {
       save_history = input$save_history,
       overwrite = FALSE
     )
-    cli::cli_inform("there")
     new_response <- interim[[3]]$choices
-    cli::cli_inform("still going")
     r$context_links <- c(r$context_links, interim[[2]]$link)
-    cli::cli_inform("down here")
     r$all_chats <-
       c(
         interim[[1]],
@@ -113,7 +110,6 @@ server <- function(input, output, session) {
           )
         )
       )
-    cli::cli_inform("did formatting mess up?")
     r$all_chats_formatted <- gptstudio::make_chat_history(r$all_chats)
     waiter::waiter_hide()
     shiny::updateTextAreaInput(session, "chat_input", value = "")
