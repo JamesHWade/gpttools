@@ -98,6 +98,8 @@ recursive_hyperlinks <- function(local_domain,
 #' pages and index if they already exist. Default is FALSE.
 #' @param num_cores Number of cores to use. Defaults to
 #'  `parallel::detectCores() - 1`
+#' @param is_pkg Whether the scraped url is package docs or code
+#' @param pkg_version Package version number
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
@@ -106,7 +108,8 @@ crawl <- function(url,
                   index_create = TRUE,
                   aggressive = FALSE,
                   overwrite = FALSE,
-                  num_cores = parallel::detectCores() - 1) {
+                  num_cores = parallel::detectCores() - 1,
+                  pkg_version = NULL) {
   local_domain <- urltools::url_parse(url)$domain
   withr::local_options(list(
     cli.progress_show_after = 0,
@@ -119,12 +122,13 @@ crawl <- function(url,
     glue::glue("{scraped_data_dir}/{local_domain}.parquet")
 
   if (file.exists(scraped_text_file) && rlang::is_false(overwrite)) {
-    cli::cli_abort(
+    cli::cli_warn(
       c(
         "!" = "Scraped data already exists for this domain.",
         "i" = "Use {.code crawl(<url>, overwrite = TRUE)} to overwrite."
       )
     )
+    return(NULL)
   }
 
   cli_rule("Crawling {.url {url}}")
@@ -140,9 +144,11 @@ crawl <- function(url,
     furrr::future_map(links, \(x) {
       if (identical(check_url(x), 200L)) {
         tibble::tibble(
+          source  = local_domain,
           link    = x,
           text    = paste(scrape_url(x), collapse = " "),
-          n_words = tokenizers::count_words(text)
+          n_words = tokenizers::count_words(text),
+          scraped = lubridate::now()
         )
       } else {
         cli::cli_inform(c(
@@ -162,7 +168,7 @@ crawl <- function(url,
     sink = scraped_text_file
   )
   if (index_create) {
-    create_index(local_domain, overwrite = overwrite)
+    create_index(local_domain, overwrite = overwrite, pkg_version = pkg_version)
   }
 }
 

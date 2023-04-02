@@ -1,6 +1,7 @@
 prepare_scraped_files <- function(domain) {
   scraped_dir <- tools::R_user_dir("gpttools", which = "data")
   arrow::read_parquet(glue("{scraped_dir}/text/{domain}.parquet")) |>
+    # dplyr::sample_n(2) |>
     dplyr::mutate(
       chunks = purrr::map(text, \(x) {
         chunk_with_overlap(x,
@@ -16,8 +17,24 @@ prepare_scraped_files <- function(domain) {
     ) |>
     tidyr::unnest(chunks) |>
     tidyr::unnest(chunks) |>
-    dplyr::rename(original_text = text) |>
-    dplyr::mutate(n_tokens = tokenizers::count_characters(chunks) %/% 4)
+    dplyr::select(-text) |>
+    dplyr::mutate(
+      n_tokens = tokenizers::count_characters(chunks) %/% 4,
+      hash = cli::hash_md5(chunks)
+    ) |>
+    check_for_duplicate_text()
+}
+
+check_for_duplicate_text <- function(x) {
+  if (sum(duplicated(x$hash)) > 0) {
+    cli::cli_inform(
+      c(
+        "!" = "Duplicate text entries detected.",
+        "i" = "These are removed by default."
+      )
+    )
+  }
+  invisible(x)
 }
 
 create_openai_embedding <-
@@ -48,7 +65,22 @@ add_embeddings <- function(index) {
     tidyr::unnest(embeddings)
 }
 
-create_index <- function(domain, overwrite = FALSE) {
+join_embeddings_from_index <- function(x) {
+  index <- try(load_index("All"))
+  if (is.data.frame(index) && all(c("hash", "embedding") %in% names(index))) {
+    all_embeddings <- index |> dplyr::select(hash, embedding)
+    x |>
+      dplyr::distinct(hash, .keep_all = TRUE) |>
+      dplyr::left_join(all_embeddings, by = "hash")
+  } else {
+    invisible(x)
+  }
+}
+
+create_index <- function(domain,
+                         overwrite = FALSE,
+                         dont_ask = FALSE,
+                         pkg_version = NULL) {
   index_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "index")
   index_file <-
@@ -68,13 +100,20 @@ create_index <- function(domain, overwrite = FALSE) {
     "i" = "Read more about embeddings at {.url
       https://platform.openai.com/docs/guides/embeddings}."
   ))
-  ask_user <- usethis::ui_yeah(
-    "Would you like to continue with creating embeddings?"
-  )
+
+  if (dont_ask) {
+    ask_user <- TRUE
+  } else {
+    ask_user <- usethis::ui_yeah(
+      "Would you like to continue with creating embeddings?"
+    )
+  }
   if (rlang::is_true(ask_user)) {
     index <-
       prepare_scraped_files(domain = domain) |>
-      add_embeddings()
+      add_embeddings() |>
+      join_embeddings_from_index() |>
+      dplyr::mutate(version = pkg_version)
     if (rlang::is_false(dir.exists(index_dir))) {
       dir.create(index_dir, recursive = TRUE)
     }
@@ -112,9 +151,12 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' load_index("example_domain")
 #' }
 load_index <- function(domain) {
-  data_dir <- tools::R_user_dir("gpttools", which = "data")
+  data_dir <- glue('{tools::R_user_dir("gpttools", which = "data")}/index')
+  if (!dir.exists(data_dir)) {
+    return(NULL)
+  }
   if (domain == "All") {
-    arrow::open_dataset(glue("{data_dir}/index")) |> tibble::as_tibble()
+    arrow::open_dataset(data_dir) |> tibble::as_tibble()
   } else {
     arrow::read_parquet(glue("{data_dir}/index/{domain}.parquet"))
   }
