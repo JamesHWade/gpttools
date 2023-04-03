@@ -158,10 +158,20 @@ load_index <- function(domain) {
   if (domain == "All") {
     arrow::open_dataset(data_dir) |> tibble::as_tibble()
   } else {
-    arrow::read_parquet(glue("{data_dir}/index/{domain}.parquet"))
+    arrow::read_parquet(glue("{data_dir}/{domain}.parquet"))
   }
 }
 
+load_index_dir <- function(dir_name) {
+  dir_name <- glue('{tools::R_user_dir("gpttools", which = "data")}/{dir_name}')
+  arrow::open_dataset(dir_name)
+}
+
+load_scraped_data <- function(dir_name, file_name) {
+  file_path <-
+    file.path(tools::R_user_dir("gpttools", which = "data"), dir_name, file_name)
+  arrow::read_parquet(file_path)
+}
 
 #' Query an Index
 #'

@@ -9,7 +9,8 @@ crawl(
   index_create = TRUE,
   aggressive = FALSE,
   overwrite = FALSE,
-  num_cores = parallel::detectCores() - 1
+  num_cores = parallel::detectCores() - 1,
+  pkg_version = NULL
 )
 }
 \arguments{
@@ -26,6 +27,10 @@ pages and index if they already exist. Default is FALSE.}
 
 \item{num_cores}{Number of cores to use. Defaults to
 \code{parallel::detectCores() - 1}}
+
+\item{pkg_version}{Package version number}
+
+\item{is_pkg}{Whether the scraped url is package docs or code}
 }
 \value{
 NULL. The resulting tibble is saved into a parquet file.

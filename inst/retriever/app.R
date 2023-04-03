@@ -1,75 +1,122 @@
 rlang::check_installed(
-  c("shiny", "cli", "glue", "gptstudio", "gpttools", "waiter")
+  c("shiny", "bsicons", "cli", "glue", "gptstudio", "gpttools", "waiter")
 )
-library(waiter)
+
 library(gpttools)
 
-rlang::check_installed("bslib", version = "0.4.2")
+rlang::check_installed("bslib", version = "0.4.2.9000")
+rlang::check_installed("bsicons")
 gptstudio::check_api()
+
+window_height_ui <- function(id) {
+  ns <- shiny::NS(id)
+  namespaced_id <- ns("window_height")
+
+  shiny::tags$head(shiny::tags$script(HTML(
+    sprintf("
+      function send_window_height() {
+        var height = $(window).height();
+        Shiny.setInputValue('%s', height);
+      }
+
+      $(document).on('shiny:connected', function() {
+        send_window_height();
+      });
+
+      $(window).on('resize', function() {
+        send_window_height();
+      });
+    ", namespaced_id)
+  )))
+}
+
+window_height_server <- function(id) {
+  shiny::moduleServer(id, function(input, output, session) {
+    shiny::reactive({
+      input$window_height
+    })
+  })
+}
+
 indices <- gpttools::list_index() |> tools::file_path_sans_ext()
 
-ui <- fluidPage(
-  useWaiter(),
+ui <- bslib::page_fluid(
+  waiter::use_waiter(),
+  window_height_ui("height"),
   theme = bslib::bs_theme(bootswatch = "morph", version = 5),
+  shiny::tags$style("
+    .card, .accordion {
+      box-shadow: none !important;
+    }
+  "),
   title = "Retreiver from gpttools",
-  shiny::br(),
-  bslib::layout_column_wrap(
-    width = 1 / 2,
-    fill = FALSE,
-    height = "1200px",
-    heights_equal = "row",
-    shiny::div(
-      id = "chat_box",
+  bslib::layout_sidebar(
+    border = TRUE,
+    border_radius = FALSE,
+    sidebar = bslib::sidebar(
+      position = "left",
+      open = FALSE,
+      bslib::accordion_panel(
+        "Data & Task",
+        icon = bsicons::bs_icon("robot"),
+        shiny::selectInput(
+          "source", "Data Source",
+          choices = c("All", indices)
+        ),
+        shiny::selectInput(
+          "task", "Task",
+          choices = c("Context Only", "Permissive Chat"),
+          selected = "Permissive Chat",
+        )
+      ),
+      shiny::br(),
+      bslib::accordion_panel(
+        "Preferences",
+        icon = bsicons::bs_icon("gear-wide-connected"),
+        shiny::radioButtons(
+          "save_history", "Save & Use History",
+          choiceNames = c("Yes", "No"),
+          choiceValues = c(TRUE, FALSE),
+          selected = TRUE, inline = TRUE,
+        ),
+        shiny::sliderInput(
+          "n_docs", "Docs to Include (#)",
+          min = 0, max = 20, value = 3
+        ),
+        shiny::sliderInput(
+          "n_history", "Chat History to Include (#)",
+          min = 0, max = 20, value = 3
+        )
+      )
+    ),
+    bslib::layout_column_wrap(
+      width = 1,
+      height = "100%",
+      heights_equal = "row",
+      shiny::uiOutput("all_chats_box"),
       bslib::card(
-        height = "600px",
         bslib::card_header("Write Prompt", class = "bg-primary"),
-        bslib::card_body(
-          fill = TRUE,
-          shiny::textAreaInput(
-            inputId = "chat_input", label = NULL,
-            value = "", resize = "vertical",
-            rows = 3, width = "100%"
+        bslib::layout_column_wrap(
+          width = NULL, fill = FALSE,
+          style = htmltools::css(grid_template_columns = "3fr 1fr"),
+          bslib::card(
+            shiny::textAreaInput(
+              inputId = "chat_input", label = NULL,
+              value = "", resize = "vertical", rows = 1,
+              width = "100%"
+            )
           ),
-          shiny::actionButton(
-            width = "100%",
-            inputId = "chat", label = "Chat",
-            icon = shiny::icon("robot"), class = "btn-primary"
-          ),
-          shiny::hr(),
-          shiny::fluidRow(
-            shiny::selectInput(
-              "source", "Data Source",
-              choices = c("All", indices),
-              width = "33%"
-            ),
-            shiny::selectInput(
-              "task", "Task",
-              choices = c(
-                "Context Only", "Permissive Chat"
-              ),
-              selected = "Permissive Chat",
-              width = "33%"
-            ),
-            shiny::radioButtons(
-              "save_history", "Save & Use History",
-              choiceNames = c("Yes", "No"),
-              choiceValues = c(TRUE, FALSE),
-              selected = TRUE,
-              width = "33%"
-            ),
-            shiny::sliderInput(
-              "n_docs", "Documents to Include (#)",
-              min = 0, max = 20, value = 3, width = "50%"
-            ),
-            shiny::sliderInput(
-              "n_history", "Chat History to Include (#)",
-              min = 0, max = 20, value = 3, width = "50%"
+          bslib::card(
+            class = "btn-primary",
+            shiny::actionButton(
+              inputId = "chat", label = "Chat",
+              icon = shiny::icon("robot"),
+              width = "100%", class = "btn-sucess"
             )
           )
         )
       )
-    ),
-    shiny::uiOutput("all_chats_box")
+    )
   )
 )
 
@@ -77,14 +124,16 @@ server <- function(input, output, session) {
   r <- shiny::reactiveValues()
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
-
+  height <- window_height_server("height")
   index <- shiny::reactive(gpttools::load_index(input$source))
   shiny::observe({
     waiter::waiter_show(
-      html = shiny::tagList(spin_flower(), shiny::h3("Asking ChatGPT...")),
+      html = shiny::tagList(
+        waiter::spin_flower(),
+        shiny::h3("Asking ChatGPT...")
+      ),
       color = waiter::transparent(0.5)
     )
-    cli::cli_inform("here")
     interim <- chat_with_context(
       query = input$chat_input,
       index = index(),
@@ -119,6 +168,7 @@ server <- function(input, output, session) {
   output$all_chats_box <- renderUI({
     shiny::req(length(r$context_links) > 0)
     bslib::card(
+      height = height() - 300,
       bslib::card_header("Chat History", class = "bg-primary"),
       bslib::card_body(
         fill = TRUE,
