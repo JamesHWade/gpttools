@@ -39,7 +39,8 @@ Imports:
     furrr,
     future,
     xml2,
-    lubridate
+    lubridate,
+    tuneR
 Suggests: 
     covr,
     mockr,
@@ -53,12 +54,14 @@ Suggests:
     shinyjs,
     waiter,
     knitr,
-    rmarkdown
+    rmarkdown,
+    tidymodels,
+    tidyverse
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 URL: https://github.com/JamesHWade/gpttools
 BugReports: https://github.com/JamesHWade/gpttools/issues
 Language: en-US
 VignetteBuilder: knitr
-Remotes:  
+Remotes: 
     rstudio/bslib

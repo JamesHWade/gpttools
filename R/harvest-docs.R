@@ -98,7 +98,6 @@ recursive_hyperlinks <- function(local_domain,
 #' pages and index if they already exist. Default is FALSE.
 #' @param num_cores Number of cores to use. Defaults to
 #'  `parallel::detectCores() - 1`
-#' @param is_pkg Whether the scraped url is package docs or code
 #' @param pkg_version Package version number
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
