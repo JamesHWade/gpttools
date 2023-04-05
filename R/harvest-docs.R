@@ -114,7 +114,12 @@ crawl <- function(url,
                   overwrite = FALSE,
                   num_cores = parallel::detectCores() - 1,
                   pkg_version = NULL) {
-  local_domain <- urltools::url_parse(url)$domain
+  parsed_url <- urltools::url_parse(url)
+  local_domain <- parsed_url$domain
+  url_path <- parsed_url$path
+  if (!rlang::is_na(url_path)) {
+    local_domain <- glue("{local_domain}/{url_path}")
+  }
   withr::local_options(list(
     cli.progress_show_after = 0,
     cli.progress_clear = FALSE
@@ -122,8 +127,9 @@ crawl <- function(url,
   future::plan(future::multisession, workers = num_cores)
   scraped_data_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "text")
+  local_domain_name <- stringr::str_replace_all(local_domain, "/|\\.", "-")
   scraped_text_file <-
-    glue::glue("{scraped_data_dir}/{local_domain}.parquet")
+    glue::glue("{scraped_data_dir}/{local_domain_name}.parquet")
 
   if (file.exists(scraped_text_file) && rlang::is_false(overwrite)) {
     cli::cli_warn(
@@ -172,7 +178,10 @@ crawl <- function(url,
     sink = scraped_text_file
   )
   if (index_create) {
-    create_index(local_domain, overwrite = overwrite, pkg_version = pkg_version)
+    create_index(local_domain_name,
+      overwrite = overwrite,
+      pkg_version = pkg_version
+    )
   }
 }
 
@@ -204,21 +213,39 @@ remove_lines_and_spaces <- function(serie) {
 #'
 #' @export
 scrape_url <- function(url) {
-  rlang::check_installed("rvest")
-  exclude_tags <- c("style", "script", "head", "meta", "link", "button") |>
-    paste(collapse = " or self::")
-  xpath_expression <-
-    glue("//body//*[not(self::{exclude_tags})]")
-
-  text <- rvest::read_html(url) |>
-    rvest::html_nodes(xpath = xpath_expression) |>
-    rvest::html_text2() |>
-    remove_lines_and_spaces()
-
+  text <- R.utils::withTimeout(extract_text(url),
+    timeout = 10,
+    onTimeout = "silent"
+  )
+  if (is.null(text)) {
+    text <- extract_text(url, use_html_text2 = FALSE)
+  }
   if ("You need to enable JavaScript to run this app." %in% text) {
     cli_warn("Unable to parse page {url}. JavaScript is required.")
     NULL
   } else {
     text
   }
+}
+
+
+extract_text <- function(url, use_html_text2 = TRUE) {
+  rlang::check_installed("rvest")
+  exclude_tags <- c(
+    "style", "script", "head", "meta", "link", "button",
+    "form", "img", "svg"
+  )
+  nodes <- rvest::read_html(url) |>
+    rvest::html_nodes(
+      xpath = paste("//body//*[not(self::",
+        paste(exclude_tags, collapse = " or self::"), ")]",
+        sep = ""
+      )
+    )
+  if (use_html_text2) {
+    text <- rvest::html_text2(nodes)
+  } else {
+    text <- rvest::html_text(nodes)
+  }
+  text |> remove_new_lines()
 }
