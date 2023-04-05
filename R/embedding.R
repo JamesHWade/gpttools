@@ -22,7 +22,8 @@ prepare_scraped_files <- function(domain) {
       n_tokens = tokenizers::count_characters(chunks) %/% 4,
       hash = cli::hash_md5(chunks)
     ) |>
-    check_for_duplicate_text()
+    check_for_duplicate_text() |>
+    dplyr::distinct(hash, .keep_all = TRUE)
 }
 
 check_for_duplicate_text <- function(x) {
@@ -71,7 +72,7 @@ join_embeddings_from_index <- function(x) {
     all_embeddings <- index |> dplyr::select(hash, embedding)
     x |>
       dplyr::distinct(hash, .keep_all = TRUE) |>
-      dplyr::left_join(all_embeddings, by = "hash")
+      dplyr::left_join(all_embeddings, by = c("hash"))
   } else {
     invisible(x)
   }
@@ -111,8 +112,8 @@ create_index <- function(domain,
   if (rlang::is_true(ask_user)) {
     index <-
       prepare_scraped_files(domain = domain) |>
+      # join_embeddings_from_index() |>
       add_embeddings() |>
-      join_embeddings_from_index() |>
       dplyr::mutate(version = pkg_version)
     if (rlang::is_false(dir.exists(index_dir))) {
       dir.create(index_dir, recursive = TRUE)

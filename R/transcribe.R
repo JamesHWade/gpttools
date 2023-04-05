@@ -15,11 +15,11 @@ split_audio <- function(file_path, duration_secs = 500) {
   chunks
 }
 
-transcribe_audio <- function(openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-                             audio_file,
-                             model = "whisper-1",
-                             prompt = NULL,
-                             language = "en") {
+transcribe_audio_chunk <- function(openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+                                   audio_file,
+                                   model = "whisper-1",
+                                   prompt = NULL,
+                                   language = "en") {
   url <- "https://api.openai.com/v1/audio/transcriptions"
 
   tmp_file <- tempfile(fileext = ".wav")
@@ -54,11 +54,36 @@ transcribe_audio <- function(openai_api_key = Sys.getenv("OPENAI_API_KEY"),
   return(result)
 }
 
-# file_path <- "~/Downloads/EP.248_-_Book_Podcast_FINAL4.mp3"
-# audio_chunks <- split_audio(file_path, duration_secs = 180)
+transcribe_audio <- function(file_path, link = NULL, prompt = NULL) {
+  audio_chunks <- split_audio(file_path = file_path, duration_secs = 180)
+  purrr::map(audio_chunks, \(x) {
+    tibble::tibble(
+      text = transcribe_audio_chunk(audio_file = x, prompt = prompt),
+      link = link,
+      scraped = lubridate::today()
+    )
+  }, .progress = "Transcribing Text")
+}
+
+write_index <- function(index, name, type = "index") {
+  dir <- file.path(tools::R_user_dir("gpttools", which = "data"), type)
+  arrow::write_parquet(index, sink = file.path(dir, name))
+}
+
+# a <- transcribe_audio(
+#   file_path = "~/Downloads/EP.249_-_Andrew_Huberman_FINAL.mp3",
+#   link = "[The Drive - How the brain works with Andrew Huberman](https://peterattiamd.com/andrewhuberman/)",
+#   prompt = "The Drive Podcast by Peter Attia with Andrew Huberman about How the brain works, Andrew’s fascinating backstory, improving scientific literacy, and more."
+# )
 #
-# transcribe_audio(audio_file = audio_chunks[[1]],
-#                  prompt = "Podcast by Peter Attia about his new book *Outlive*")
+# b <- a |>
+#   dplyr::bind_rows() |>
+#   tidyr::unnest(text) |>
+#   dplyr::mutate(scraped = lubridate::today()) |>
+#   dplyr::group_by(link, scraped) |>
+#   dplyr::summarise(text = paste(text, collapse = " "), .groups = "drop")
+#
+# write_index(b, "huberman_pod.parquet", type = "text")
 
 # a <-
 #   load_index_dir("longevity") |>

@@ -241,15 +241,18 @@ chat_with_context <- function(query,
         )
     )
 
-  prompt_components <- list(
+  prompt_context <- list(
     list(
-      role = "system",
+      role = "user",
       content = glue("---\nContext:\n{context}\n---")
     ),
     list(
-      role = "system",
+      role = "user",
       content = glue("---\nRelated Chat History:\n{related_history}\n---")
-    ),
+    )
+  )
+
+  prompt_query <- list(
     list(
       role = "user",
       content = glue("{query}")
@@ -257,10 +260,29 @@ chat_with_context <- function(query,
   )
 
   session_history <-
-    purrr::map(session_history, \(x) if (x$role == "system") NULL else x) |>
+    purrr::map(session_history, \(x) {
+      if (x$role == "system") {
+        NULL
+      } else if (stringr::str_detect(
+        x$content,
+        pattern = "---\nContext:\n|---\nRelated Chat History:\n"
+      )
+      ) {
+        NULL
+      } else {
+        x
+      }
+    }) |>
     purrr::compact()
 
-  prompt <- c(session_history, prompt_instructions, prompt_components)
+  prompt <- c(
+    session_history,
+    prompt_instructions,
+    prompt_context,
+    prompt_query
+  )
+
+  cli::cat_print(prompt)
 
   answer <- gptstudio::openai_create_chat_completion(prompt)
 
@@ -281,5 +303,8 @@ chat_with_context <- function(query,
     )
   }
 
-  list(prompt, full_context, answer)
+  prompt_without_context <-
+    c(session_history, prompt_query)
+
+  list(prompt_without_context, full_context, answer)
 }
