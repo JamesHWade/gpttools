@@ -1,6 +1,6 @@
 get_hyperlinks <- function(url) {
   rlang::check_installed("rvest")
-  status <- httr::GET(url) |> httr::status_code()
+  status <- check_url(url)
   if (identical(status, 200L)) {
     tibble::tibble(
       parent = url,
@@ -19,7 +19,9 @@ get_hyperlinks <- function(url) {
 }
 
 check_url <- function(url) {
-  httr::GET(url) |> httr::status_code()
+  httr2::request(url) |>
+    httr2::req_perform() |>
+    httr2::resp_status()
 }
 
 validate_link <- function(link, original_link, try_fix = TRUE) {
@@ -180,12 +182,11 @@ crawl <- function(url,
 #' @return A character vector with all new line characters removed.
 #'
 #' @export
-remove_new_lines <- function(serie) {
+remove_new_lines_and_spaces <- function(serie) {
   serie |>
     stringr::str_replace("\n", " ") |>
     stringr::str_replace("\\n", " ") |>
-    stringr::str_replace("  ", " ") |>
-    stringr::str_replace("  ", " ") |>
+    stringr::str_replace("\\s+", " ") |>
     stringr::str_remove_all("^\\s*$") |>
     unique()
 }
@@ -201,17 +202,18 @@ remove_new_lines <- function(serie) {
 #' @export
 scrape_url <- function(url) {
   rlang::check_installed("rvest")
-  exclude_tags <- c("style", "script", "head", "meta", "link", "button")
-  text <- rvest::read_html(url) |>
-    rvest::html_nodes(xpath = paste("//body//*[not(self::",
-      paste(exclude_tags, collapse = " or self::"),
-      ")]",
-      sep = ""
-    )) |>
-    rvest::html_text2() |>
-    remove_new_lines()
+  exclude_tags <- c("style", "script", "head", "meta", "link", "button") |>
+    paste(collapse = " or self::")
+  xpath_expression <-
+    glue("//body//*[not(self::{exclude_tags})]")
+
+  text <- rvest::read_html(url) %>%
+    rvest::html_nodes(xpath = xpath_expression) %>%
+    rvest::html_text2() %>%
+    remove_newlines_and_spaces()
+
   if ("You need to enable JavaScript to run this app." %in% text) {
-    cli::cli_warn("Unable to parse page {url}. JavaScript is required.")
+    cli_warn("Unable to parse page {url}. JavaScript is required.")
     NULL
   } else {
     text

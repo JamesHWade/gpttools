@@ -22,7 +22,7 @@ Imports:
     jsonlite,
     lsa,
     miniUI,
-    purrr (>= 1),
+    purrr (>= 1.0.0),
     rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
     shiny,
@@ -43,7 +43,8 @@ Imports:
     tuneR,
     pdftools,
     janitor,
-    readr
+    readr,
+    httr2
 Suggests: 
     covr,
     mockr,

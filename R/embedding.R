@@ -1,7 +1,19 @@
 prepare_scraped_files <- function(domain) {
   scraped_dir <- tools::R_user_dir("gpttools", which = "data")
-  arrow::read_parquet(glue("{scraped_dir}/text/{domain}.parquet")) |>
-    # dplyr::sample_n(2) |>
+  scraped <-
+    arrow::read_parquet(glue("{scraped_dir}/text/{domain}.parquet"))
+
+  if (max(scraped$n_words) > 2e5) {
+    max_index <- which.max(scraped$n_words)
+    cli_abort(
+      c(
+        "!" = "Entry {max_index} of {domain} has at least 200,000 words.",
+        "i" = "You probably do not want that. Please inspect scraped data."
+      )
+    )
+  }
+
+  scraped |>
     dplyr::mutate(
       chunks = purrr::map(text, \(x) {
         chunk_with_overlap(x,
@@ -285,17 +297,17 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
     end <- end + (chunk_size - overlap_size)
   }
   if (!is.null(doc_id)) {
-    num_chars <- stringi::stri_length(length(chunks))
-    chunk_ids <- stringi::stri_pad_left(seq_along(chunks),
+    num_chars <- stringr::str_length(length(chunks))
+    chunk_ids <- stringr::str_pad(seq_along(chunks),
+      side = "left",
       width = num_chars, pad = "0"
     )
-    names(chunks) <- stringi::stri_c(doc_id, chunk_ids, sep = "-")
+    names(chunks) <- stringr::str_c(doc_id, chunk_ids, sep = "-")
   } else {
     names(chunks) <- NULL
   }
   chunks <- purrr::compact(chunks)
-  out <- lapply(chunks, stringi::stri_c, collapse = " ")
-  out
+  purrr::map(chunks, \(x) stringr::str_c(x, collapse = " "))
 }
 
 query_openai_api <- function(body, openai_api_key, task) {
