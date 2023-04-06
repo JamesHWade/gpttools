@@ -17,3 +17,4 @@
 ^processed$
 ^indices$
 ^inst/positgpt-app/indices$
+^inst/longevity$

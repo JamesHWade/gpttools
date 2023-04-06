@@ -13,7 +13,7 @@ load_index(domain)
 A data frame containing the index data for the specified domain.
 }
 \description{
-This function loads the index data for a given domain from a Feather file.
+This function loads the index data for a given domain from a parquet file.
 }
 \examples{
 \dontrun{

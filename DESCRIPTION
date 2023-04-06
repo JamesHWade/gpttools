@@ -40,7 +40,10 @@ Imports:
     future,
     xml2,
     lubridate,
-    tuneR
+    tuneR,
+    pdftools,
+    janitor,
+    readr
 Suggests: 
     covr,
     mockr,

@@ -139,7 +139,7 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 
 #' Load Index Data for a Domain
 #'
-#' This function loads the index data for a given domain from a Feather file.
+#' This function loads the index data for a given domain from a parquet file.
 #'
 #' @param domain A character string indicating the name of the domain.
 #'
@@ -170,7 +170,11 @@ load_index_dir <- function(dir_name) {
 
 load_scraped_data <- function(dir_name, file_name) {
   file_path <-
-    file.path(tools::R_user_dir("gpttools", which = "data"), dir_name, file_name)
+    file.path(
+      tools::R_user_dir("gpttools", which = "data"),
+      dir_name,
+      file_name
+    )
   arrow::read_parquet(file_path)
 }
 

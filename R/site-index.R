@@ -71,7 +71,7 @@ get_pkgs_to_scrape <- function() {
 
   indices <- read_indexed_pkgs()
   if (!rlang::is_null(indices)) {
-    # indices |> select()
+    # to do
   }
 
   package_info |>
