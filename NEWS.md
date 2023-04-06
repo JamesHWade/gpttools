@@ -1,4 +1,4 @@
-# gpttools (development version)
+# gpttools 0.0.5
 
 # gpttools 0.2.3
 
