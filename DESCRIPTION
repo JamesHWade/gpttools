@@ -28,7 +28,6 @@ Imports:
     shiny,
     skimr,
     stats,
-    stringi,
     stringr,
     tibble,
     tidyr,
