@@ -40,10 +40,22 @@
     <loc>https://jameshwade.github.io/gpttools/reference/addin_run_retriever.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/chat_with_context.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/collect_dataframes.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/crawl.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/create_index_from_audio.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/create_index_from_pdf.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/delete_history.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/document_data.html</loc>
@@ -64,6 +76,9 @@
     <loc>https://jameshwade.github.io/gpttools/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/ingest_pdf.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/insert_text.html</loc>
   </url>
   <url>
@@ -77,6 +92,9 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/query_index.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/read_history.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/remove_new_lines.html</loc>
@@ -98,5 +116,8 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/summarize_data.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/transcribe_audio.html</loc>
   </url>
 </urlset>
