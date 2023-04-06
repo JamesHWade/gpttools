@@ -22,7 +22,7 @@ Imports:
     jsonlite,
     lsa,
     miniUI,
-    purrr,
+    purrr (>= 1),
     rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
     shiny,
