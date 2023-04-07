@@ -59,7 +59,9 @@ Suggests:
     knitr,
     rmarkdown,
     tidymodels,
-    tidyverse
+    tidyverse,
+    htmltools,
+    bsicons
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 URL: https://github.com/JamesHWade/gpttools

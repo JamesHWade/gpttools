@@ -1,6 +1,7 @@
-rlang::check_installed(
-  c("shiny", "bsicons", "cli", "glue", "gptstudio", "gpttools", "waiter")
-)
+rlang::check_installed(c(
+  "shiny", "bsicons", "cli", "glue", "gptstudio",
+  "gpttools", "waiter", "htmltools"
+))
 
 library(gpttools)
 
