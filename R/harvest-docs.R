@@ -19,14 +19,11 @@ get_hyperlinks <- function(url) {
 }
 
 check_url <- function(url) {
-  cli::cli_inform("started checking")
   status <-
     httr2::request(url) |>
-    # suppress error
     httr2::req_error(is_error = function(resp) FALSE) |>
     httr2::req_perform() |>
     httr2::resp_status()
-  cli::cli_inform("finished checking")
   status
 }
 
