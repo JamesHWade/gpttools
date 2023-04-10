@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   retriever: retriever.html
-last_built: 2023-04-05T00:35Z
+last_built: 2023-04-10T12:03Z
 urls:
   reference: https://jameshwade.github.io/gpttools/reference
   article: https://jameshwade.github.io/gpttools/articles
