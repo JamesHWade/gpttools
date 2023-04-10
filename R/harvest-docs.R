@@ -19,9 +19,15 @@ get_hyperlinks <- function(url) {
 }
 
 check_url <- function(url) {
-  httr2::request(url) |>
+  cli::cli_inform("started checking")
+  status <-
+    httr2::request(url) |>
+    # suppress error
+    httr2::req_error(is_error = function(resp) FALSE) |>
     httr2::req_perform() |>
     httr2::resp_status()
+  cli::cli_inform("finished checking")
+  status
 }
 
 validate_link <- function(link, original_link, try_fix = TRUE) {
@@ -182,7 +188,7 @@ crawl <- function(url,
 #' @return A character vector with all new line characters removed.
 #'
 #' @export
-remove_new_lines_and_spaces <- function(serie) {
+remove_lines_and_spaces <- function(serie) {
   serie |>
     stringr::str_replace("\n", " ") |>
     stringr::str_replace("\\n", " ") |>
@@ -207,10 +213,10 @@ scrape_url <- function(url) {
   xpath_expression <-
     glue("//body//*[not(self::{exclude_tags})]")
 
-  text <- rvest::read_html(url) %>%
-    rvest::html_nodes(xpath = xpath_expression) %>%
-    rvest::html_text2() %>%
-    remove_newlines_and_spaces()
+  text <- rvest::read_html(url) |>
+    rvest::html_nodes(xpath = xpath_expression) |>
+    rvest::html_text2() |>
+    remove_lines_and_spaces()
 
   if ("You need to enable JavaScript to run this app." %in% text) {
     cli_warn("Unable to parse page {url}. JavaScript is required.")
