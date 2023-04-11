@@ -4,11 +4,13 @@
 #'
 #' @export
 suggest_unit_test_addin <- function() {
-  gpt_insert(
-    model = "text-davinci-003",
-    prompt = "Suggest a unit test for this function with R package testthat",
-    temperature = 0.5,
-    max_tokens = getOption("gpttools.max_tokens"),
-    append_text = TRUE
+  instructions <- paste(
+    "You are an expert code copilot.",
+    "Suggest a unit test for this function with R package testthat.",
+    "Any text or annotations should be included as code",
+    "comments. Do not use code blocks. The output goes into an R file. Do not",
+    "provide tests or examples.",
+    collapse = " "
   )
+  gpt_chat(instructions)
 }
