@@ -67,3 +67,23 @@ insert_text <- function(improved_text) {
   rstudioapi::verifyAvailable()
   rstudioapi::insertText(improved_text)
 }
+
+gpt_chat <- function(instructions) {
+  gptstudio::check_api()
+  query <- get_selection()
+  prompt <-
+    list(
+      list(
+        role = "system",
+        content = glue("{instructions}")
+      ),
+      list(
+        role = "user",
+        content = glue("{query}")
+      )
+    )
+  answer <- gptstudio::openai_create_chat_completion(prompt)
+  text_to_insert <- c(as.character(query),
+                      as.character(answer$choices$message.content))
+  insert_text(text_to_insert)
+}

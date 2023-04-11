@@ -2,11 +2,16 @@
 % Please edit documentation in R/addin_suggest_better.R
 \name{suggest_code_improvements}
 \alias{suggest_code_improvements}
-\title{Suggest code improvements}
+\title{Suggest code improvements using a code copilot}
 \usage{
 suggest_code_improvements()
 }
+\value{
+A string containing suggestions for code improvements, including
+descriptions of the changes and any necessary annotations as code comments.
+The output is formatted for inclusion in an R file.
+}
 \description{
-Prompt: "I'm writing R code for use in a package. How can I improve this
-code:"
+This function provides suggestions for improving the provided code using an
+expert code copilot. The output is formatted for inclusion in an R file.
 }
