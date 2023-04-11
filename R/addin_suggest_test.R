@@ -10,6 +10,7 @@ suggest_unit_test_addin <- function() {
     "Any text or annotations should be included as code",
     "comments. Do not use code blocks. The output goes into an R file. Do not",
     "provide tests or examples.",
-    collapse = " ")
+    collapse = " "
+  )
   gpt_chat(instructions)
 }
