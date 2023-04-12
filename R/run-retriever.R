@@ -18,7 +18,6 @@ addin_run_retriever <- function() {
       "No index was found. Create an index with {.code crawl(<url>)}."
     )
   }
-  withr::local_options(shiny.launch.browser = ".rs.invokeShinyPaneViewer")
-  app_dir <- system.file("retriever", package = "gpttools")
-  shiny::shinyAppDir(app_dir)
+  run_app_file <- system.file("scripts/run_retriever.R", package = "gpttools")
+  rstudioapi::jobRunScript(path = run_app_file)
 }
