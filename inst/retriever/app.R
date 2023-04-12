@@ -1,8 +1,7 @@
 rlang::check_installed(c(
   "shiny", "bsicons", "cli", "glue", "gptstudio",
-  "gpttools", "waiter", "htmltools"
+  "gpttools", "waiter", "htmltools", "withr"
 ))
-
 library(gpttools)
 
 rlang::check_installed("bslib", version = "0.4.2.9000")
@@ -13,7 +12,7 @@ window_height_ui <- function(id) {
   ns <- shiny::NS(id)
   namespaced_id <- ns("window_height")
 
-  shiny::tags$head(shiny::tags$script(HTML(
+  shiny::tags$head(shiny::tags$script(shiny::HTML(
     sprintf("
       function send_window_height() {
         var height = $(window).height();
@@ -182,4 +181,4 @@ server <- function(input, output, session) {
   shiny::observeEvent(input$cancel, shiny::stopApp())
 }
 
-shinyApp(ui, server)
+shiny::shinyApp(ui, server)

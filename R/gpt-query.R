@@ -68,6 +68,8 @@ insert_text <- function(improved_text) {
   rstudioapi::insertText(improved_text)
 }
 
+
+# write a function to take the output of this function and return only the R code
 gpt_chat <- function(instructions) {
   gptstudio::check_api()
   query <- get_selection()
@@ -89,3 +91,63 @@ gpt_chat <- function(instructions) {
   )
   insert_text(text_to_insert)
 }
+
+# The new function to extract only R code would be:
+extract_code <- function(response_with_code) {
+  prompt <-
+    list(
+      list(
+        role = "system",
+        content = paste(
+          "Extract only the R code from the user provided input.",
+          "Do not provide anything besides R code in response.",
+          "The code will be evaluated by the R console.",
+          "No free text at all. No code blocks. Only R code.",
+          collapse = " "
+        )
+      ),
+      list(
+        role = "user",
+        content = response_with_code
+      )
+    )
+  answer <- gptstudio::openai_create_chat_completion(prompt)
+  code <- stringr::str_remove_all(answer$choices$message.content,
+    pattern = "(?i)```\\{?[Rr]?\\}?"
+  )
+}
+
+run_bg_code <- function(code) {
+  tmpfile <- tempfile(fileext = ".R")
+  readr::write_lines(code, tmpfile)
+  callr::r_bg(run_code, args = list(code))
+}
+
+# a <- gptstudio::gpt_chat(query = "Show me how to use ggplot2", history = NULL,
+#                     style = "tidyverse", skill = "advanced")
+
+
+# # Load the callr package
+# library(callr)
+#
+# # R code you want to run in a background process
+# my_code <- "
+# library(ggplot2)
+#
+# data(mtcars)
+# plot <- ggplot(mtcars, aes(x = mpg, y = disp) +
+#   geom_point() +
+#   labs(title = 'Miles per Gallon vs Displacement')
+#
+# ggsave('my_plot', plot)
+# "
+#
+# # Define a function to run the R code
+# run_code <- function(code) {
+#   eval(parse(text = code))
+# }
+#
+#
+#
+# # To wait for the process to finish and collect the result
+# result <- r_bg_process$get_result()

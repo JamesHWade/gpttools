@@ -44,7 +44,8 @@ Imports:
     janitor,
     readr,
     httr2,
-    R.utils
+    R.utils,
+    callr
 Suggests: 
     covr,
     mockr,
@@ -62,7 +63,8 @@ Suggests:
     tidymodels,
     tidyverse,
     htmltools,
-    bsicons
+    bsicons,
+    later
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 URL: https://github.com/JamesHWade/gpttools
