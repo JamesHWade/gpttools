@@ -44,7 +44,8 @@ Imports:
     janitor,
     readr,
     httr2,
-    R.utils
+    R.utils,
+    callr
 Suggests: 
     covr,
     mockr,
