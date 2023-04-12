@@ -85,8 +85,10 @@ gpt_chat <- function(instructions) {
       )
     )
   answer <- gptstudio::openai_create_chat_completion(prompt)
-  text_to_insert <- c(as.character(query),
-                      as.character(answer$choices$message.content))
+  text_to_insert <- c(
+    as.character(query),
+    as.character(answer$choices$message.content)
+  )
   insert_text(text_to_insert)
 }
 
@@ -111,7 +113,8 @@ extract_code <- function(response_with_code) {
     )
   answer <- gptstudio::openai_create_chat_completion(prompt)
   code <- stringr::str_remove_all(answer$choices$message.content,
-                                  pattern = "(?i)```\\{?[Rr]?\\}?")
+    pattern = "(?i)```\\{?[Rr]?\\}?"
+  )
 }
 
 run_bg_code <- function(code) {

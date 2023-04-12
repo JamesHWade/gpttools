@@ -13,6 +13,7 @@ add_roxygen_addin <- function() {
     "You are an expert code copilot. Insert a roxygen skeleton to document",
     "this function. Any text or annotations should be included as code",
     "comments. Do not use code blocks. The output goes into an R file.",
-    collapse = " ")
+    collapse = " "
+  )
   gpt_chat(instructions)
 }
