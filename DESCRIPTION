@@ -1,6 +1,6 @@
 Package: gpttools
 Title: Extensions and Tools for gptstudio
-Version: 0.0.6
+Version: 0.0.6.9000
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9740-1905"))
@@ -43,9 +43,11 @@ Imports:
     pdftools,
     janitor,
     readr,
+    rvest,
     httr2,
     R.utils,
-    callr
+    callr,
+    scales
 Suggests: 
     covr,
     mockr,
@@ -54,7 +56,6 @@ Suggests:
     shinytest2,
     spelling,
     roxygen2,
-    rvest,
     withr,
     shinyjs,
     waiter,

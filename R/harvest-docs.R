@@ -1,5 +1,4 @@
 get_hyperlinks <- function(url) {
-  rlang::check_installed("rvest")
   status <- check_url(url)
   if (identical(status, 200L)) {
     tibble::tibble(

@@ -24,6 +24,7 @@ query_azure_openai <- function(deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOY
     ) |>
     httr2::req_body_json(body) |>
     httr2::req_retry() |>
+    httr2::req_throttle(0.5) |>
     httr2::req_perform()
 
   resp |> httr2::resp_body_json(simplifyVector = TRUE)
@@ -78,9 +79,13 @@ create_azure_index <- function(domain,
       )
     )
   }
+  index <- prepare_scraped_files(domain = domain)
+  n_tokens <- sum(index$n_tokens)
+
   cli::cli_inform(c(
     "!" = "You are about to create embeddings for {domain}.",
-    "i" = "This will use many tokens. Only proceed if you understand the cost.",
+    "i" = "This will use approx. {scales::scientific(n_tokens)} tokens.",
+    "i" = "Only proceed if you understand the cost.",
     "i" = "Read more about embeddings at {.url
       https://platform.openai.com/docs/guides/embeddings}."
   ))
@@ -94,7 +99,7 @@ create_azure_index <- function(domain,
   }
   if (rlang::is_true(ask_user)) {
     index <-
-      prepare_scraped_files(domain = domain) |>
+      index |>
       add_azure_embeddings() |>
       dplyr::mutate(version = pkg_version)
     if (rlang::is_false(dir.exists(index_dir))) {
