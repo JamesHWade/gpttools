@@ -43,9 +43,11 @@ Imports:
     pdftools,
     janitor,
     readr,
+    rvest,
     httr2,
     R.utils,
-    callr
+    callr,
+    scales
 Suggests: 
     covr,
     mockr,
@@ -54,7 +56,6 @@ Suggests:
     shinytest2,
     spelling,
     roxygen2,
-    rvest,
     withr,
     shinyjs,
     waiter,

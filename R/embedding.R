@@ -5,12 +5,16 @@ prepare_scraped_files <- function(domain) {
 
   if (max(scraped$n_words) > 2e5) {
     max_index <- which.max(scraped$n_words)
-    cli_abort(
+    cli_warn(
       c(
         "!" = "Entry {max_index} of {domain} has at least 200,000 words.",
         "i" = "You probably do not want that. Please inspect scraped data."
       )
     )
+    dont_embed <- usethis::ui_nope("Do you want to continue?")
+    if (dont_embed) {
+      cli_abort("Embedding aborted at your request.")
+    }
   }
 
   scraped |>
@@ -106,9 +110,14 @@ create_index <- function(domain,
       )
     )
   }
+
+  index <- prepare_scraped_files(domain = domain)
+  n_tokens <- sum(index$n_tokens) |> scales::scientific()
+
   cli::cli_inform(c(
     "!" = "You are about to create embeddings for {domain}.",
-    "i" = "This will use many tokens. Only proceed if you understand the cost.",
+    "i" = "This will use approx. {n_tokens} tokens.",
+    "i" = "Only proceed if you understand the cost.",
     "i" = "Read more about embeddings at {.url
       https://platform.openai.com/docs/guides/embeddings}."
   ))
@@ -121,8 +130,8 @@ create_index <- function(domain,
     )
   }
   if (rlang::is_true(ask_user)) {
-    index <-
-      prepare_scraped_files(domain = domain) |>
+     index <-
+       index |>
       # join_embeddings_from_index() |>
       add_embeddings() |>
       dplyr::mutate(version = pkg_version)
