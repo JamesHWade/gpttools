@@ -130,8 +130,8 @@ create_index <- function(domain,
     )
   }
   if (rlang::is_true(ask_user)) {
-     index <-
-       index |>
+    index <-
+      index |>
       # join_embeddings_from_index() |>
       add_embeddings() |>
       dplyr::mutate(version = pkg_version)
