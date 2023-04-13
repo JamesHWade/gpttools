@@ -2,8 +2,7 @@
 % Please edit documentation in R/run-retriever.R
 \name{addin_run_retriever}
 \alias{addin_run_retriever}
-\title{Run Chat GPT with Retreival
-Run the ChatGPT shiny app with semantic search and document retrieval}
+\title{Run Chat GPT with Retrieval}
 \usage{
 addin_run_retriever()
 }
@@ -11,12 +10,11 @@ addin_run_retriever()
 This function has no return value.
 }
 \description{
-Run Chat GPT with Retreival
 Run the ChatGPT shiny app with semantic search and document retrieval
 }
 \examples{
 # Call the function as an RStudio addin
 \dontrun{
-addin_chatgpt()
+addin_run_retriever()
 }
 }

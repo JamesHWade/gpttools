@@ -104,6 +104,7 @@ recursive_hyperlinks <- function(local_domain,
 #' @param num_cores Number of cores to use. Defaults to
 #'  `parallel::detectCores() - 1`
 #' @param pkg_version Package version number
+#' @param use_azure_openai Whether to use Azure OpenAI for index creation
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
@@ -113,7 +114,8 @@ crawl <- function(url,
                   aggressive = FALSE,
                   overwrite = FALSE,
                   num_cores = parallel::detectCores() - 1,
-                  pkg_version = NULL) {
+                  pkg_version = NULL,
+                  use_azure_openai = FALSE) {
   parsed_url <- urltools::url_parse(url)
   local_domain <- parsed_url$domain
   url_path <- parsed_url$path
@@ -178,10 +180,17 @@ crawl <- function(url,
     sink = scraped_text_file
   )
   if (index_create) {
-    create_index(local_domain_name,
-      overwrite = overwrite,
-      pkg_version = pkg_version
-    )
+    if (use_azure_openai) {
+      create_azure_index(local_domain_name,
+        overwrite = overwrite,
+        pkg_version = pkg_version
+      )
+    } else {
+      create_index(local_domain_name,
+        overwrite = overwrite,
+        pkg_version = pkg_version
+      )
+    }
   }
 }
 
@@ -247,5 +256,5 @@ extract_text <- function(url, use_html_text2 = TRUE) {
   } else {
     text <- rvest::html_text(nodes)
   }
-  text |> remove_new_lines()
+  text |> remove_lines_and_spaces()
 }

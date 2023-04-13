@@ -1,4 +1,5 @@
-#' Run Chat GPT with Retreival
+#' Run Chat GPT with Retrieval
+#'
 #' Run the ChatGPT shiny app with semantic search and document retrieval
 #'
 #' @export
@@ -8,7 +9,7 @@
 #' @examples
 #' # Call the function as an RStudio addin
 #' \dontrun{
-#' addin_chatgpt()
+#' addin_run_retriever()
 #' }
 addin_run_retriever <- function() {
   gptstudio::check_api()
