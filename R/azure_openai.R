@@ -1,13 +1,11 @@
-query_azure_openai <- function(
-    deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
-    task = "chat/completions",
-    body = NULL,
-    api_key = Sys.getenv("AZURE_OPENAI_KEY")) {
+query_azure_openai <- function(deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+                               task = "chat/completions",
+                               body = NULL,
+                               api_key = Sys.getenv("AZURE_OPENAI_KEY")) {
   arg_match(task, c("chat/completions", "embeddings"))
 
   api_version <-
-    switch(
-      task,
+    switch(task,
       "chat/completions" = "chat/completions?api-version=2023-03-15-preview",
       "embeddings"       = "embeddings?api-version=2022-12-01"
     )
@@ -34,9 +32,11 @@ query_azure_openai <- function(
 
 create_azure_openai_embedding <- function(input_text) {
   body <- list(input = input_text)
-  embedding <- query_azure_openai(deployment_name = "embeddings",
-                                  body = body,
-                                  task = "embeddings")
+  embedding <- query_azure_openai(
+    deployment_name = "embeddings",
+    body = body,
+    task = "embeddings"
+  )
   tibble::tibble(
     usage = embedding$usage$total_tokens,
     embedding = embedding$data$embedding
