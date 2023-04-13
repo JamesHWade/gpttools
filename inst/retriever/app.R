@@ -6,7 +6,6 @@ library(gpttools)
 
 rlang::check_installed("bslib", version = "0.4.2.9000")
 rlang::check_installed("bsicons")
-gptstudio::check_api()
 
 window_height_ui <- function(id) {
   ns <- shiny::NS(id)

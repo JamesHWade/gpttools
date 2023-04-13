@@ -59,7 +59,6 @@ create_openai_embedding <-
       input = input_text
     )
     embedding <- query_openai_api(body, openai_api_key, task = "embeddings")
-    embedding$usage$total_tokens
     tibble::tibble(
       usage = embedding$usage$total_tokens,
       embedding = embedding$data$embedding

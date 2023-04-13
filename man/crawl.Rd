@@ -10,7 +10,8 @@ crawl(
   aggressive = FALSE,
   overwrite = FALSE,
   num_cores = parallel::detectCores() - 1,
-  pkg_version = NULL
+  pkg_version = NULL,
+  use_azure_openai = FALSE
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ pages and index if they already exist. Default is FALSE.}
 \code{parallel::detectCores() - 1}}
 
 \item{pkg_version}{Package version number}
+
+\item{use_azure_openai}{Whether to use Azure OpenAI for index creation}
 }
 \value{
 NULL. The resulting tibble is saved into a parquet file.

@@ -12,7 +12,7 @@ ingest_pdf <- function(file_path, source, link = NULL) {
   text <- pdftools::pdf_text(file_path) |>
     readr::read_lines() |>
     stringr::str_c(collapse = " ") |>
-    remove_new_lines()
+    remove_lines_and_spaces()
 
   tibble::tibble(
     text = text,
