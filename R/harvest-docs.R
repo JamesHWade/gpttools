@@ -84,7 +84,9 @@ recursive_hyperlinks <- function(local_domain,
       }
     }) |>
     unlist()
-
+  exclude_exts <- "\\.(xml|mp4|pdf|zip|rar|gz|tar|csv|docx|pptx|xlsx|avi)$"
+  new_links <-
+    new_links[!grepl(exclue_exts, new_links, ignore.case = TRUE)] |> unique()
   recursive_hyperlinks(local_domain, unique(new_links), checked_urls)
 }
 
@@ -180,7 +182,7 @@ crawl <- function(url,
   )
   if (index_create) {
     if (use_azure_openai) {
-      create_azure_index(local_domain_name,
+      create_index_azure(local_domain_name,
         overwrite = overwrite,
         pkg_version = pkg_version
       )
@@ -238,10 +240,13 @@ scrape_url <- function(url) {
 
 
 extract_text <- function(url, use_html_text2 = TRUE) {
-  rlang::check_installed("rvest")
   exclude_tags <- c(
-    "style", "script", "head", "meta", "link", "button",
-    "form", "img", "svg"
+    c(
+      "style", "script", "head", "meta", "link", "button", "form", "img",
+      "svg", "input", "select", "option", "textarea", "label", "noscript",
+      "canvas", "map", "area", "object", "param", "source", "track", "embed",
+      "iframe", "video", "audio", "picture", "figure", "nav", "footer"
+    )
   )
   nodes <- rvest::read_html(url) |>
     rvest::html_nodes(
