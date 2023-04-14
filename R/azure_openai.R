@@ -1,12 +1,10 @@
-query_openai_azure <- function(
-    deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
-    task = "chat/completions",
-    body = NULL,
-    api_key = Sys.getenv("AZURE_OPENAI_KEY")) {
+query_openai_azure <- function(deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+                               task = "chat/completions",
+                               body = NULL,
+                               api_key = Sys.getenv("AZURE_OPENAI_KEY")) {
   arg_match(task, c("chat/completions", "embeddings"))
 
-  api_version <- switch(
-    task,
+  api_version <- switch(task,
     "chat/completions" = "chat/completions?api-version=2023-03-15-preview",
     "embeddings"       = "embeddings?api-version=2022-12-01"
   )
@@ -203,34 +201,34 @@ chat_with_context_azure <- function(query,
 
   prompt_instructions <-
     switch(task,
-           "Context Only" =
-             list(
-               list(
-                 role = "system",
-                 content =
-                   glue(
-                     "You are a helpful chat bot that answers questions based on ",
-                     "the context provided by the user. If the user does not ",
-                     "provide related context, say \"I am not able to answer that ",
-                     "question. Maybe try rephrasing your question in a different ",
-                     "way.\""
-                   )
-               )
-             ),
-           "Permissive Chat" =
-             list(
-               list(
-                 role = "system",
-                 content =
-                   glue(
-                     "You are a helpful chat bot that answers questions based on ",
-                     "on the context provided by the user. If the user does not ",
-                     "provide context, answer the quest but first say \"I am not ",
-                     "able to answer that question with the context you gave me, ",
-                     "but here is my best answer.",
-                   )
-               )
-             )
+      "Context Only" =
+        list(
+          list(
+            role = "system",
+            content =
+              glue(
+                "You are a helpful chat bot that answers questions based on ",
+                "the context provided by the user. If the user does not ",
+                "provide related context, say \"I am not able to answer that ",
+                "question. Maybe try rephrasing your question in a different ",
+                "way.\""
+              )
+          )
+        ),
+      "Permissive Chat" =
+        list(
+          list(
+            role = "system",
+            content =
+              glue(
+                "You are a helpful chat bot that answers questions based on ",
+                "on the context provided by the user. If the user does not ",
+                "provide context, answer the quest but first say \"I am not ",
+                "able to answer that question with the context you gave me, ",
+                "but here is my best answer.",
+              )
+          )
+        )
     )
 
   prompt_context <- list(
