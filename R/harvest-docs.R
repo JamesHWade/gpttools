@@ -84,7 +84,9 @@ recursive_hyperlinks <- function(local_domain,
       }
     }) |>
     unlist()
-
+  exclude_exts <- "\\.(xml|mp4|pdf|zip|rar|gz|tar|csv|docx|pptx|xlsx|avi)$"
+  new_links <-
+    new_links[!grepl(exclue_exts, new_links, ignore.case = TRUE)] |> unique()
   recursive_hyperlinks(local_domain, unique(new_links), checked_urls)
 }
 
@@ -180,14 +182,14 @@ crawl <- function(url,
   )
   if (index_create) {
     if (use_azure_openai) {
-      create_azure_index(local_domain_name,
-        overwrite = overwrite,
-        pkg_version = pkg_version
+      create_index_azure(local_domain_name,
+                         overwrite = overwrite,
+                         pkg_version = pkg_version
       )
     } else {
       create_index(local_domain_name,
-        overwrite = overwrite,
-        pkg_version = pkg_version
+                   overwrite = overwrite,
+                   pkg_version = pkg_version
       )
     }
   }
@@ -222,8 +224,8 @@ remove_lines_and_spaces <- function(serie) {
 #' @export
 scrape_url <- function(url) {
   text <- R.utils::withTimeout(extract_text(url),
-    timeout = 10,
-    onTimeout = "silent"
+                               timeout = 10,
+                               onTimeout = "silent"
   )
   if (is.null(text)) {
     text <- extract_text(url, use_html_text2 = FALSE)
@@ -238,16 +240,17 @@ scrape_url <- function(url) {
 
 
 extract_text <- function(url, use_html_text2 = TRUE) {
-  rlang::check_installed("rvest")
   exclude_tags <- c(
-    "style", "script", "head", "meta", "link", "button",
-    "form", "img", "svg"
+    c("style", "script", "head", "meta", "link", "button", "form", "img",
+      "svg", "input", "select", "option", "textarea", "label", "noscript",
+      "canvas", "map", "area", "object", "param", "source", "track", "embed",
+      "iframe", "video", "audio", "picture", "figure", "nav", "footer")
   )
   nodes <- rvest::read_html(url) |>
     rvest::html_nodes(
       xpath = paste("//body//*[not(self::",
-        paste(exclude_tags, collapse = " or self::"), ")]",
-        sep = ""
+                    paste(exclude_tags, collapse = " or self::"), ")]",
+                    sep = ""
       )
     )
   if (use_html_text2) {

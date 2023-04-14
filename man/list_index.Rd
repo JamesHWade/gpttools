@@ -4,7 +4,10 @@
 \alias{list_index}
 \title{List Index Files}
 \usage{
-list_index()
+list_index(dir = "index")
+}
+\arguments{
+\item{dir}{Name of the directory, defaults to "index"}
 }
 \value{
 A character vector containing the names of the index files found in

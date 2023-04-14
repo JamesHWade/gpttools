@@ -50,8 +50,8 @@ get_pkgs_to_scrape <- function() {
   pkgs <- c(
     tidyverse::tidyverse_packages(),
     tidymodels::tidymodels_packages(),
-    "shiny", "bslib", "shinyjs", "waiter", "golem" # ,
-    # "brms", "rstanarm", "lme4"
+    "shiny", "bslib", "shinyjs", "waiter", "golem",
+    "vetiver", "plumber", "embed", "textrecipes", "gpttools", "gptstudio"
   )
 
   package_info <- installed_packages |>

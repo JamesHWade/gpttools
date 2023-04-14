@@ -3,6 +3,7 @@
 export(add_roxygen_addin)
 export(addin_run_retriever)
 export(chat_with_context)
+export(chat_with_context_azure)
 export(collect_dataframes)
 export(crawl)
 export(create_index_from_audio)
