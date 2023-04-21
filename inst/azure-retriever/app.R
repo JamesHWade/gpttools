@@ -147,17 +147,19 @@ server <- function(input, output, session) {
       overwrite = FALSE
     )
     new_response <- interim[[3]]$choices
+    cli::cat_print(new_response)
     r$context_links <- c(r$context_links, interim[[2]]$link)
     r$all_chats <-
       c(
         interim[[1]],
         list(
           list(
-            role    = new_response$message.role,
-            content = new_response$message.content
+            role    = new_response$message$role,
+            content = new_response$message$content
           )
         )
       )
+    cli::cat_print(r$all_chats)
     r$all_chats_formatted <- gptstudio::make_chat_history(r$all_chats)
     waiter::waiter_hide()
     shiny::updateTextAreaInput(session, "chat_input", value = "")
