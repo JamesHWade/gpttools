@@ -86,7 +86,7 @@ recursive_hyperlinks <- function(local_domain,
     unlist()
   exclude_exts <- "\\.(xml|mp4|pdf|zip|rar|gz|tar|csv|docx|pptx|xlsx|avi)$"
   new_links <-
-    new_links[!grepl(exclue_exts, new_links, ignore.case = TRUE)] |> unique()
+    new_links[!grepl(exclude_exts, new_links, ignore.case = TRUE)] |> unique()
   recursive_hyperlinks(local_domain, unique(new_links), checked_urls)
 }
 
