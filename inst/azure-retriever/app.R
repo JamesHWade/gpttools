@@ -173,7 +173,7 @@ server <- function(input, output, session) {
       height = height() - 300,
       bslib::card_header("Chat History", class = "bg-primary"),
       bslib::card_body(
-        fill = TRUE,
+        fill = FALSE,
         r$all_chats_formatted,
         shiny::markdown("**Sources**"),
         shiny::markdown(paste0("* ", unique(r$context_links), collapse = "\n"))
