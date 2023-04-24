@@ -1,11 +1,16 @@
 rlang::check_installed(c(
   "shiny", "bsicons", "cli", "glue", "gptstudio",
-  "gpttools", "waiter", "htmltools", "withr"
+  "gpttools", "waiter", "htmltools", "withr", "pins"
 ))
 library(gpttools)
 
 rlang::check_installed("bslib", version = "0.4.2.9000")
 rlang::check_installed("bsicons")
+
+board        <- pins::board_connect()
+stored_index <- board |> pins::pin_read(Sys.getenv("GPTTOOLS_INDEX_PIN"))
+indices      <- stored_index |> dplyr::pull(source) |> unique()
+
 
 window_height_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -36,8 +41,6 @@ window_height_server <- function(id) {
     })
   })
 }
-
-indices <- gpttools::list_index() |> tools::file_path_sans_ext()
 
 ui <- bslib::page_fluid(
   waiter::use_waiter(),
@@ -114,7 +117,13 @@ server <- function(input, output, session) {
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
   height <- window_height_server("height")
-  index <- shiny::reactive(gpttools::load_index(input$source))
+  index <- shiny::reactive(
+    if (input$source == "All") {
+      stored_index
+    } else {
+      stored_index |> dplyr::filter(source == input$source)
+    }
+  )
   shiny::observe({
     waiter::waiter_show(
       html = shiny::tagList(
