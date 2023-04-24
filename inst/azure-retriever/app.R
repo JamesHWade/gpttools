@@ -7,9 +7,11 @@ library(gpttools)
 rlang::check_installed("bslib", version = "0.4.2.9000")
 rlang::check_installed("bsicons")
 
-board        <- pins::board_connect()
+board <- pins::board_connect()
 stored_index <- board |> pins::pin_read(Sys.getenv("GPTTOOLS_INDEX_PIN"))
-indices      <- stored_index |> dplyr::pull(source) |> unique()
+indices <- stored_index |>
+  dplyr::pull(source) |>
+  unique()
 
 
 window_height_ui <- function(id) {
