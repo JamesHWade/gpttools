@@ -1,11 +1,18 @@
 rlang::check_installed(c(
   "shiny", "bsicons", "cli", "glue", "gptstudio",
-  "gpttools", "waiter", "htmltools", "withr"
+  "gpttools", "waiter", "htmltools", "withr", "pins"
 ))
 library(gpttools)
 
 rlang::check_installed("bslib", version = "0.4.2.9000")
 rlang::check_installed("bsicons")
+
+board <- pins::board_connect()
+stored_index <- board |> pins::pin_read(Sys.getenv("GPTTOOLS_INDEX_PIN"))
+indices <- stored_index |>
+  dplyr::pull(source) |>
+  unique()
+
 
 window_height_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -36,8 +43,6 @@ window_height_server <- function(id) {
     })
   })
 }
-
-indices <- gpttools::list_index() |> tools::file_path_sans_ext()
 
 ui <- bslib::page_fluid(
   waiter::use_waiter(),
@@ -72,18 +77,8 @@ ui <- bslib::page_fluid(
       bslib::accordion_panel(
         "Preferences",
         icon = bsicons::bs_icon("gear-wide-connected"),
-        shiny::radioButtons(
-          "save_history", "Save & Use History",
-          choiceNames = c("Yes", "No"),
-          choiceValues = c(TRUE, FALSE),
-          selected = TRUE, inline = TRUE,
-        ),
         shiny::sliderInput(
           "n_docs", "Docs to Include (#)",
-          min = 0, max = 20, value = 3
-        ),
-        shiny::sliderInput(
-          "n_history", "Chat History to Include (#)",
           min = 0, max = 20, value = 3
         )
       )
@@ -124,7 +119,13 @@ server <- function(input, output, session) {
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
   height <- window_height_server("height")
-  index <- shiny::reactive(gpttools::load_index(input$source))
+  index <- shiny::reactive(
+    if (input$source == "All") {
+      stored_index
+    } else {
+      stored_index |> dplyr::filter(source == input$source)
+    }
+  )
   shiny::observe({
     waiter::waiter_show(
       html = shiny::tagList(
@@ -139,11 +140,11 @@ server <- function(input, output, session) {
       add_context = TRUE,
       chat_history = read_history(),
       session_history = r$all_chats,
-      add_history = input$save_history,
+      add_history = FALSE,
       task = input$task,
       k_context = input$n_docs,
-      k_history = input$n_history,
-      save_history = input$save_history,
+      k_history = 1,
+      save_history = FALSE,
       overwrite = FALSE
     )
     new_response <- interim[[3]]$choices
