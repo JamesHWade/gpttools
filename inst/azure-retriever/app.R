@@ -72,18 +72,8 @@ ui <- bslib::page_fluid(
       bslib::accordion_panel(
         "Preferences",
         icon = bsicons::bs_icon("gear-wide-connected"),
-        shiny::radioButtons(
-          "save_history", "Save & Use History",
-          choiceNames = c("Yes", "No"),
-          choiceValues = c(TRUE, FALSE),
-          selected = TRUE, inline = TRUE,
-        ),
         shiny::sliderInput(
           "n_docs", "Docs to Include (#)",
-          min = 0, max = 20, value = 3
-        ),
-        shiny::sliderInput(
-          "n_history", "Chat History to Include (#)",
           min = 0, max = 20, value = 3
         )
       )
@@ -139,11 +129,11 @@ server <- function(input, output, session) {
       add_context = TRUE,
       chat_history = read_history(),
       session_history = r$all_chats,
-      add_history = input$save_history,
+      add_history = FALSE,
       task = input$task,
       k_context = input$n_docs,
-      k_history = input$n_history,
-      save_history = input$save_history,
+      k_history = 1,
+      save_history = FALSE,
       overwrite = FALSE
     )
     new_response <- interim[[3]]$choices

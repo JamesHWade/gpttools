@@ -1,7 +1,8 @@
 query_openai_azure <- function(deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
                                task = "chat/completions",
                                body = NULL,
-                               api_key = Sys.getenv("AZURE_OPENAI_KEY")) {
+                               api_key = Sys.getenv("AZURE_OPENAI_KEY"),
+                               base_url = Sys.getenv("AZURE_OPENAI_ENDPOINT")) {
   arg_match(task, c("chat/completions", "embeddings"))
 
   api_version <- switch(task,
@@ -9,7 +10,7 @@ query_openai_azure <- function(deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOY
     "embeddings"       = "embeddings?api-version=2022-12-01"
   )
 
-  req <- httr2::request("https://ai0028.openai.azure.com")
+  req <- httr2::request(base_url)
 
   resp <-
     req |>
