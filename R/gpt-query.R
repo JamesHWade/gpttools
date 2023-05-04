@@ -123,31 +123,27 @@ run_bg_code <- function(code) {
   callr::r_bg(run_code, args = list(code))
 }
 
-# a <- gptstudio::gpt_chat(query = "Show me how to use ggplot2", history = NULL,
-#                     style = "tidyverse", skill = "advanced")
+query_openai <- function(task = "chat/completions",
+                         body = NULL,
+                         api_key = Sys.getenv("OPENAI_API_KEY"),
+                         base_url = "https://api.openai.com/v1",
+                         model = "gpt-3.5-turbo") {
+  arg_match(task, c("chat/completions", "embeddings"))
 
+  req <- httr2::request(base_url)
 
-# # Load the callr package
-# library(callr)
-#
-# # R code you want to run in a background process
-# my_code <- "
-# library(ggplot2)
-#
-# data(mtcars)
-# plot <- ggplot(mtcars, aes(x = mpg, y = disp) +
-#   geom_point() +
-#   labs(title = 'Miles per Gallon vs Displacement')
-#
-# ggsave('my_plot', plot)
-# "
-#
-# # Define a function to run the R code
-# run_code <- function(code) {
-#   eval(parse(text = code))
-# }
-#
-#
-#
-# # To wait for the process to finish and collect the result
-# result <- r_bg_process$get_result()
+  resp <-
+    req |>
+    httr2::req_url_path_append(task) |>
+    httr2::req_user_agent("gpttools: https://github.com/jameshwade/gpttools") |>
+    httr2::req_headers(
+      "Authorization" = glue("Bearer {api_key}"),
+      "Content-Type" = "application/json"
+    ) |>
+    httr2::req_body_json(list(model = model, messages = body)) |>
+    httr2::req_retry() |>
+    httr2::req_throttle(4) |>
+    httr2::req_perform()
+
+  resp |> httr2::resp_body_json(simplifyVector = TRUE)
+}

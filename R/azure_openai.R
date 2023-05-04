@@ -1,4 +1,4 @@
-query_openai_azure <- function(deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+query_openai_azure <- function(deployment_name,
                                task = "chat/completions",
                                body = NULL,
                                api_key = Sys.getenv("AZURE_OPENAI_KEY"),
@@ -34,7 +34,7 @@ query_openai_azure <- function(deployment_name = Sys.getenv("AZURE_OPENAI_DEPLOY
 create_openai_embedding_azure <- function(input_text) {
   body <- list(input = input_text)
   embedding <- query_openai_azure(
-    deployment_name = "embeddings",
+    deployment_name = Sys.getenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME"),
     body = body,
     task = "embeddings"
   )
@@ -46,7 +46,10 @@ create_openai_embedding_azure <- function(input_text) {
 
 create_openai_chat_completion_azure <- function(prompt) {
   body <- list(messages = prompt)
-  query_openai_azure(body = body, task = "chat/completions")
+  query_openai_azure(
+    deployment_name = Sys.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"),
+    body = body,
+    task = "chat/completions")
 }
 
 

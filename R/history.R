@@ -130,6 +130,7 @@ check_context <- function(context) {
 #' generate responses.
 #'
 #' @param query The input query to be processed.
+#' @param model Name of the openai model to use, defaults to gpt-3.5-turbo
 #' @param index Index to look for context.
 #' @param add_context Whether to add context to the query or not. Default is
 #'   TRUE.
@@ -161,6 +162,7 @@ check_context <- function(context) {
 #' result <- chat_with_context(query = query, context = context)
 #' }
 chat_with_context <- function(query,
+                              model = "gpt-3.5-turbo",
                               index = NULL,
                               add_context = TRUE,
                               chat_history = NULL,
@@ -284,7 +286,9 @@ chat_with_context <- function(query,
 
   cli::cat_print(prompt)
 
-  answer <- gptstudio::openai_create_chat_completion(prompt)
+  answer <- query_openai(task = "chat/completions",
+                         body = prompt,
+                         model = model)
 
   if (rlang::is_true(save_history)) {
     purrr::map(prompt, \(x) {
