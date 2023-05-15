@@ -183,13 +183,13 @@ crawl <- function(url,
   if (index_create) {
     if (use_azure_openai) {
       create_index_azure(local_domain_name,
-                         overwrite = overwrite,
-                         pkg_version = pkg_version
+        overwrite = overwrite,
+        pkg_version = pkg_version
       )
     } else {
       create_index(local_domain_name,
-                   overwrite = overwrite,
-                   pkg_version = pkg_version
+        overwrite = overwrite,
+        pkg_version = pkg_version
       )
     }
   }
@@ -224,8 +224,8 @@ remove_lines_and_spaces <- function(serie) {
 #' @export
 scrape_url <- function(url) {
   text <- R.utils::withTimeout(extract_text(url),
-                               timeout = 10,
-                               onTimeout = "silent"
+    timeout = 10,
+    onTimeout = "silent"
   )
   if (is.null(text)) {
     text <- extract_text(url, use_html_text2 = FALSE)
@@ -249,8 +249,10 @@ extract_text <- function(url, use_html_text2 = TRUE) {
   )
   nodes <- rvest::read_html(url) |>
     rvest::html_elements(
-      xpath = paste0("//body//*[not(self::",
-                     paste(exclude_classes, collapse = " or self::"), ")]")
+      xpath = paste0(
+        "//body//*[not(self::",
+        paste(exclude_classes, collapse = " or self::"), ")]"
+      )
     )
   if (use_html_text2) {
     text <- rvest::html_text2(nodes)
@@ -275,14 +277,18 @@ exclude_xpath <- paste0("//*[not(contains(@class, '", paste(exclude_classes, col
 
 html <- rvest::read_html(url) |>
   rvest::html_elements(
-    xpath = paste0("//body//*[not(self::",
-                   paste(exclude_classes, collapse = " or self::"), ")]")
+    xpath = paste0(
+      "//body//*[not(self::",
+      paste(exclude_classes, collapse = " or self::"), ")]"
+    )
   )
 
 a <- html |> rvest::html_text()
 
 node_info <- tibble::tibble(
   index = 1:length(head(html, n = 100)),
-  text_length = purrr::map_int(head(html, n = 100),
-                               ~nchar(rvest::html_text(.x)))
+  text_length = purrr::map_int(
+    head(html, n = 100),
+    ~ nchar(rvest::html_text(.x))
+  )
 )

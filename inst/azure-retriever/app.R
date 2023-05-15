@@ -163,9 +163,11 @@ server <- function(input, output, session) {
       )
     cli::cat_print(r$all_chats)
     r$all_chats_formatted <-
-      gpttools:::make_chat_history(history = r$all_chats_formatted,
-                                   new_prompt = input$chat_input,
-                                   new_response = interim[[3]]$choices$message$content)
+      gpttools:::make_chat_history(
+        history = r$all_chats_formatted,
+        new_prompt = input$chat_input,
+        new_response = interim[[3]]$choices$message$content
+      )
     waiter::waiter_hide()
     shiny::updateTextAreaInput(session, "chat_input", value = "")
   }) |>

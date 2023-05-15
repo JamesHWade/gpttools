@@ -49,7 +49,8 @@ create_openai_chat_completion_azure <- function(prompt) {
   query_openai_azure(
     deployment_name = Sys.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"),
     body = body,
-    task = "chat/completions")
+    task = "chat/completions"
+  )
 }
 
 

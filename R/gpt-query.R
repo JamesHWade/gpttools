@@ -159,15 +159,18 @@ check_to_add_context <- function(query, model = "gpt-3.5-turbo") {
   body <- list(
     list(
       role = "system",
-      content = "Determine if the user provided prompt needs additional context to provide a useful response. Provide your response as json where \"add_context\" is either TRUE or FALSE. Do not provide any additional details or response."),
+      content = "Determine if the user provided prompt needs additional context to provide a useful response. Provide your response as json where \"add_context\" is either TRUE or FALSE. Do not provide any additional details or response."
+    ),
     list(
       role = "user",
       content = query
     )
   )
 
-  response <- query_openai(task = "chat/completions",
-                           body = body,
-                           model = model)
+  response <- query_openai(
+    task = "chat/completions",
+    body = body,
+    model = model
+  )
   jsonlite::fromJSON(response$choices$message$content)
 }
