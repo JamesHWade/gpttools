@@ -73,6 +73,8 @@ ui <- bslib::page_fluid(
       bslib::accordion_panel(
         "Preferences",
         icon = bsicons::bs_icon("gear-wide-connected"),
+        shiny::selectInput(model, "Model",
+                           choices = c("gpt-3.5-turbo", "gpt-4")),
         shiny::radioButtons(
           "save_history", "Save & Use History",
           choiceNames = c("Yes", "No"),
@@ -136,6 +138,7 @@ server <- function(input, output, session) {
     )
     interim <- chat_with_context(
       query = input$chat_input,
+      model = input$model,
       index = index(),
       add_context = TRUE,
       chat_history = read_history(),
@@ -154,8 +157,8 @@ server <- function(input, output, session) {
         interim[[1]],
         list(
           list(
-            role    = new_response$message.role,
-            content = new_response$message.content
+            role    = new_response$message$role,
+            content = new_response$message$content
           )
         )
       )

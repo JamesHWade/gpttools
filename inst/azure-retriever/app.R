@@ -54,42 +54,43 @@ ui <- bslib::page_fluid(
     }
   "),
   title = "Retreiver from gpttools",
-  bslib::layout_sidebar(
+  br(),
+  bslib::layout_column_wrap(
+    width = 1,
+    height = "100%",
+    heights_equal = "row",
     border = TRUE,
     border_radius = FALSE,
-    sidebar = bslib::sidebar(
-      position = "left",
-      open = FALSE,
-      bslib::accordion_panel(
-        "Data & Task",
-        icon = bsicons::bs_icon("robot"),
-        shiny::selectInput(
-          "source", "Data Source",
-          choices = c("All", indices)
+    shiny::uiOutput("all_chats_box"),
+    bslib::card(
+      bslib::card_header("Write Prompt", class = "bg-primary"),
+      bslib::layout_sidebar(
+        sidebar = bslib::sidebar(
+          position = "left",
+          open = FALSE,
+          bslib::accordion_panel(
+            "Data & Task",
+            icon = bsicons::bs_icon("robot"),
+            shiny::selectInput(
+              "source", "Data Source",
+              choices = c("All", indices)
+            ),
+            shiny::selectInput(
+              "task", "Task",
+              choices = c("Context Only", "Permissive Chat"),
+              selected = "Permissive Chat",
+            )
+          ),
+          shiny::br(),
+          bslib::accordion_panel(
+            "Preferences",
+            icon = bsicons::bs_icon("gear-wide-connected"),
+            shiny::sliderInput(
+              "n_docs", "Docs to Include (#)",
+              min = 0, max = 20, value = 3
+            )
+          )
         ),
-        shiny::selectInput(
-          "task", "Task",
-          choices = c("Context Only", "Permissive Chat"),
-          selected = "Permissive Chat",
-        )
-      ),
-      shiny::br(),
-      bslib::accordion_panel(
-        "Preferences",
-        icon = bsicons::bs_icon("gear-wide-connected"),
-        shiny::sliderInput(
-          "n_docs", "Docs to Include (#)",
-          min = 0, max = 20, value = 3
-        )
-      )
-    ),
-    bslib::layout_column_wrap(
-      width = 1,
-      height = "100%",
-      heights_equal = "row",
-      shiny::uiOutput("all_chats_box"),
-      bslib::card(
-        bslib::card_header("Write Prompt", class = "bg-primary"),
         bslib::layout_column_wrap(
           width = NULL, fill = FALSE,
           style = htmltools::css(grid_template_columns = "3fr 1fr"),
@@ -161,7 +162,10 @@ server <- function(input, output, session) {
         )
       )
     cli::cat_print(r$all_chats)
-    r$all_chats_formatted <- gptstudio::make_chat_history(r$all_chats)
+    r$all_chats_formatted <-
+      gpttools:::make_chat_history(history = r$all_chats_formatted,
+                                   new_prompt = input$chat_input,
+                                   new_response = interim[[3]]$choices$message$content)
     waiter::waiter_hide()
     shiny::updateTextAreaInput(session, "chat_input", value = "")
   }) |>
@@ -170,9 +174,9 @@ server <- function(input, output, session) {
   output$all_chats_box <- renderUI({
     shiny::req(length(r$context_links) > 0)
     bslib::card(
-      height = height() - 300,
       bslib::card_header("Chat History", class = "bg-primary"),
       bslib::card_body(
+        max_height = height() - 300,
         fill = FALSE,
         r$all_chats_formatted,
         shiny::markdown("**Sources**"),

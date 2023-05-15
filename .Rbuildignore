@@ -18,3 +18,4 @@
 ^indices$
 ^inst/positgpt-app/indices$
 ^inst/longevity$
+^inst/azure-retriever/rsconnect/$

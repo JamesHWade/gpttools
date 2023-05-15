@@ -177,7 +177,7 @@ chat_with_context <- function(query,
   arg_match(task, c("Context Only", "Permissive Chat"))
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
-    query_embedding <- get_query_embedding(query)
+    query_embedding <- get_query_embedding_azure(query)
   }
 
   if (rlang::is_true(add_context)) {
@@ -213,34 +213,34 @@ chat_with_context <- function(query,
 
   prompt_instructions <-
     switch(task,
-      "Context Only" =
-        list(
-          list(
-            role = "system",
-            content =
-              glue(
-                "You are a helpful chat bot that answers questions based on ",
-                "the context provided by the user. If the user does not ",
-                "provide related context, say \"I am not able to answer that ",
-                "question. Maybe try rephrasing your question in a different ",
-                "way.\""
-              )
-          )
-        ),
-      "Permissive Chat" =
-        list(
-          list(
-            role = "system",
-            content =
-              glue(
-                "You are a helpful chat bot that answers questions based on ",
-                "on the context provided by the user. If the user does not ",
-                "provide context, answer the quest but first say \"I am not ",
-                "able to answer that question with the context you gave me, ",
-                "but here is my best answer.",
-              )
-          )
-        )
+           "Context Only" =
+             list(
+               list(
+                 role = "system",
+                 content =
+                   glue(
+                     "You are a helpful chat bot that answers questions based on ",
+                     "the context provided by the user. If the user does not ",
+                     "provide related context, say \"I am not able to answer that ",
+                     "question. Maybe try rephrasing your question in a different ",
+                     "way.\""
+                   )
+               )
+             ),
+           "Permissive Chat" =
+             list(
+               list(
+                 role = "system",
+                 content =
+                   glue(
+                     "You are a helpful chat bot that answers questions based on ",
+                     "on the context provided by the user. If the user does not ",
+                     "provide context, answer the quest but first say \"I am not ",
+                     "able to answer that question with the context you gave me, ",
+                     "but here is my best answer.",
+                   )
+               )
+             )
     )
 
   prompt_context <- list(
@@ -286,20 +286,18 @@ chat_with_context <- function(query,
 
   cli::cat_print(prompt)
 
-  answer <- query_openai(task = "chat/completions",
-                         body = prompt,
-                         model = model)
+  answer <- query_openai(body = prompt)
 
   if (rlang::is_true(save_history)) {
     purrr::map(prompt, \(x) {
-      save_history(
+      save_history_azure(
         file_name = history_name,
         role      = "system",
         content   = x$content,
         overwrite = overwrite
       )
     })
-    save_history(
+    save_history_azure(
       file_name = history_name,
       role      = "assistant",
       content   = answer$choices$message.content,

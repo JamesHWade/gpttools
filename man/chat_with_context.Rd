@@ -6,6 +6,7 @@
 \usage{
 chat_with_context(
   query,
+  model = "gpt-3.5-turbo",
   index = NULL,
   add_context = TRUE,
   chat_history = NULL,
@@ -21,6 +22,8 @@ chat_with_context(
 }
 \arguments{
 \item{query}{The input query to be processed.}
+
+\item{model}{Name of the openai model to use, defaults to gpt-3.5-turbo}
 
 \item{index}{Index to look for context.}
 
