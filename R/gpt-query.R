@@ -132,6 +132,13 @@ query_openai <- function(task = "chat/completions",
 
   req <- httr2::request(base_url)
 
+  if (task == "chat/completions") {
+    body <- list(
+      model = model,
+      messages = body
+    )
+  }
+
   resp <-
     req |>
     httr2::req_url_path_append(task) |>
@@ -140,10 +147,30 @@ query_openai <- function(task = "chat/completions",
       "Authorization" = glue("Bearer {api_key}"),
       "Content-Type" = "application/json"
     ) |>
-    httr2::req_body_json(list(model = model, messages = body)) |>
+    httr2::req_body_json(body) |>
     httr2::req_retry() |>
     httr2::req_throttle(4) |>
     httr2::req_perform()
 
   resp |> httr2::resp_body_json(simplifyVector = TRUE)
+}
+
+check_to_add_context <- function(query, model = "gpt-3.5-turbo") {
+  body <- list(
+    list(
+      role = "system",
+      content = "Determine if the user provided prompt needs additional context to provide a useful response. Provide your response as json where \"add_context\" is either TRUE or FALSE. Do not provide any additional details or response."
+    ),
+    list(
+      role = "user",
+      content = query
+    )
+  )
+
+  response <- query_openai(
+    task = "chat/completions",
+    body = body,
+    model = model
+  )
+  jsonlite::fromJSON(response$choices$message$content)
 }
