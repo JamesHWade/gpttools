@@ -17,7 +17,7 @@ Imports:
     cli,
     dplyr,
     glue,
-    gptstudio,
+    gptstudio (>= 0.2.0),
     httr,
     jsonlite,
     lsa,
@@ -75,3 +75,4 @@ Language: en-US
 VignetteBuilder: knitr
 Remotes: 
     rstudio/bslib
+    michelnivard/gptstudio
