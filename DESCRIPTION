@@ -4,75 +4,82 @@ Version: 0.0.6.9000
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9740-1905"))
-Description: gpttools is an R package that provides extensions to gptstudio to provide devtools-like functionality using the latest natural language processing (NLP) models. It is designed to make package development easier by providing a range of tools and functions that can be used to improve the quality of your package's documentation, testing, and maybe even functionality.
+Description: gpttools is an R package that provides extensions to
+    gptstudio to provide devtools-like functionality using the latest
+    natural language processing (NLP) models. It is designed to make
+    package development easier by providing a range of tools and functions
+    that can be used to improve the quality of your package's
+    documentation, testing, and maybe even functionality.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
-Depends: R (>= 4.1)
+URL: https://github.com/JamesHWade/gpttools
+BugReports: https://github.com/JamesHWade/gpttools/issues
+Depends: 
+    R (>= 4.1)
 Imports: 
     arrow,
     assertthat,
     bslib (>= 0.4.2.9000),
+    callr,
     cli,
     dplyr,
+    furrr,
+    future,
     glue,
     gptstudio (>= 0.2.0),
     httr,
+    httr2,
+    janitor,
     jsonlite,
     lsa,
+    lubridate,
     miniUI,
+    pdftools,
     purrr (>= 1.0.0),
+    R.utils,
+    readr,
     rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
+    rvest,
+    scales,
     shiny,
     skimr,
     stats,
     stringr,
     tibble,
     tidyr,
-    tools,
     tokenizers,
+    tools,
+    tuneR,
     urltools,
     usethis,
-    furrr,
-    future,
-    xml2,
-    lubridate,
-    tuneR,
-    pdftools,
-    janitor,
-    readr,
-    rvest,
-    httr2,
-    R.utils,
-    callr,
-    scales
+    xml2
 Suggests: 
+    bsicons,
     covr,
+    htmltools,
+    knitr,
+    later,
     mockr,
-    testthat (>= 3.0.0),
-    uuid,
+    reticulate,
+    rmarkdown,
+    roxygen2,
+    shinyjs,
     shinytest2,
     spelling,
-    roxygen2,
-    withr,
-    shinyjs,
-    waiter,
-    knitr,
-    rmarkdown,
+    testthat (>= 3.0.0),
     tidymodels,
     tidyverse,
-    htmltools,
-    bsicons,
-    later,
-    reticulate
+    uuid,
+    waiter,
+    withr
+VignetteBuilder: 
+    knitr
+Remotes: 
+    michelnivard/gptstudio,
+    rstudio/bslib
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-URL: https://github.com/JamesHWade/gpttools
-BugReports: https://github.com/JamesHWade/gpttools/issues
+Encoding: UTF-8
 Language: en-US
-VignetteBuilder: knitr
-Remotes: 
-    rstudio/bslib
-    michelnivard/gptstudio
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
