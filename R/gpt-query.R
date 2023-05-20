@@ -69,7 +69,7 @@ insert_text <- function(improved_text) {
 }
 
 
-# write a function to take the output of this function and return only the R code
+# write a function to take the output of this function; return only the R code
 gpt_chat <- function(instructions) {
   gptstudio::check_api()
   query <- get_selection()
@@ -156,6 +156,7 @@ query_openai <- function(task = "chat/completions",
 }
 
 check_to_add_context <- function(query, model = "gpt-3.5-turbo") {
+  # nolint start
   body <- list(
     list(
       role = "system",
@@ -166,6 +167,7 @@ check_to_add_context <- function(query, model = "gpt-3.5-turbo") {
       content = query
     )
   )
+  # nolint end
 
   response <- query_openai(
     task = "chat/completions",

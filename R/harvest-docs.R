@@ -272,7 +272,10 @@ exclude_classes <- c(
   "drag"
 )
 
-exclude_xpath <- paste0("//*[not(contains(@class, '", paste(exclude_classes, collapse = "') and not(contains(@class, '"), "'))]")
+exclude_xpath <- paste0("//*[not(contains(@class, '",
+                        paste(exclude_classes,
+                              collapse = "') and not(contains(@class, '"),
+                        "'))]")
 
 
 html <- rvest::read_html(url) |>
@@ -286,7 +289,7 @@ html <- rvest::read_html(url) |>
 a <- html |> rvest::html_text()
 
 node_info <- tibble::tibble(
-  index = 1:length(head(html, n = 100)),
+  index = seq_along(head(html, n = 100)),
   text_length = purrr::map_int(
     head(html, n = 100),
     ~ nchar(rvest::html_text(.x))
