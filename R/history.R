@@ -286,9 +286,11 @@ chat_with_context <- function(query,
 
   cli::cat_print(prompt)
 
-  answer <- query_openai(task = "chat/completions",
-                         body = prompt,
-                         model = model)
+  answer <- query_openai(
+    task = "chat/completions",
+    body = prompt,
+    model = model
+  )
 
   if (rlang::is_true(save_history)) {
     purrr::map(prompt, \(x) {

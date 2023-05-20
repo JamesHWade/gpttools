@@ -2,18 +2,21 @@ parse_sentence_transformers_version <- function(version) {
   # returns unquoted string directly passable to pip
   # e.g 'sentence-transformers==2.1.*'
 
-  if (is.null(version) || is.na(version) || version %in% c("", "release"))
+  if (is.null(version) || is.na(version) || version %in% c("", "release")) {
     return("sentence-transformers")
+  }
 
   version <- as.character(version) # if numeric_version()
 
-  if (grepl("^.*\\.whl$", version))
+  if (grepl("^.*\\.whl$", version)) {
     return(normalizePath(version))
+  }
 
-  if (!grepl("[><=]", version))
+  if (!grepl("[><=]", version)) {
     version <- sprintf("==%s.*", version)
+  }
 
-  paste0('sentence-transformers', version)
+  paste0("sentence-transformers", version)
 }
 
 #' Install sentence-transformers and its dependencies
@@ -98,7 +101,6 @@ install_sentence_transformers <-
            ...,
            pip_ignore_installed = TRUE,
            python_version = conda_python_version) {
-
     check_installed("reticulate")
     method <- match.arg(method)
 
@@ -111,12 +113,12 @@ install_sentence_transformers <-
     packages <- shQuote(gsub("[\"']", "", packages))
 
     reticulate::py_install(
-      packages       = packages,
-      envname        = envname,
-      method         = method,
-      conda          = conda,
+      packages = packages,
+      envname = envname,
+      method = method,
+      conda = conda,
       python_version = python_version,
-      pip            = TRUE,
+      pip = TRUE,
       pip_ignore_installed = pip_ignore_installed,
       ...
     )
@@ -124,9 +126,10 @@ install_sentence_transformers <-
     cat("\nInstallation complete.\n\n")
 
     if (restart_session &&
-        requireNamespace("rstudioapi", quietly = TRUE) &&
-        rstudioapi::hasFun("restartSession"))
+      requireNamespace("rstudioapi", quietly = TRUE) &&
+      rstudioapi::hasFun("restartSession")) {
       rstudioapi::restartSession()
+    }
 
     invisible(NULL)
   }
