@@ -2,29 +2,25 @@ parse_sentence_transformers_version <- function(version) {
   # returns unquoted string directly passable to pip
   # e.g 'sentence-transformers==2.1.*'
 
-  if (is.null(version) || is.na(version) || version %in% c("", "release")) {
+  if (is.null(version) || is.na(version) || version %in% c("", "release"))
     return("sentence-transformers")
-  }
 
   version <- as.character(version) # if numeric_version()
 
-  if (grepl("^.*\\.whl$", version)) {
+  if (grepl("^.*\\.whl$", version))
     return(normalizePath(version))
-  }
 
-  if (!grepl("[><=]", version)) {
+  if (!grepl("[><=]", version))
     version <- sprintf("==%s.*", version)
-  }
 
-  paste0("sentence-transformers", version)
+  paste0('sentence-transformers', version)
 }
 
 #' Install sentence-transformers and its dependencies
 #'
-#' `install_sentence_transformers()` installs the sentence-transformers python
-#' package and its direct dependencies. This code is taken and only slightly
-#' modified from the tensorflow and reticulate packages. See the original code
-#' here: [tensorflow::install_tensorflow()].
+#' `install_sentence_transformers()` installs the sentence-transformers python package and its
+#' direct dependencies. This code is taken and only slightly modified from the tensorflow and
+#' reticulate packages. See the original code here: [tensorflow::install_tensorflow()].
 #'
 #' @details You may be prompted to download and install
 #'   miniconda if reticulate did not find a non-system installation of python.
@@ -85,10 +81,10 @@ parse_sentence_transformers_version <- function(version) {
 #'   to `TRUE`, to ensure that TensorFlow dependencies like NumPy are compatible
 #'   with the prebuilt TensorFlow binaries.
 #'
-#' @param ... other arguments passed to `reticulate::conda_install()` or
-#'   `reticulate::virtualenv_install()`, depending on the `method` used.
+#' @param ... other arguments passed to [`reticulate::conda_install()`] or
+#'   [`reticulate::virtualenv_install()`], depending on the `method` used.
 #'
-#' @seealso `keras::install_keras()`, `tensorflow::install_tensorflow()`
+#' \seealso [`keras::install_keras()`, `tensorflow::install_tensorflow()`]
 #'
 #' @export
 install_sentence_transformers <-
@@ -102,6 +98,7 @@ install_sentence_transformers <-
            ...,
            pip_ignore_installed = TRUE,
            python_version = conda_python_version) {
+
     check_installed("reticulate")
     method <- match.arg(method)
 
@@ -114,12 +111,12 @@ install_sentence_transformers <-
     packages <- shQuote(gsub("[\"']", "", packages))
 
     reticulate::py_install(
-      packages = packages,
-      envname = envname,
-      method = method,
-      conda = conda,
+      packages       = packages,
+      envname        = envname,
+      method         = method,
+      conda          = conda,
       python_version = python_version,
-      pip = TRUE,
+      pip            = TRUE,
       pip_ignore_installed = pip_ignore_installed,
       ...
     )
@@ -127,10 +124,9 @@ install_sentence_transformers <-
     cat("\nInstallation complete.\n\n")
 
     if (restart_session &&
-      requireNamespace("rstudioapi", quietly = TRUE) &&
-      rstudioapi::hasFun("restartSession")) {
+        requireNamespace("rstudioapi", quietly = TRUE) &&
+        rstudioapi::hasFun("restartSession"))
       rstudioapi::restartSession()
-    }
 
     invisible(NULL)
   }

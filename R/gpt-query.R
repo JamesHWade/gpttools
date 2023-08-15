@@ -65,7 +65,7 @@ get_selection <- function() {
 #' @export
 insert_text <- function(improved_text) {
   rstudioapi::verifyAvailable()
-  rstudioapi::insertText(improved_text)
+  rstudioapi::insertText(NULL, improved_text)
 }
 
 
@@ -73,6 +73,7 @@ insert_text <- function(improved_text) {
 gpt_chat <- function(instructions) {
   gptstudio::check_api()
   query <- get_selection()
+  cli::cli_inform("Selection: {query}")
   prompt <-
     list(
       list(
@@ -84,11 +85,14 @@ gpt_chat <- function(instructions) {
         content = glue("{query}")
       )
     )
+  cli::cli_process_start(msg = "Sending query to OpenAI")
   answer <- gptstudio::openai_create_chat_completion(prompt)
+  cli::cli_process_done(msg_done = "Received response from OpenAI")
   text_to_insert <- c(
     as.character(query),
     as.character(answer$choices$message.content)
   )
+  cli::cli_inform("Text to insert: {text_to_insert}")
   insert_text(text_to_insert)
 }
 

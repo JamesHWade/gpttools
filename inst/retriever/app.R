@@ -3,10 +3,9 @@ rlang::check_installed(
 )
 
 library(gpttools)
+library(gptstudio)
 
-rlang::check_installed("bslib", version = "0.4.2.9000")
-rlang::check_installed("bsicons")
-gptstudio::check_api()
+rlang::check_installed(c("bslib", "bsicons"))
 
 window_height_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -73,7 +72,7 @@ ui <- bslib::page_fluid(
       bslib::accordion_panel(
         "Preferences",
         icon = bsicons::bs_icon("gear-wide-connected"),
-        shiny::selectInput(model, "Model",
+        shiny::selectInput("model", "Model",
           choices = c("gpt-3.5-turbo", "gpt-4")
         ),
         shiny::radioButtons(
@@ -137,6 +136,10 @@ server <- function(input, output, session) {
       ),
       color = waiter::transparent(0.5)
     )
+    if (is.null(input$model)) {
+      input$model <- "gpt-3.5-turbo"
+    }
+
     interim <- chat_with_context(
       query = input$chat_input,
       model = input$model,
@@ -163,7 +166,7 @@ server <- function(input, output, session) {
           )
         )
       )
-    r$all_chats_formatted <- gptstudio::make_chat_history(r$all_chats)
+    r$all_chats_formatted <-  gptstudio:::prepare_chat_history(r$all_chats)
     waiter::waiter_hide()
     shiny::updateTextAreaInput(session, "chat_input", value = "")
   }) |>

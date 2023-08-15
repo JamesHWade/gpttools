@@ -7,7 +7,6 @@ get_transformer_model <- function(model_name = "all-mpnet-base-v2") {
   model
 }
 
-create_text_embeddings <- function(text) {
-  model <- get_transformer_model()
-  purrr::map(text, \(x) model$encode(x) |> as.numeric())
+create_text_embeddings <- function(text, model) {
+  model$encode(text) |> as.numeric()
 }

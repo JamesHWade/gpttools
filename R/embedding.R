@@ -27,13 +27,13 @@ prepare_scraped_files <- function(domain) {
     dplyr::mutate(
       chunks = purrr::map(text, \(x) {
         chunk_with_overlap(x,
-          chunk_size = 500,
-          overlap_size = 50,
-          doc_id = domain,
-          lowercase = FALSE,
-          strip_punct = FALSE,
-          strip_numeric = FALSE,
-          stopwords = NULL
+                           chunk_size = 500,
+                           overlap_size = 50,
+                           doc_id = domain,
+                           lowercase = FALSE,
+                           strip_punct = FALSE,
+                           strip_numeric = FALSE,
+                           stopwords = NULL
         )
       })
     ) |>
@@ -75,16 +75,24 @@ create_openai_embedding <-
     )
   }
 
-add_embeddings <- function(index) {
-  index |>
-    dplyr::mutate(
-      embeddings = purrr::map(
-        .x = chunks,
-        .f = create_openai_embedding,
-        .progress = "Create Embeddings"
+add_embeddings <- function(index,
+                           local_embeddings = TRUE) {
+  if (local_embeddings) {
+    model <- get_transformer_model()
+    index |>
+      dplyr::mutate(
+        embeddings = purrr::map(chunks, \(x) {create_text_embeddings(x, model)}),
+        embedding_method = "local"
       )
-    ) |>
-    tidyr::unnest(embeddings)
+  } else {
+    index |>
+      dplyr::mutate(
+        embeddings = purrr::map(.x = chunks,
+                                .f = create_openai_embedding,
+                                .progress = "Create Embeddings"),
+        embedding_method = "OpenAI"
+      )
+  }
 }
 
 join_embeddings_from_index <- function(x) {
@@ -156,9 +164,11 @@ create_index <- function(domain,
 get_top_matches <- function(index, query_embedding, k = 5) {
   k <- min(k, nrow(index))
   index |>
-    dplyr::mutate(similarity = purrr::map_dbl(embedding, \(x) {
-      lsa::cosine(query_embedding, unlist(x))
-    })) |>
+    dplyr::mutate(
+      similarity = purrr::map_dbl(embedding, \(x) {
+        lsa::cosine(query_embedding, unlist(x))
+      })
+    ) |>
     dplyr::arrange(dplyr::desc(similarity)) |>
     head(k)
 }
@@ -243,43 +253,43 @@ query_index <- function(index, query, history, task = "Context Only", k = 4) {
 
   instructions <-
     switch(task,
-      "Context Only" =
-        list(
-          list(
-            role = "system",
-            content =
-              glue(
-                "You are a helpful chat bot that answere questions based on the
+           "Context Only" =
+             list(
+               list(
+                 role = "system",
+                 content =
+                   glue(
+                     "You are a helpful chat bot that answere questions based on the
                 context provided by the user. If the user does not provide
                 context, say \"I am not able to answer that question. Maybe
                 try rephrasing your question in a different way.\"\n\n
                 Context: {context}"
-              )
-          ),
-          list(
-            role = "user",
-            content = glue("{query}")
-          )
-        ),
-      "Permissive Chat" =
-        list(
-          list(
-            role = "system",
-            content =
-              glue(
-                "You are a helpful chat bot that answere questions based on the
+                   )
+               ),
+               list(
+                 role = "user",
+                 content = glue("{query}")
+               )
+             ),
+           "Permissive Chat" =
+             list(
+               list(
+                 role = "system",
+                 content =
+                   glue(
+                     "You are a helpful chat bot that answere questions based on the
                 context provided by the user. If the user does not provide
                 context, say \"I am not able to answer that question with the
                 context you gave me, but here is my best answer. Maybe
                 try rephrasing your question in a different way.\"\n\n
                 Context: {context}"
-              )
-          ),
-          list(
-            role = "user",
-            content = glue("{query}")
-          )
-        )
+                   )
+               ),
+               list(
+                 role = "user",
+                 content = glue("{query}")
+               )
+             )
     )
   history <-
     purrr::map(history, \(x) if (x$role == "system") NULL else x) |>
@@ -313,8 +323,8 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
   if (!is.null(doc_id)) {
     num_chars <- stringr::str_length(length(chunks))
     chunk_ids <- stringr::str_pad(seq_along(chunks),
-      side = "left",
-      width = num_chars, pad = "0"
+                                  side = "left",
+                                  width = num_chars, pad = "0"
     )
     names(chunks) <- stringr::str_c(doc_id, chunk_ids, sep = "-")
   } else {
@@ -336,10 +346,10 @@ query_openai_api <- function(body, openai_api_key, task) {
 
   response <-
     httr::RETRY("POST",
-      url = base_url,
-      httr::add_headers(headers), body = body,
-      encode = "json",
-      quiet = TRUE
+                url = base_url,
+                httr::add_headers(headers), body = body,
+                encode = "json",
+                quiet = TRUE
     )
 
   parsed <- response |>

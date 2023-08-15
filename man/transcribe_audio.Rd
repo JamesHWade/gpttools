@@ -4,18 +4,26 @@
 \alias{transcribe_audio}
 \title{Transcribe audio and write to index}
 \usage{
-transcribe_audio(file_path, source, link = NULL, prompt = NULL)
+transcribe_audio(
+  file_path,
+  source,
+  link = NULL,
+  prompt = NULL,
+  chunk_size = 120
+)
 }
 \arguments{
 \item{file_path}{Character string specifying the path to the audio file.}
 
 \item{source}{Character string specifying the source of the audio.}
 
-\item{link}{Character string specifying the link to the audio file
+\item{link}{Character string specifying the HTML link to the audio file
 (optional).}
 
 \item{prompt}{Character string specifying the prompt for transcription
 (optional).}
+
+\item{chunk_size}{Audio size in seconds}
 }
 \value{
 The function writes an index in Parquet format to disk.

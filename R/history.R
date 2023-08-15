@@ -177,7 +177,7 @@ chat_with_context <- function(query,
   arg_match(task, c("Context Only", "Permissive Chat"))
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
-    query_embedding <- get_query_embedding_azure(query)
+    query_embedding <- get_query_embedding(query)
   }
 
   if (rlang::is_true(add_context)) {
