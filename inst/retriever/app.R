@@ -38,8 +38,10 @@ window_height_server <- function(id) {
 make_chat_history <- function(chats) {
   purrr::discard(chats, \(x) x$role == "system") |>
     purrr::map(\(x) {
-      list(shiny::strong(stringr::str_to_title(x$role)),
-           shiny::markdown(x$content))
+      list(
+        shiny::strong(stringr::str_to_title(x$role)),
+        shiny::markdown(x$content)
+      )
     }) |>
     purrr::list_flatten()
 }
@@ -80,7 +82,7 @@ ui <- bslib::page_fluid(
         "Preferences",
         icon = bsicons::bs_icon("gear-wide-connected"),
         shiny::selectInput("model", "Model",
-                           choices = c("gpt-3.5-turbo", "gpt-4")
+          choices = c("gpt-3.5-turbo", "gpt-4")
         ),
         shiny::radioButtons(
           "save_history", "Save & Use History",
