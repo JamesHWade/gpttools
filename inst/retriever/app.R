@@ -166,7 +166,7 @@ server <- function(input, output, session) {
           )
         )
       )
-    r$all_chats_formatted <-  gptstudio:::prepare_chat_history(r$all_chats)
+    r$all_chats_formatted <- gptstudio:::prepare_chat_history(r$all_chats)
     waiter::waiter_hide()
     shiny::updateTextAreaInput(session, "chat_input", value = "")
   }) |>

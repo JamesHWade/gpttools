@@ -272,10 +272,13 @@ exclude_classes <- c(
   "drag"
 )
 
-exclude_xpath <- paste0("//*[not(contains(@class, '",
-                        paste(exclude_classes,
-                              collapse = "') and not(contains(@class, '"),
-                        "'))]")
+exclude_xpath <- paste0(
+  "//*[not(contains(@class, '",
+  paste(exclude_classes,
+    collapse = "') and not(contains(@class, '"
+  ),
+  "'))]"
+)
 
 
 html <- rvest::read_html(url) |>
