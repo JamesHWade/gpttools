@@ -71,7 +71,7 @@ run_chat_gpt <- function() {
       prompt <- glue(r$all_chats, new_prompt, .sep = " ")
       cli_rule("Prompt")
       cat_print(prompt)
-      interim <- openai_create_completion(
+      interim <- openai_create_chat_completion(
         model = input$model,
         prompt = prompt,
         temperature = input$temperature,

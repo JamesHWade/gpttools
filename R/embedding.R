@@ -75,16 +75,28 @@ create_openai_embedding <-
     )
   }
 
-add_embeddings <- function(index) {
-  index |>
-    dplyr::mutate(
-      embeddings = purrr::map(
-        .x = chunks,
-        .f = create_openai_embedding,
-        .progress = "Create Embeddings"
+add_embeddings <- function(index,
+                           local_embeddings = TRUE) {
+  if (local_embeddings) {
+    model <- get_transformer_model()
+    index |>
+      dplyr::mutate(
+        embeddings = purrr::map(chunks, \(x) {
+          create_text_embeddings(x, model)
+        }),
+        embedding_method = "local"
       )
-    ) |>
-    tidyr::unnest(embeddings)
+  } else {
+    index |>
+      dplyr::mutate(
+        embeddings = purrr::map(
+          .x = chunks,
+          .f = create_openai_embedding,
+          .progress = "Create Embeddings"
+        ),
+        embedding_method = "OpenAI"
+      )
+  }
 }
 
 join_embeddings_from_index <- function(x) {
@@ -156,9 +168,11 @@ create_index <- function(domain,
 get_top_matches <- function(index, query_embedding, k = 5) {
   k <- min(k, nrow(index))
   index |>
-    dplyr::mutate(similarity = purrr::map_dbl(embedding, \(x) {
-      lsa::cosine(query_embedding, unlist(x))
-    })) |>
+    dplyr::mutate(
+      similarity = purrr::map_dbl(embedding, \(x) {
+        lsa::cosine(query_embedding, unlist(x))
+      })
+    ) |>
     dplyr::arrange(dplyr::desc(similarity)) |>
     head(k)
 }

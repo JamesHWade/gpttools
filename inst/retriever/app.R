@@ -1,12 +1,9 @@
 rlang::check_installed(
-  c("shiny", "bsicons", "cli", "glue", "gptstudio", "gpttools", "waiter")
+  c("shiny", "bslib", "bsicons", "cli", "glue", "gptstudio", "gpttools", "waiter")
 )
 
 library(gpttools)
-
-rlang::check_installed("bslib", version = "0.4.2.9000")
-rlang::check_installed("bsicons")
-gptstudio::check_api()
+library(gptstudio)
 
 window_height_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -36,6 +33,17 @@ window_height_server <- function(id) {
       input$window_height
     })
   })
+}
+
+make_chat_history <- function(chats) {
+  purrr::discard(chats, \(x) x$role == "system") |>
+    purrr::map(\(x) {
+      list(
+        shiny::strong(stringr::str_to_title(x$role)),
+        shiny::markdown(x$content)
+      )
+    }) |>
+    purrr::list_flatten()
 }
 
 indices <- gpttools::list_index() |> tools::file_path_sans_ext()
@@ -73,7 +81,7 @@ ui <- bslib::page_fluid(
       bslib::accordion_panel(
         "Preferences",
         icon = bsicons::bs_icon("gear-wide-connected"),
-        shiny::selectInput(model, "Model",
+        shiny::selectInput("model", "Model",
           choices = c("gpt-3.5-turbo", "gpt-4")
         ),
         shiny::radioButtons(
@@ -137,6 +145,10 @@ server <- function(input, output, session) {
       ),
       color = waiter::transparent(0.5)
     )
+    if (is.null(input$model)) {
+      input$model <- "gpt-3.5-turbo"
+    }
+
     interim <- chat_with_context(
       query = input$chat_input,
       model = input$model,
@@ -163,19 +175,19 @@ server <- function(input, output, session) {
           )
         )
       )
-    r$all_chats_formatted <- gptstudio::make_chat_history(r$all_chats)
+    r$all_chats_formatted <- make_chat_history(r$all_chats)
     waiter::waiter_hide()
     shiny::updateTextAreaInput(session, "chat_input", value = "")
   }) |>
     shiny::bindEvent(input$chat)
 
   output$all_chats_box <- renderUI({
+    cli::cli_inform("height: {height()}")
     shiny::req(length(r$context_links) > 0)
     bslib::card(
       height = height() - 300,
       bslib::card_header("Chat History", class = "bg-primary"),
       bslib::card_body(
-        fill = FALSE,
         r$all_chats_formatted,
         shiny::markdown("**Sources**"),
         shiny::markdown(paste0("* ", unique(r$context_links), collapse = "\n"))

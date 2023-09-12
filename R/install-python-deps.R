@@ -21,10 +21,9 @@ parse_sentence_transformers_version <- function(version) {
 
 #' Install sentence-transformers and its dependencies
 #'
-#' `install_sentence_transformers()` installs the sentence-transformers python
-#' package and its direct dependencies. This code is taken and only slightly
-#' modified from the tensorflow and reticulate packages. See the original code
-#' here: [tensorflow::install_tensorflow()].
+#' `install_sentence_transformers()` installs the sentence-transformers python package and its
+#' direct dependencies. This code is taken and only slightly modified from the tensorflow and
+#' reticulate packages. See the original code here: [tensorflow::install_tensorflow()].
 #'
 #' @details You may be prompted to download and install
 #'   miniconda if reticulate did not find a non-system installation of python.
@@ -85,10 +84,10 @@ parse_sentence_transformers_version <- function(version) {
 #'   to `TRUE`, to ensure that TensorFlow dependencies like NumPy are compatible
 #'   with the prebuilt TensorFlow binaries.
 #'
-#' @param ... other arguments passed to `reticulate::conda_install()` or
-#'   `reticulate::virtualenv_install()`, depending on the `method` used.
+#' @param ... other arguments passed to [`reticulate::conda_install()`] or
+#'   [`reticulate::virtualenv_install()`], depending on the `method` used.
 #'
-#' @seealso `keras::install_keras()`, `tensorflow::install_tensorflow()`
+#' \seealso [`keras::install_keras()`, `tensorflow::install_tensorflow()`]
 #'
 #' @export
 install_sentence_transformers <-
