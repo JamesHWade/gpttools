@@ -4,6 +4,10 @@ rlang::check_installed(
 
 library(gpttools)
 library(gptstudio)
+library(shiny)
+library(bslib)
+library(bsicons)
+library(waiter)
 
 window_height_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -48,82 +52,90 @@ make_chat_history <- function(chats) {
 
 indices <- gpttools::list_index() |> tools::file_path_sans_ext()
 
-ui <- bslib::page_fluid(
+ui <- page_fluid(
   waiter::use_waiter(),
   window_height_ui("height"),
-  theme = bslib::bs_theme(bootswatch = "morph", version = 5),
-  shiny::tags$style("
+  theme = bs_theme(bootswatch = "morph", version = 5),
+  tags$style("
     .card, .accordion {
       box-shadow: none !important;
     }
   "),
+  tags$head(tags$script(HTML("
+  $(document).on('keydown', '#chat_input', function(e) {
+    if ((e.keyCode == 10 || e.keyCode == 13) && (!e.shiftKey)) {
+      e.preventDefault();
+      setTimeout(function() {
+        $('#chat').click();
+      }, 500);
+     }
+  });"))),
   title = "Retreiver from gpttools",
-  bslib::layout_sidebar(
-    border = TRUE,
-    border_radius = FALSE,
-    sidebar = bslib::sidebar(
-      position = "left",
-      open = FALSE,
-      bslib::accordion_panel(
-        "Data & Task",
-        icon = bsicons::bs_icon("robot"),
-        shiny::selectInput(
-          "source", "Data Source",
-          choices = c("All", indices)
-        ),
-        shiny::selectInput(
-          "task", "Task",
-          choices = c("Context Only", "Permissive Chat"),
-          selected = "Permissive Chat",
-        )
-      ),
-      shiny::br(),
-      bslib::accordion_panel(
-        "Preferences",
-        icon = bsicons::bs_icon("gear-wide-connected"),
-        shiny::selectInput("model", "Model",
-          choices = c("gpt-3.5-turbo", "gpt-4")
-        ),
-        shiny::radioButtons(
-          "save_history", "Save & Use History",
-          choiceNames = c("Yes", "No"),
-          choiceValues = c(TRUE, FALSE),
-          selected = TRUE, inline = TRUE,
-        ),
-        shiny::sliderInput(
-          "n_docs", "Docs to Include (#)",
-          min = 0, max = 20, value = 3
-        ),
-        shiny::sliderInput(
-          "n_history", "Chat History to Include (#)",
-          min = 0, max = 20, value = 3
-        )
-      )
-    ),
-    bslib::layout_column_wrap(
-      width = 1,
-      height = "100%",
-      heights_equal = "row",
-      shiny::uiOutput("all_chats_box"),
-      bslib::card(
-        bslib::card_header("Write Prompt", class = "bg-primary"),
-        bslib::layout_column_wrap(
-          width = NULL, fill = FALSE,
-          style = htmltools::css(grid_template_columns = "3fr 1fr"),
-          bslib::card(
-            shiny::textAreaInput(
-              inputId = "chat_input", label = NULL,
-              value = "", resize = "vertical", rows = 1,
-              width = "100%"
+  br(),
+  layout_column_wrap(
+    width = 1,
+    height = "100%",
+    heights_equal = "row",
+    card(
+      card_header("Write Prompt",
+        class = "bg-primary d-flex align-items-center",
+        popover(
+          bs_icon("gear", class = "ms-auto"),
+          accordion_panel(
+            "Data & Task",
+            icon = bs_icon("robot", class = "ms-auto"),
+            selectInput(
+              "source", "Data Source",
+              choices = c("All", indices)
+            ),
+            selectInput(
+              "task", "Task",
+              choices = c("Context Only", "Permissive Chat"),
+              selected = "Permissive Chat",
             )
           ),
-          bslib::card(
-            class = "btn-primary",
-            shiny::actionButton(
-              inputId = "chat", label = "Chat",
-              icon = shiny::icon("robot"),
-              width = "100%", class = "btn-sucess"
+          br(),
+          accordion_panel(
+            "Preferences",
+            icon = bs_icon("sliders", class = "ms-auto"),
+            selectInput("model", "Model",
+              choices = c("gpt-3.5-turbo", "gpt-4")
+            ),
+            radioButtons(
+              "save_history", "Save & Use History",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              selected = TRUE, inline = TRUE,
+            ),
+            sliderInput(
+              "n_docs", "Docs to Include (#)",
+              min = 0, max = 20, value = 3
+            ),
+            sliderInput(
+              "n_history", "Chat History to Include (#)",
+              min = 0, max = 20, value = 3
             )
+          ),
+          title = "Plot settings"
+        )
+      ),
+      uiOutput("all_chats_box"),
+      layout_column_wrap(
+        width = NULL, fill = FALSE,
+        style = htmltools::css(grid_template_columns = "3fr 1fr"),
+        card(
+          textAreaInput(
+            inputId = "chat_input", label = NULL,
+            value = "", resize = "vertical", rows = 1,
+            width = "100%"
+          )
+        ),
+        card(
+          class = "btn-primary",
+          actionButton(
+            inputId = "chat", label = "Chat",
+            icon = icon("robot"),
+            width = "100%", class = "btn-sucess"
           )
         )
       )
@@ -132,16 +144,16 @@ ui <- bslib::page_fluid(
 )
 
 server <- function(input, output, session) {
-  r <- shiny::reactiveValues()
+  r <- reactiveValues()
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
   height <- window_height_server("height")
-  index <- shiny::reactive(gpttools::load_index(input$source))
-  shiny::observe({
-    waiter::waiter_show(
-      html = shiny::tagList(
-        waiter::spin_flower(),
-        shiny::h3("Asking ChatGPT...")
+  index <- reactive(load_index(input$source))
+  observe({
+    waiter_show(
+      html = tagList(
+        waiter::spin_facebook(),
+        h3("Asking ChatGPT...")
       ),
       color = waiter::transparent(0.5)
     )
@@ -177,24 +189,21 @@ server <- function(input, output, session) {
       )
     r$all_chats_formatted <- make_chat_history(r$all_chats)
     waiter::waiter_hide()
-    shiny::updateTextAreaInput(session, "chat_input", value = "")
+    updateTextAreaInput(session, "chat_input", value = "")
   }) |>
-    shiny::bindEvent(input$chat)
+    bindEvent(input$chat)
 
   output$all_chats_box <- renderUI({
-    cli::cli_inform("height: {height()}")
-    shiny::req(length(r$context_links) > 0)
-    bslib::card(
+    req(length(r$context_links) > 0)
+    card(
       height = height() - 300,
-      bslib::card_header("Chat History", class = "bg-primary"),
-      bslib::card_body(
+      card_body(
         r$all_chats_formatted,
-        shiny::markdown("**Sources**"),
-        shiny::markdown(paste0("* ", unique(r$context_links), collapse = "\n"))
+        markdown("**Sources**"),
+        markdown(paste0("* ", unique(r$context_links), collapse = "\n"))
       )
     )
   })
-  shiny::observeEvent(input$cancel, shiny::stopApp())
 }
 
 shinyApp(ui, server)

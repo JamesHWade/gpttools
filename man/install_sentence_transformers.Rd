@@ -49,10 +49,8 @@ TensorFlow.}
 \item{restart_session}{Restart R session after installing (note this will
 only occur within RStudio).}
 
-\item{...}{other arguments passed to \code{\link[reticulate:conda-tools]{reticulate::conda_install()}} or
-\code{\link[reticulate:virtualenv-tools]{reticulate::virtualenv_install()}}, depending on the \code{method} used.
-
-\seealso}
+\item{...}{other arguments passed to \code{reticulate::conda_install()} or
+\code{reticulate::virtualenv_install()}, depending on the \code{method} used.}
 
 \item{pip_ignore_installed}{Whether pip should ignore installed python
 packages and reinstall all already installed python packages. This defaults

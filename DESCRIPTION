@@ -1,6 +1,6 @@
 Package: gpttools
 Title: Extensions and Tools for gptstudio
-Version: 0.0.6.9000
+Version: 0.0.7
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9740-1905"))
@@ -18,7 +18,7 @@ Depends:
 Imports: 
     arrow,
     assertthat,
-    bslib (>= 0.4.2.9000),
+    bslib (>= 0.5),
     callr,
     cli,
     dplyr,
@@ -74,9 +74,6 @@ Suggests:
     withr
 VignetteBuilder: 
     knitr
-Remotes: 
-    michelnivard/gptstudio,
-    rstudio/bslib
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8
