@@ -76,7 +76,7 @@ create_openai_embedding <-
   }
 
 add_embeddings <- function(index,
-                           local_embeddings = TRUE) {
+                           local_embeddings = FALSE) {
   if (local_embeddings) {
     model <- get_transformer_model()
     index |>
