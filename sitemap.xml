@@ -43,6 +43,9 @@
     <loc>https://jameshwade.github.io/gpttools/reference/chat_with_context.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/chat_with_context_azure.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/collect_dataframes.html</loc>
   </url>
   <url>
@@ -64,9 +67,6 @@
     <loc>https://jameshwade.github.io/gpttools/reference/get_selection.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/gpt_insert.html</loc>
-  </url>
-  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_sitrep.html</loc>
   </url>
   <url>
@@ -80,6 +80,9 @@
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/insert_text.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/install_sentence_transformers.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/list_index.html</loc>
