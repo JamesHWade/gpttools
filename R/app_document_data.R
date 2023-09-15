@@ -138,11 +138,9 @@ run_document_data <- function() {
     shiny::observe({
       cli_inform(c("i" = "Querying OpenAI's API..."))
 
-      interim <- openai_create_completion(
-        model = "text-davinci-003",
+      interim <- gptstudio::openai_create_chat_completion(
+        model = "gpt-3.5-turbo",
         prompt = input$prompt,
-        temperature = input$temperature,
-        max_tokens = input$max_tokens,
         openai_api_key = Sys.getenv("OPENAI_API_KEY")
       )
 

@@ -84,10 +84,8 @@ parse_sentence_transformers_version <- function(version) {
 #'   to `TRUE`, to ensure that TensorFlow dependencies like NumPy are compatible
 #'   with the prebuilt TensorFlow binaries.
 #'
-#' @param ... other arguments passed to [`reticulate::conda_install()`] or
-#'   [`reticulate::virtualenv_install()`], depending on the `method` used.
-#'
-#' \seealso [`keras::install_keras()`, `tensorflow::install_tensorflow()`]
+#' @param ... other arguments passed to `reticulate::conda_install()` or
+#'   `reticulate::virtualenv_install()`, depending on the `method` used.
 #'
 #' @export
 install_sentence_transformers <-
