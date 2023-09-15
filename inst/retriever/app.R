@@ -78,46 +78,47 @@ ui <- page_fluid(
     heights_equal = "row",
     card(
       card_header("Write Prompt",
-                  class = "bg-primary d-flex align-items-center",
-                  popover(
-                    bs_icon("gear", class = "ms-auto"),
-                    accordion_panel(
-                      "Data & Task",
-                      icon = bs_icon("robot", class = "ms-auto"),
-                      selectInput(
-                        "source", "Data Source",
-                        choices = c("All", indices)
-                      ),
-                      selectInput(
-                        "task", "Task",
-                        choices = c("Context Only", "Permissive Chat"),
-                        selected = "Permissive Chat",
-                      )
-                    ),
-                    br(),
-                    accordion_panel(
-                      "Preferences",
-                      icon = bs_icon("sliders", class = "ms-auto"),
-                      selectInput("model", "Model",
-                                  choices = c("gpt-3.5-turbo", "gpt-4")
-                      ),
-                      radioButtons(
-                        "save_history", "Save & Use History",
-                        choiceNames = c("Yes", "No"),
-                        choiceValues = c(TRUE, FALSE),
-                        selected = TRUE, inline = TRUE,
-                      ),
-                      sliderInput(
-                        "n_docs", "Docs to Include (#)",
-                        min = 0, max = 20, value = 3
-                      ),
-                      sliderInput(
-                        "n_history", "Chat History to Include (#)",
-                        min = 0, max = 20, value = 3
-                      )
-                    ),
-                    title = "Plot settings"
-                  )),
+        class = "bg-primary d-flex align-items-center",
+        popover(
+          bs_icon("gear", class = "ms-auto"),
+          accordion_panel(
+            "Data & Task",
+            icon = bs_icon("robot", class = "ms-auto"),
+            selectInput(
+              "source", "Data Source",
+              choices = c("All", indices)
+            ),
+            selectInput(
+              "task", "Task",
+              choices = c("Context Only", "Permissive Chat"),
+              selected = "Permissive Chat",
+            )
+          ),
+          br(),
+          accordion_panel(
+            "Preferences",
+            icon = bs_icon("sliders", class = "ms-auto"),
+            selectInput("model", "Model",
+              choices = c("gpt-3.5-turbo", "gpt-4")
+            ),
+            radioButtons(
+              "save_history", "Save & Use History",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              selected = TRUE, inline = TRUE,
+            ),
+            sliderInput(
+              "n_docs", "Docs to Include (#)",
+              min = 0, max = 20, value = 3
+            ),
+            sliderInput(
+              "n_history", "Chat History to Include (#)",
+              min = 0, max = 20, value = 3
+            )
+          ),
+          title = "Plot settings"
+        )
+      ),
       uiOutput("all_chats_box"),
       layout_column_wrap(
         width = NULL, fill = FALSE,
