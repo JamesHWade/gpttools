@@ -68,10 +68,12 @@ create_openai_embedding <-
       model = model,
       input = input_text
     )
-    embedding <- query_openai_api(body, openai_api_key, task = "embeddings")
+    embedding <- gptstudio:::query_openai_api(task = "embeddings",
+                                              request_body = body,
+                                              openai_api_key = openai_api_key)
     tibble::tibble(
       usage = embedding$usage$total_tokens,
-      embedding = embedding$data$embedding
+      embedding = embedding$data[[1]]$embedding |> list()
     )
   }
 
@@ -337,37 +339,6 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
   }
   chunks <- purrr::compact(chunks)
   purrr::map(chunks, \(x) stringr::str_c(x, collapse = " "))
-}
-
-query_openai_api <- function(body, openai_api_key, task) {
-  arg_match(task, c("completions", "chat/completions", "edits", "embeddings"))
-
-  base_url <- glue("https://api.openai.com/v1/{task}")
-
-  headers <- c(
-    "Authorization" = glue("Bearer {openai_api_key}"),
-    "Content-Type" = "application/json"
-  )
-
-  response <-
-    httr::RETRY("POST",
-      url = base_url,
-      httr::add_headers(headers), body = body,
-      encode = "json",
-      quiet = TRUE
-    )
-
-  parsed <- response |>
-    httr::content(as = "text", encoding = "UTF-8") |>
-    jsonlite::fromJSON(flatten = TRUE)
-
-  if (httr::http_error(response)) {
-    cli_alert_warning(c(
-      "x" = glue("OpenAI API request failed [{httr::status_code(response)}]."),
-      "i" = glue("Error message: {parsed$error$message}")
-    ))
-  }
-  parsed
 }
 
 #' List Index Files
