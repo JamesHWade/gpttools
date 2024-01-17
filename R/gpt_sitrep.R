@@ -21,10 +21,7 @@ gpt_sitrep <- function() {
       "i" = "API key set to {api_key}"
     ))
   } else {
-    cli_inform(c(
-      "x" = "OpenAI API not validated.",
-      "i" = "You can validate API by calling {.code gptstudio::check_api()}"
-    ))
+    cli_alert_danger("OpenAI API not validated.")
   }
   cli_rule("RStudio API")
   if (rstudioapi::isAvailable()) {

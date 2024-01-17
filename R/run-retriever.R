@@ -12,7 +12,6 @@
 #' addin_run_retriever()
 #' }
 addin_run_retriever <- function() {
-  gptstudio::check_api()
   indices <- list_index()
   if (length(indices) == 0) {
     cli::cli_abort(

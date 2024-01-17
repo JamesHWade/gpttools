@@ -130,7 +130,7 @@ create_index <- function(domain,
   }
 
   index <- prepare_scraped_files(domain = domain)
-  n_tokens <- sum(index$n_tokens) |> scales::scientific()
+  n_tokens <- sum(index$n_tokens) |> scales_scientific()
 
   cli::cli_inform(c(
     "!" = "You are about to create embeddings for {domain}.",
@@ -152,6 +152,7 @@ create_index <- function(domain,
       index |>
       # join_embeddings_from_index() |>
       add_embeddings() |>
+      tidyr::unnest(embeddings) |>
       dplyr::mutate(version = pkg_version)
     if (rlang::is_false(dir.exists(index_dir))) {
       dir.create(index_dir, recursive = TRUE)
@@ -384,7 +385,33 @@ query_openai_api <- function(body, openai_api_key, task) {
 #' }
 #' @export
 list_index <- function(dir = "index") {
-  list.files(
-    file.path(tools::R_user_dir("gpttools", "data"), dir)
-  )
+  loc <- file.path(tools::R_user_dir("gpttools", "data"), dir)
+  cli::cli_inform("Access your index files here: {.file {loc}}")
+  list.files(loc)
+}
+
+
+#' Delete an Index File
+#'
+#' Interactively deletes a specified index file from a user-defined directory.
+#' Presents the user with a list of available index files and prompts for confirmation
+#' before deletion.
+
+#' @export
+delete_index <- function() {
+  files <- list_index()
+  if (length(files) == 0) {
+    cli_alert_warning("No index files found.")
+    return(invisible())
+  }
+  cli::cli_alert("Select the index file you want to delete.")
+  to_delete <- utils::menu(files)
+  confirm_delete <-
+    usethis::ui_yeah("Are you sure you want to delete {files[to_delete]}?")
+  if (confirm_delete) {
+    file.remove(file.path(tools::R_user_dir("gpttools", "data"), "index", files[to_delete]))
+    cli_alert_success("Index deleted.")
+  } else {
+    cli_alert_warning("Index not deleted.")
+  }
 }

@@ -53,6 +53,8 @@ transcribe_audio_chunk <-
 
     result <- httr::content(response, "parsed", "application/json")
 
+    print(result)
+
     file.remove(tmp_file)
 
     return(result)
@@ -77,7 +79,10 @@ write_index <- function(index, name, type = "index") {
 #' @param chunk_size Audio size in seconds
 #' @return The function writes an index in Parquet format to disk.
 #' @export
-transcribe_audio <- function(file_path, source, link = NULL, prompt = NULL, chunk_size = 120) {
+transcribe_audio <- function(file_path,
+                             source = NA,
+                             link   = NA,
+                             prompt = NA, chunk_size = 120) {
   audio_chunks <- split_audio(file_path = file_path, duration_secs = chunk_size)
   purrr::map(audio_chunks, \(x) {
     tibble::tibble(
@@ -117,4 +122,24 @@ create_index_from_audio <- function(file_path,
   index_name <- janitor::make_clean_names(source)
   transcribe_audio(file_path, source, link)
   create_index(index_name, overwrite = overwrite)
+}
+
+#' Get Transcription from Audio
+#'
+#' This function transcribes audio files and returns the transcription text.
+#'
+#' @param file_path Character string specifying the path to the audio file.
+#' @param prompt Character string specifying the prompt for transcription
+#'   (optional).
+#' @param chunk_size Audio size in seconds.
+#' @return A character string containing the transcription text.
+#' @export
+create_transcript <- function(file_path, prompt = NULL, chunk_size = 120) {
+  split_audio(file_path = file_path, duration_secs = chunk_size) |>
+    purrr::map(\(x) {
+    transcribed_text <- transcribe_audio_chunk(audio_file = x, prompt = prompt)
+    transcribed_text$text
+  }, .progress = "Transcribing Text") |>
+    unlist() |>
+    paste0(collapse = " ")
 }

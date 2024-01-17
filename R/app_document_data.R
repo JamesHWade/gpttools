@@ -4,7 +4,6 @@
 #'
 #' @export
 document_data <- function() {
-  gptstudio::check_api()
   withr::local_options(shiny.launch.browser = ".rs.invokeShinyPaneViewer")
   run_document_data()
 }

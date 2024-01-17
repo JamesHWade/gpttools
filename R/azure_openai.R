@@ -88,7 +88,7 @@ create_index_azure <- function(domain,
 
   cli::cli_inform(c(
     "!" = "You are about to create embeddings for {domain}.",
-    "i" = "This will use approx. {scales::scientific(n_tokens)} tokens.",
+    "i" = "This will use approx. {scales_scientific(n_tokens)} tokens.",
     "i" = "Only proceed if you understand the cost.",
     "i" = "Read more about embeddings at {.url
       https://platform.openai.com/docs/guides/embeddings}."

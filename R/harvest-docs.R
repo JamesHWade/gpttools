@@ -292,9 +292,9 @@ html <- rvest::read_html(url) |>
 a <- html |> rvest::html_text()
 
 node_info <- tibble::tibble(
-  index = seq_along(head(html, n = 100)),
+  index = seq_along(utils::head(html, n = 100)),
   text_length = purrr::map_int(
-    head(html, n = 100),
+    utils::head(html, n = 100),
     ~ nchar(rvest::html_text(.x))
   )
 )

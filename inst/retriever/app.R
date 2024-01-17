@@ -99,7 +99,7 @@ ui <- page_fluid(
             "Preferences",
             icon = bs_icon("sliders", class = "ms-auto"),
             selectInput("model", "Model",
-              choices = c("gpt-3.5-turbo", "gpt-4")
+              choices = gptstudio::get_available_models(service = "openai")
             ),
             radioButtons(
               "save_history", "Save & Use History",

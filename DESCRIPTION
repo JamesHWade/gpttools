@@ -17,8 +17,6 @@ Depends:
     R (>= 4.1)
 Imports: 
     arrow,
-    assertthat,
-    bslib (>= 0.5),
     callr,
     cli,
     dplyr,
@@ -40,7 +38,6 @@ Imports:
     rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
     rvest,
-    scales,
     shiny,
     skimr,
     stats,
@@ -54,6 +51,7 @@ Imports:
     usethis,
     xml2
 Suggests: 
+    bslib,
     bsicons,
     covr,
     htmltools,

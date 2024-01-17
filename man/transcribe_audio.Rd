@@ -6,9 +6,9 @@
 \usage{
 transcribe_audio(
   file_path,
-  source,
-  link = NULL,
-  prompt = NULL,
+  source = NA,
+  link = NA,
+  prompt = NA,
   chunk_size = 120
 )
 }

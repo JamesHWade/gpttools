@@ -21,7 +21,6 @@ insert_text <- function(improved_text) {
 
 # write a function to take the output of this function; return only the R code
 gpt_chat <- function(instructions) {
-  gptstudio::check_api()
   query <- get_selection()
   cli::cli_inform("Selection: {query}")
   prompt <-
