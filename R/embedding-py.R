@@ -1,4 +1,4 @@
-get_transformer_model <- function(model_name = "all-mpnet-base-v2") {
+get_transformer_model <- function(model_name = "jinaai/jina-embeddings-v2-base-en") {
   py_pkg_is_available()
   transformer <- reticulate::import("sentence_transformers")
   cli::cli_process_start("Downloading model. This may take a few minutes.")

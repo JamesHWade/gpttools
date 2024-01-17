@@ -24,8 +24,9 @@ transcribe_audio_chunk <-
            model = "whisper-1",
            prompt = NULL,
            language = "en") {
+    rlang::check_installed("tuneR")
+    rlang::check_installed("httr")
     url <- "https://api.openai.com/v1/audio/transcriptions"
-
     tmp_file <- tempfile(fileext = ".wav")
     tuneR::writeWave(audio_file, filename = tmp_file, extensible = FALSE)
 

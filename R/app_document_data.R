@@ -13,6 +13,7 @@ document_data <- function() {
 #' @return Nothing is returned, a shiny app is run
 #' @export
 run_document_data <- function() {
+  rlang::check_installed("miniUI")
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
       title = "Document your data with gpttools",
