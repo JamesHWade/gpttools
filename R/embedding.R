@@ -68,9 +68,11 @@ create_openai_embedding <-
       model = model,
       input = input_text
     )
-    embedding <- gptstudio:::query_openai_api(task = "embeddings",
-                                              request_body = body,
-                                              openai_api_key = openai_api_key)
+    embedding <- gptstudio:::query_openai_api(
+      task = "embeddings",
+      request_body = body,
+      openai_api_key = openai_api_key
+    )
     tibble::tibble(
       usage = embedding$usage$total_tokens,
       embedding = embedding$data[[1]]$embedding |> list()
