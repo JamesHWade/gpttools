@@ -81,7 +81,7 @@ write_index <- function(index, name, type = "index") {
 #' @export
 transcribe_audio <- function(file_path,
                              source = NA,
-                             link   = NA,
+                             link = NA,
                              prompt = NA, chunk_size = 120) {
   audio_chunks <- split_audio(file_path = file_path, duration_secs = chunk_size)
   purrr::map(audio_chunks, \(x) {
@@ -137,9 +137,9 @@ create_index_from_audio <- function(file_path,
 create_transcript <- function(file_path, prompt = NULL, chunk_size = 120) {
   split_audio(file_path = file_path, duration_secs = chunk_size) |>
     purrr::map(\(x) {
-    transcribed_text <- transcribe_audio_chunk(audio_file = x, prompt = prompt)
-    transcribed_text$text
-  }, .progress = "Transcribing Text") |>
+      transcribed_text <- transcribe_audio_chunk(audio_file = x, prompt = prompt)
+      transcribed_text$text
+    }, .progress = "Transcribing Text") |>
     unlist() |>
     paste0(collapse = " ")
 }
