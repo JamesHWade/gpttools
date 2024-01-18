@@ -130,6 +130,7 @@ check_context <- function(context) {
 #' generate responses.
 #'
 #' @param query The input query to be processed.
+#' @param service Name of the AI service to use, defaults to openai.
 #' @param model Name of the openai model to use, defaults to gpt-3.5-turbo
 #' @param index Index to look for context.
 #' @param add_context Whether to add context to the query or not. Default is
@@ -147,6 +148,7 @@ check_context <- function(context) {
 #' @param save_history Whether to save the chat history or not. Default is TRUE.
 #' @param overwrite Whether to overwrite the history file or not. Default is
 #'   FALSE.
+#' @param local Whether to use the local model or not. Default is FALSE.
 #'
 #' @return A list containing the prompt, context, and answer.
 #' @export
@@ -162,7 +164,8 @@ check_context <- function(context) {
 #' result <- chat_with_context(query = query, context = context)
 #' }
 chat_with_context <- function(query,
-                              model = "gpt-3.5-turbo",
+                              service = "openai",
+                              model = "gpt-4",
                               index = NULL,
                               add_context = TRUE,
                               chat_history = NULL,
@@ -173,11 +176,19 @@ chat_with_context <- function(query,
                               k_context = 4,
                               k_history = 4,
                               save_history = TRUE,
-                              overwrite = FALSE) {
+                              overwrite = FALSE,
+                              local = FALSE) {
   arg_match(task, c("Context Only", "Permissive Chat"))
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
-    query_embedding <- get_query_embedding(query)
+    if (local) {
+      model <- get_transformer_model()
+      query_embedding <- create_text_embeddings(query, model = model) |>
+        dplyr::pull("embedding") |>
+        unlist()
+    } else {
+      query_embedding <- get_query_embedding(query)
+    }
   }
 
   if (rlang::is_true(add_context)) {
@@ -286,7 +297,14 @@ chat_with_context <- function(query,
 
   cli::cat_print(prompt)
 
-  answer <- query_openai(body = prompt)
+  answer <-
+    gptstudio:::gptstudio_create_skeleton(
+      service = service,
+      model = model,
+      prompt = prompt,
+      stream = FALSE
+    ) |>
+    gptstudio:::gptstudio_request_perform()
 
   if (rlang::is_true(save_history)) {
     purrr::map(prompt, \(x) {

@@ -85,10 +85,12 @@ add_embeddings <- function(index,
     model <- get_transformer_model()
     index |>
       dplyr::mutate(
-        embeddings = purrr::map(chunks, \(x) {
-          create_text_embeddings(x, model)
-        }),
-        embedding_method = "local"
+        embeddings = purrr::map(
+          .x = chunks,
+          .f = \(x) create_text_embeddings(x, model),
+          .progress = "Creating Embeddings Locally"
+        ),
+        embedding_method = glue::glue("local: {model$name_or_path}")
       )
   } else {
     index |>
@@ -118,11 +120,17 @@ join_embeddings_from_index <- function(x) {
 create_index <- function(domain,
                          overwrite = FALSE,
                          dont_ask = FALSE,
-                         pkg_version = NULL) {
+                         pkg_version = NULL,
+                         local_embeddings = FALSE) {
   index_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "index")
-  index_file <-
-    glue::glue("{index_dir}/{domain}.parquet")
+
+  if (local_embeddings) {
+    index_file <- glue::glue("{index_dir}/local/{domain}.parquet")
+  } else {
+    index_file <- glue::glue("{index_dir}/{domain}.parquet")
+  }
+
 
   if (file.exists(index_file) && rlang::is_false(overwrite)) {
     cli::cli_abort(
@@ -155,7 +163,7 @@ create_index <- function(domain,
     index <-
       index |>
       # join_embeddings_from_index() |>
-      add_embeddings() |>
+      add_embeddings(local_embeddings = local_embeddings) |>
       tidyr::unnest(embeddings) |>
       dplyr::mutate(version = pkg_version)
     if (rlang::is_false(dir.exists(index_dir))) {
@@ -172,10 +180,13 @@ create_index <- function(domain,
 
 get_top_matches <- function(index, query_embedding, k = 5) {
   k <- min(k, nrow(index))
+  print(head(index))
   index |>
     dplyr::mutate(
       similarity = purrr::map_dbl(embedding, \(x) {
-        lsa::cosine(query_embedding, unlist(x))
+        score <- lsa::cosine(query_embedding, unlist(x))
+        cli::cli_inform("Similarity: {score}")
+        score
       })
     ) |>
     dplyr::arrange(dplyr::desc(similarity)) |>

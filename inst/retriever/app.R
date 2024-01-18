@@ -50,7 +50,9 @@ make_chat_history <- function(chats) {
     purrr::list_flatten()
 }
 
-indices <- gpttools::list_index() |> tools::file_path_sans_ext()
+api_services <- utils::methods("gptstudio_request_perform") %>%
+  stringr::str_remove(pattern = "gptstudio_request_perform.gptstudio_request_") %>%
+  purrr::discard(~ .x == "gptstudio_request_perform.default")
 
 ui <- page_fluid(
   waiter::use_waiter(),
@@ -86,7 +88,7 @@ ui <- page_fluid(
             icon = bs_icon("robot", class = "ms-auto"),
             selectInput(
               "source", "Data Source",
-              choices = c("All", indices)
+              choices = NULL
             ),
             selectInput(
               "task", "Task",
@@ -98,14 +100,24 @@ ui <- page_fluid(
           accordion_panel(
             "Preferences",
             icon = bs_icon("sliders", class = "ms-auto"),
+            selectInput(
+              "service", "AI Service",
+              choices = api_services
+            ),
             selectInput("model", "Model",
-              choices = gptstudio::get_available_models(service = "openai")
+              choices = NULL
             ),
             radioButtons(
               "save_history", "Save & Use History",
               choiceNames = c("Yes", "No"),
               choiceValues = c(TRUE, FALSE),
               selected = TRUE, inline = TRUE,
+            ),
+            radioButtons(
+              "local", "Local Embeddings",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              selected = FALSE, inline = TRUE,
             ),
             sliderInput(
               "n_docs", "Docs to Include (#)",
@@ -148,7 +160,28 @@ server <- function(input, output, session) {
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
   height <- window_height_server("height")
-  index <- reactive(load_index(input$source))
+  index <- reactive({
+    if (input$local == TRUE) {
+      load_index(glue::glue("local/{input$source}"))
+    } else {
+      load_index(input$source)
+    }
+  })
+  indices <- reactive({
+    if (input$local == TRUE) {
+      list_index(dir = "index/local") |> tools::file_path_sans_ext()
+    } else {
+      list_index() |> tools::file_path_sans_ext()
+    }
+  })
+  observe(
+    updateSelectInput(
+      session,
+      "model",
+      choices = gptstudio::get_available_models(service = input$service)
+    )
+  )
+  observe(updateSelectInput(session, "source", choices = indices()))
   observe({
     waiter_show(
       html = tagList(
@@ -158,7 +191,7 @@ server <- function(input, output, session) {
       color = waiter::transparent(0.5)
     )
     if (is.null(input$model)) {
-      input$model <- "gpt-3.5-turbo"
+      input$model <- "gpt-4"
     }
 
     interim <- chat_with_context(
@@ -173,7 +206,8 @@ server <- function(input, output, session) {
       k_context = input$n_docs,
       k_history = input$n_history,
       save_history = input$save_history,
-      overwrite = FALSE
+      overwrite = FALSE,
+      local = input$local
     )
     new_response <- interim[[3]]$choices
     r$context_links <- c(r$context_links, interim[[2]]$link)

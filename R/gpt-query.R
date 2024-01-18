@@ -35,6 +35,7 @@ gpt_chat <- function(instructions) {
       )
     )
   cli::cli_process_start(msg = "Sending query to OpenAI")
+  cli::cli_progress_update()
   answer <- gptstudio::openai_create_chat_completion(prompt)
   cli::cli_process_done(msg_done = "Received response from OpenAI")
   text_to_insert <- c(

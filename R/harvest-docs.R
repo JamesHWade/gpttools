@@ -116,7 +116,7 @@ crawl <- function(url,
                   overwrite = FALSE,
                   num_cores = parallel::detectCores() - 1,
                   pkg_version = NULL,
-                  use_azure_openai = FALSE) {
+                  service = c("openai", "local", "azure")) {
   parsed_url <- urltools::url_parse(url)
   local_domain <- parsed_url$domain
   url_path <- parsed_url$path
@@ -181,15 +181,21 @@ crawl <- function(url,
     sink = scraped_text_file
   )
   if (index_create) {
-    if (use_azure_openai) {
+    if (service == "azure") {
       create_index_azure(local_domain_name,
         overwrite = overwrite,
         pkg_version = pkg_version
       )
-    } else {
+    } else if (service == "openai") {
       create_index(local_domain_name,
         overwrite = overwrite,
         pkg_version = pkg_version
+      )
+    } else if (service == "local") {
+      create_index(local_domain_name,
+        overwrite = overwrite,
+        pkg_version = pkg_version,
+        local_embeddings = TRUE
       )
     }
   }
