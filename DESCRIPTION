@@ -20,8 +20,6 @@ Imports:
     callr,
     cli,
     dplyr,
-    furrr,
-    future,
     glue,
     gptstudio (>= 0.2.0),
     httr2,

@@ -29,8 +29,14 @@ get_outdated_pkgs <- function() {
     dplyr::mutate(outdated = TRUE)
 }
 
-read_indexed_pkgs <- function() {
-  data_dir <- glue('{tools::R_user_dir("gpttools", which = "data")}/index')
+read_indexed_pkgs <- function(local = FALSE) {
+  if (local) {
+    data_dir <-
+      glue::glue('{tools::R_user_dir("gpttools", which = "data")}/index/local')
+  } else {
+    data_dir <-
+      glue::glue('{tools::R_user_dir("gpttools", which = "data")}/index')
+  }
   if (dir.exists(data_dir)) {
     indices <- arrow::open_dataset(data_dir)
   } else {
@@ -51,7 +57,7 @@ get_pkgs_to_scrape <- function() {
     tidyverse::tidyverse_packages(),
     tidymodels::tidymodels_packages(),
     "shiny", "bslib", "shinyjs", "waiter", "golem",
-    "vetiver", "plumber", "embed", "textrecipes", "gpttools", "gptstudio"
+    "vetiver", "plumber", "embed", "textrecipes", "gptstudio"
   )
 
   package_info <- installed_packages |>
@@ -78,14 +84,18 @@ get_pkgs_to_scrape <- function() {
     dplyr::filter(!stringr::str_detect(url, "github.com|arxiv.org"))
 }
 
-scrape_pkg_sites <- function(sites = get_pkgs_to_scrape()) {
+scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(), service) {
   sites |>
     dplyr::rowwise() |>
-    dplyr::mutate(indexed = crawl(url,
-      index_create = FALSE,
-      overwrite = FALSE,
-      pkg_version = version
-    ))
+    dplyr::mutate(
+      indexed = crawl(
+        url          = url,
+        index_create = FALSE,
+        overwrite    = FALSE,
+        pkg_version  = version,
+        service      = service
+      )
+    )
 }
 
 

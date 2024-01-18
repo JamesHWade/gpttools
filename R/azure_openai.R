@@ -230,7 +230,7 @@ chat_with_context_azure <- function(query,
                 "on the context provided by the user. If the user does not ",
                 "provide context, answer the quest but first say \"I am not ",
                 "able to answer that question with the context you gave me, ",
-                "but here is my best answer.",
+                "but here is my best answer."
               )
           )
         )

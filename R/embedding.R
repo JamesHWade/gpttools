@@ -4,16 +4,17 @@ prepare_scraped_files <- function(domain) {
     arrow::read_parquet(glue("{scraped_dir}/text/{domain}.parquet"))
 
   if (max(scraped$n_words) > 2e5) {
-    max_index <- which.max(scraped$n_words)
+    max_index <- scraped[which.max(scraped$n_words), ]
+    print(max_index |> dplyr::select(-text))
     cli_warn(
       c(
-        "!" = "Entry {max_index} of {domain} has at least 200,000 words.",
+        "!" = "Entry {max_index$link} of {domain} has at least 200,000 words.",
         "i" = "You probably do not want that. Please inspect scraped data."
       )
     )
     dont_embed <- usethis::ui_nope(
       c(
-        "Entry {max_index} of {domain} has at least 200,000 words.",
+        "Entry {max_index$link} of {domain} has at least 200,000 words.",
         "You probably do not want that. Please inspect scraped data.",
         "Do you want to continue?"
       )
@@ -375,8 +376,8 @@ list_index <- function(dir = "index") {
 #' Delete an Index File
 #'
 #' Interactively deletes a specified index file from a user-defined directory.
-#' Presents the user with a list of available index files and prompts for confirmation
-#' before deletion.
+#' Presents the user with a list of available index files and prompts for
+#' confirmation before deletion.
 
 #' @export
 delete_index <- function() {
@@ -390,7 +391,11 @@ delete_index <- function() {
   confirm_delete <-
     usethis::ui_yeah("Are you sure you want to delete {files[to_delete]}?")
   if (confirm_delete) {
-    file.remove(file.path(tools::R_user_dir("gpttools", "data"), "index", files[to_delete]))
+    file.remove(file.path(
+      tools::R_user_dir("gpttools", "data"),
+      "index",
+      files[to_delete]
+    ))
     cli_alert_success("Index deleted.")
   } else {
     cli_alert_warning("Index not deleted.")

@@ -9,10 +9,8 @@ collect_dataframes <- function() {
   objects <- names(rlang::global_env())
   purrr::map_chr(
     .x = objects,
-    .f = \(x) if (is.data.frame(get(x))) {
-      x
-    } else {
-      NA
+    .f = \(x) {
+      if (is.data.frame(get(x))) x else NA
     }
   ) |>
     stats::na.omit()

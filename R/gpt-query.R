@@ -20,7 +20,9 @@ insert_text <- function(improved_text) {
 
 
 # write a function to take the output of this function; return only the R code
-gpt_chat <- function(instructions) {
+gpt_chat <- function(instructions,
+                     service = getOption("gpttools.service", "openai"),
+                     model = getOption("gpttools.model", "gpt-4")) {
   query <- get_selection()
   cli::cli_inform("Selection: {query}")
   prompt <-
@@ -34,10 +36,27 @@ gpt_chat <- function(instructions) {
         content = glue("{query}")
       )
     )
-  cli::cli_process_start(msg = "Sending query to OpenAI")
+  cli::cli_process_start(msg = "Sending query to {service}")
   cli::cli_progress_update()
-  answer <- gptstudio::openai_create_chat_completion(prompt)
-  cli::cli_process_done(msg_done = "Received response from OpenAI")
+  simple_prompt <- prompt |>
+    purrr::map_chr(.f = "content") |>
+    paste(collapse = "\n\n")
+
+  cat(simple_prompt, "\n\n")
+
+  cli::cli_inform("Service: {service}")
+  cli::cli_inform("Model: {model}")
+
+  answer <-
+    gptstudio:::gptstudio_create_skeleton(
+      service = service,
+      model = model,
+      prompt = simple_prompt,
+      stream = FALSE
+    ) |>
+    gptstudio:::gptstudio_request_perform()
+
+  cli::cli_process_done(msg_done = "Received response from {service}")
   text_to_insert <- c(
     as.character(query),
     as.character(answer$choices$message.content)

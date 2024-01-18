@@ -14,10 +14,15 @@ scales_scientific <- function(x,
     return(character())
   }
   x <- signif(x * scale, digits)
-  ret <- paste0(prefix, format(x,
-    decimal.mark = decimal.mark,
-    trim = trim, scientific = TRUE, ...
-  ), suffix)
+  ret <- paste0(
+    prefix,
+    format(x,
+      decimal.mark = decimal.mark,
+      trim = trim,
+      scientific = TRUE, ...
+    ),
+    suffix
+  )
   ret[is.na(x)] <- NA
   names(ret) <- names(x)
   ret

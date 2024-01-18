@@ -1,5 +1,8 @@
 rlang::check_installed(
-  c("shiny", "bslib", "bsicons", "cli", "glue", "gptstudio", "gpttools", "waiter")
+  c(
+    "shiny", "bslib", "bsicons", "cli", "glue",
+    "gptstudio", "gpttools", "waiter"
+  )
 )
 
 library(gpttools)
@@ -50,8 +53,11 @@ make_chat_history <- function(chats) {
     purrr::list_flatten()
 }
 
-api_services <- utils::methods("gptstudio_request_perform") %>%
-  stringr::str_remove(pattern = "gptstudio_request_perform.gptstudio_request_") %>%
+api_services <-
+  utils::methods("gptstudio_request_perform") |>
+  stringr::str_remove(
+    pattern = "gptstudio_request_perform.gptstudio_request_"
+  ) |>
   purrr::discard(~ .x == "gptstudio_request_perform.default")
 
 ui <- page_fluid(

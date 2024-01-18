@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gpttools <a href="https://jameshwade.github.io/gpttools/"><img src="man/figures/logo.png" align="right" height="139"/></a>
+# gpttools <a href="https://jameshwade.github.io/gpttools/"><img src="man/figures/logo.png" align="right" height="125"/></a>
 
 <!-- badges: start -->
 
@@ -146,7 +146,7 @@ The package has four addins:
 
 - Write a unit test for a function with testthat: uses text-davinci-003
   model from OpenAI to suggest a unit test for a selected function with
-  the prompt: “Suggest a unit test for this function using the testthat
+  the prompt: “Suggest a unit text for this function using the testthat
   package”
 
 - A freeform addins that let’s you specify the prompt using the “edit”

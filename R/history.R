@@ -183,7 +183,9 @@ chat_with_context <- function(query,
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
     if (local) {
       embedding_model <- get_transformer_model()
-      query_embedding <- create_text_embeddings(query, model = embedding_model) |>
+      query_embedding <- create_text_embeddings(query,
+        model = embedding_model
+      ) |>
         dplyr::pull("embedding") |>
         unlist()
     } else {

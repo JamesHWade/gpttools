@@ -138,7 +138,10 @@ create_index_from_audio <- function(file_path,
 create_transcript <- function(file_path, prompt = NULL, chunk_size = 120) {
   split_audio(file_path = file_path, duration_secs = chunk_size) |>
     purrr::map(\(x) {
-      transcribed_text <- transcribe_audio_chunk(audio_file = x, prompt = prompt)
+      transcribed_text <- transcribe_audio_chunk(
+        audio_file = x,
+        prompt = prompt
+      )
       transcribed_text$text
     }, .progress = "Transcribing Text") |>
     unlist() |>
