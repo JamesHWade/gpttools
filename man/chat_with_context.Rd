@@ -6,7 +6,8 @@
 \usage{
 chat_with_context(
   query,
-  model = "gpt-3.5-turbo",
+  service = "openai",
+  model = "gpt-4",
   index = NULL,
   add_context = TRUE,
   chat_history = NULL,
@@ -17,11 +18,14 @@ chat_with_context(
   k_context = 4,
   k_history = 4,
   save_history = TRUE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  local = FALSE
 )
 }
 \arguments{
 \item{query}{The input query to be processed.}
+
+\item{service}{Name of the AI service to use, defaults to openai.}
 
 \item{model}{Name of the openai model to use, defaults to gpt-3.5-turbo}
 
@@ -51,6 +55,8 @@ is TRUE.}
 
 \item{overwrite}{Whether to overwrite the history file or not. Default is
 FALSE.}
+
+\item{local}{Whether to use the local model or not. Default is FALSE.}
 }
 \value{
 A list containing the prompt, context, and answer.

@@ -102,7 +102,8 @@ ui <- page_fluid(
             icon = bs_icon("sliders", class = "ms-auto"),
             selectInput(
               "service", "AI Service",
-              choices = api_services
+              choices = api_services,
+              selected = "openai"
             ),
             selectInput("model", "Model",
               choices = NULL
@@ -190,12 +191,9 @@ server <- function(input, output, session) {
       ),
       color = waiter::transparent(0.5)
     )
-    if (is.null(input$model)) {
-      input$model <- "gpt-4"
-    }
-
     interim <- chat_with_context(
       query = input$chat_input,
+      service = input$service,
       model = input$model,
       index = index(),
       add_context = TRUE,
@@ -209,15 +207,15 @@ server <- function(input, output, session) {
       overwrite = FALSE,
       local = input$local
     )
-    new_response <- interim[[3]]$choices
+    new_response <- interim[[3]]
     r$context_links <- c(r$context_links, interim[[2]]$link)
     r$all_chats <-
       c(
         interim[[1]],
         list(
           list(
-            role    = new_response$message$role,
-            content = new_response$message$content
+            role    = "assistant",
+            content = new_response
           )
         )
       )

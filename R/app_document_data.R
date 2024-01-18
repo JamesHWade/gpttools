@@ -5,6 +5,7 @@
 #' @export
 document_data <- function() {
   withr::local_options(shiny.launch.browser = ".rs.invokeShinyPaneViewer")
+  rlang::check_installed("miniUI")
   run_document_data()
 }
 

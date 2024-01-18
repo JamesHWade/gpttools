@@ -77,10 +77,10 @@ create_history <- function(file_name = "chat_history",
   }
 }
 
-save_history <- function(file_name = "chat_history",
-                         role,
-                         content,
-                         overwrite = FALSE) {
+save_user_history <- function(file_name = "chat_history",
+                              role,
+                              content,
+                              overwrite = FALSE) {
   create_history(file_name, overwrite = overwrite)
   history <- read_history(file_name)
   embedding <- create_openai_embedding(content)
@@ -182,8 +182,8 @@ chat_with_context <- function(query,
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
     if (local) {
-      model <- get_transformer_model()
-      query_embedding <- create_text_embeddings(query, model = model) |>
+      embedding_model <- get_transformer_model()
+      query_embedding <- create_text_embeddings(query, model = embedding_model) |>
         dplyr::pull("embedding") |>
         unlist()
     } else {
@@ -205,7 +205,8 @@ chat_with_context <- function(query,
     context <- "No additional context provided."
   }
 
-  if (rlang::is_true(add_history) && !rlang::is_null(chat_history)) {
+  if (add_history) {
+    cli::cli_inform("Attempting to add chat history to query.")
     if (nrow(chat_history) == 0) {
       related_history <- "No related history found."
     }
@@ -215,12 +216,13 @@ chat_with_context <- function(query,
         chat_history,
         k_history
       ) |>
-      dplyr::pull("content") |>
+      dplyr::distinct(content) |>
+      dplyr::pull(content) |>
       paste(collapse = "\n\n")
   } else {
+    cli::cli_inform("Not attempting to add chat history to query.")
     related_history <- "No related history found."
   }
-
 
   prompt_instructions <-
     switch(task,
@@ -295,30 +297,37 @@ chat_with_context <- function(query,
     prompt_query
   )
 
-  cli::cat_print(prompt)
+  simple_prompt <- prompt |>
+    purrr::map_chr(.f = "content") |>
+    paste(collapse = "\n\n")
+
+  cat(simple_prompt, "\n\n")
+
+  cli::cli_inform("Service: {service}")
+  cli::cli_inform("Model: {model}")
 
   answer <-
     gptstudio:::gptstudio_create_skeleton(
       service = service,
       model = model,
-      prompt = prompt,
+      prompt = simple_prompt,
       stream = FALSE
     ) |>
     gptstudio:::gptstudio_request_perform()
 
-  if (rlang::is_true(save_history)) {
+  if (save_history) {
     purrr::map(prompt, \(x) {
-      save_history_azure(
+      save_user_history(
         file_name = history_name,
         role      = "system",
         content   = x$content,
         overwrite = overwrite
       )
     })
-    save_history_azure(
+    save_user_history(
       file_name = history_name,
       role      = "assistant",
-      content   = answer$choices$message.content,
+      content   = answer$response,
       overwrite = overwrite
     )
   }
@@ -326,5 +335,5 @@ chat_with_context <- function(query,
   prompt_without_context <-
     c(session_history, prompt_query)
 
-  list(prompt_without_context, full_context, answer)
+  list(prompt_without_context, full_context, answer$response)
 }

@@ -11,7 +11,7 @@ crawl(
   overwrite = FALSE,
   num_cores = parallel::detectCores() - 1,
   pkg_version = NULL,
-  use_azure_openai = FALSE
+  service = c("openai", "local", "azure")
 )
 }
 \arguments{
