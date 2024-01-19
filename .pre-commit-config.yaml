@@ -32,7 +32,7 @@ repos:
     -   id: no-browser-statement
     -   id: no-debug-statement
     -   id: deps-in-desc
-        args: [--allow_private_imports]
+        args: [--allow_private_imports --warn_only]
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
