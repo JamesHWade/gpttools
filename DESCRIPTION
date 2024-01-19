@@ -45,7 +45,8 @@ Imports:
     tools,
     urltools,
     usethis,
-    xml2
+    xml2,
+    yaml
 Suggests: 
     bslib,
     bsicons,
