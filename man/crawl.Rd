@@ -28,7 +28,8 @@ pages and index if they already exist. Default is FALSE.
 
 \item{pkg_version}{Package version number}
 
-\item{use_azure_openai}{Whether to use Azure OpenAI for index creation}
+\item{service}{The service to use for scraping. Default is "openai". Options
+are "openai", "local", and "azure".}
 }
 \value{
 NULL. The resulting tibble is saved into a parquet file.

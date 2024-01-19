@@ -116,7 +116,8 @@ recursive_hyperlinks <- function(local_domain,
 #' pages and index if they already exist. Default is FALSE.
 #'  `parallel::detectCores() - 1`
 #' @param pkg_version Package version number
-#' @param use_azure_openai Whether to use Azure OpenAI for index creation
+#' @param service The service to use for scraping. Default is "openai". Options
+#' are "openai", "local", and "azure".
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
