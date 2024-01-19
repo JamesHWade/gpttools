@@ -88,18 +88,20 @@ ui <- page_fluid(
       card_header("Write Prompt",
         class = "bg-primary d-flex align-items-center",
         popover(
+          id = "settings",
           bs_icon("gear", class = "ms-auto"),
           accordion_panel(
             "Data & Task",
             icon = bs_icon("robot", class = "ms-auto"),
             selectInput(
               "source", "Data Source",
-              choices = NULL
+              choices = NULL,
+              multiple = TRUE
             ),
             selectInput(
               "task", "Task",
               choices = c("Context Only", "Permissive Chat"),
-              selected = "Permissive Chat",
+              selected = getOption("gpttools.task", "Permissive Chat")
             )
           ),
           br(),
@@ -109,7 +111,7 @@ ui <- page_fluid(
             selectInput(
               "service", "AI Service",
               choices = api_services,
-              selected = "openai"
+              selected = getOption("gpttools.service", "openai")
             ),
             selectInput("model", "Model",
               choices = NULL
@@ -118,22 +120,33 @@ ui <- page_fluid(
               "save_history", "Save & Use History",
               choiceNames = c("Yes", "No"),
               choiceValues = c(TRUE, FALSE),
-              selected = TRUE, inline = TRUE,
+              selected = getOption("gpttools.save_history", FALSE),
+              inline = TRUE,
             ),
             radioButtons(
               "local", "Local Embeddings",
               choiceNames = c("Yes", "No"),
               choiceValues = c(TRUE, FALSE),
-              selected = FALSE, inline = TRUE,
+              selected = getOption("gpttools.local_embed"),
+              inline = TRUE,
             ),
             sliderInput(
               "n_docs", "Docs to Include (#)",
-              min = 0, max = 20, value = 3
+              min = 0,
+              max = 20,
+              value = getOption("gpttools.k_context", 4)
             ),
             sliderInput(
               "n_history", "Chat History to Include (#)",
-              min = 0, max = 20, value = 3
+              min = 0, max = 20,
+              value = getOption("gpttools.k_history", 4)
             )
+          ),
+          br(),
+          actionButton(
+            "save_settings", "Save Settings",
+            icon = icon("save", class = "ms-auto"),
+            class = "btn-primary"
           ),
           title = "Plot settings"
         )
@@ -163,6 +176,7 @@ ui <- page_fluid(
 )
 
 server <- function(input, output, session) {
+  set_user_config()
   r <- reactiveValues()
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
@@ -185,10 +199,28 @@ server <- function(input, output, session) {
     updateSelectInput(
       session,
       "model",
-      choices = gptstudio::get_available_models(service = input$service)
+      choices = gptstudio::get_available_models(service = input$service),
+      selected = getOption("gpttools.model")
     )
   )
-  observe(updateSelectInput(session, "source", choices = indices()))
+  observe(updateSelectInput(session, "source",
+    choices = c("All", indices()),
+    selected = getOption("gpttools.sources")
+  ))
+  observe({
+    toggle_popover("settings", show = FALSE)
+    save_user_config(
+      service = input$service,
+      model = input$model,
+      task = input$task,
+      embeddings = input$local,
+      k_context = input$n_docs,
+      k_history = input$n_history,
+      save_history = input$save_history,
+      sources = input$source,
+      persist = TRUE
+    )
+  }) |> bindEvent(input$save_settings)
   observe({
     waiter_show(
       html = tagList(

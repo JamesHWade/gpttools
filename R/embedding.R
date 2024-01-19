@@ -199,6 +199,8 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' This function loads the index data for a given domain from a parquet file.
 #'
 #' @param domain A character string indicating the name of the domain.
+#' @param local_embeddings A logical indicating whether to load the local
+#' embeddings or the OpenAI embeddings. Defaults to FALSE.
 #'
 #' @return A data frame containing the index data for the specified domain.
 #'
@@ -208,10 +210,16 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' \dontrun{
 #' load_index("example_domain")
 #' }
-load_index <- function(domain) {
-  data_dir <- glue('{tools::R_user_dir("gpttools", which = "data")}/index')
+load_index <- function(domain, local_embeddings = FALSE) {
+  if (local_embeddings) {
+    data_dir <-
+      glue::glue('{tools::R_user_dir("gpttools", which = "data")}/index/local')
+  } else {
+    data_dir <-
+      glue::glue('{tools::R_user_dir("gpttools", which = "data")}/index')
+  }
   if (!dir.exists(data_dir)) {
-    return(NULL)
+    invisible(NULL)
   }
   if (domain == "All") {
     arrow::open_dataset(data_dir) |> tibble::as_tibble()
@@ -360,6 +368,7 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
 #' This function lists the index files in the specified directory.
 #'
 #' @param dir Name of the directory, defaults to "index"
+#' @param full_path If TRUE, returns the full path to the index files.
 #'
 #' @return A character vector containing the names of the index files found in
 #' the specified directory.
@@ -369,10 +378,14 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
 #' list_index()
 #' }
 #' @export
-list_index <- function(dir = "index") {
+list_index <- function(dir = "index", full_path = FALSE) {
   loc <- file.path(tools::R_user_dir("gpttools", "data"), dir)
   cli::cli_inform("Access your index files here: {.file {loc}}")
-  list.files(loc)
+  if (full_path) {
+    list.files(loc, full.names = TRUE)
+  } else {
+    list.files(loc)
+  }
 }
 
 

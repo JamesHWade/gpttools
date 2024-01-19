@@ -23,6 +23,8 @@ insert_text <- function(improved_text) {
 gpt_chat <- function(instructions,
                      service = getOption("gpttools.service", "openai"),
                      model = getOption("gpttools.model", "gpt-4")) {
+  gptstudio:::gptstudio_chat_in_source
+
   query <- get_selection()
   cli::cli_inform("Selection: {query}")
   prompt <-

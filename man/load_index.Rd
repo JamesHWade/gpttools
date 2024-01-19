@@ -4,10 +4,13 @@
 \alias{load_index}
 \title{Load Index Data for a Domain}
 \usage{
-load_index(domain)
+load_index(domain, local_embeddings = FALSE)
 }
 \arguments{
 \item{domain}{A character string indicating the name of the domain.}
+
+\item{local_embeddings}{A logical indicating whether to load the local
+embeddings or the OpenAI embeddings. Defaults to FALSE.}
 }
 \value{
 A data frame containing the index data for the specified domain.
