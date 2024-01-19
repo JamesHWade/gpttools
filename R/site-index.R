@@ -44,7 +44,7 @@ read_indexed_pkgs <- function(local = FALSE) {
   }
 }
 
-get_pkgs_to_scrape <- function() {
+get_pkgs_to_scrape <- function(local = FALSE) {
   if (!is_installed(c("tidyverse", "tidymodels"))) {
     cli_abort(
       "This function assumes tidymodels and tidyverse are installed."
@@ -57,7 +57,11 @@ get_pkgs_to_scrape <- function() {
     tidyverse::tidyverse_packages(),
     tidymodels::tidymodels_packages(),
     "shiny", "bslib", "shinyjs", "waiter", "golem",
-    "vetiver", "plumber", "embed", "textrecipes", "gptstudio"
+    "vetiver", "plumber", "embed", "textrecipes", "gptstudio",
+    "devtools", "usethis", "roxygen2", "pkgdown", "testthat",
+    "knitr", "rmarkdown", "bookdown", "blogdown",
+    "tidytext", "tidygraph", "tidybayes", "tidylog",
+    "rstanarm", "rstan", "brms", "rstantools", "bayesplot", "httr2"
   )
 
   package_info <- installed_packages |>
@@ -75,7 +79,7 @@ get_pkgs_to_scrape <- function() {
     ) |>
     dplyr::left_join(get_outdated_pkgs(), by = "name")
 
-  indices <- read_indexed_pkgs()
+  indices <- read_indexed_pkgs(local = local)
   if (!rlang::is_null(indices)) {
     # to do
   }
@@ -84,20 +88,19 @@ get_pkgs_to_scrape <- function() {
     dplyr::filter(!stringr::str_detect(url, "github.com|arxiv.org"))
 }
 
-scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(), service) {
+scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = FALSE),
+                             service,
+                             index_create = FALSE,
+                             overwrite = FALSE) {
   sites |>
-    dplyr::rowwise() |>
-    dplyr::mutate(
-      indexed = crawl(
-        url          = url,
-        index_create = FALSE,
-        overwrite    = FALSE,
-        pkg_version  = version,
-        service      = service
+    dplyr::select(url, version) |>
+    purrr::pmap(.f = \(url, version) {
+      crawl(
+        url = url,
+        index_create = index_create,
+        overwrite = overwrite,
+        pkg_version = version,
+        service = service
       )
-    )
+    })
 }
-
-
-# packages
-# tidyverse, tidymodels, shiny, bslib,

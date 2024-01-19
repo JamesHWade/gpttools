@@ -145,17 +145,20 @@ create_index <- function(domain,
   index <- prepare_scraped_files(domain = domain)
   n_tokens <- sum(index$n_tokens) |> scales_scientific()
 
-  cli::cli_inform(c(
-    "!" = "You are about to create embeddings for {domain}.",
-    "i" = "This will use approx. {n_tokens} tokens.",
-    "i" = "Only proceed if you understand the cost.",
-    "i" = "Read more about embeddings at {.url
-      https://platform.openai.com/docs/guides/embeddings}."
-  ))
-
   if (dont_ask) {
+    cli::cli_inform(c(
+      "!" = "You are about to create embeddings for {domain}.",
+      "i" = "This will use approx. {n_tokens} tokens."
+    ))
     ask_user <- TRUE
   } else {
+    cli::cli_inform(c(
+      "!" = "You are about to create embeddings for {domain}.",
+      "i" = "This will use approx. {n_tokens} tokens.",
+      "i" = "Only proceed if you understand the cost.",
+      "i" = "Read more about embeddings at {.url
+      https://platform.openai.com/docs/guides/embeddings}."
+    ))
     ask_user <- usethis::ui_yeah(
       "Would you like to continue with creating embeddings?"
     )

@@ -9,9 +9,8 @@ crawl(
   index_create = TRUE,
   aggressive = FALSE,
   overwrite = FALSE,
-  num_cores = parallel::detectCores() - 1,
   pkg_version = NULL,
-  service = c("openai", "local", "azure")
+  service = "openai"
 )
 }
 \arguments{
@@ -24,9 +23,7 @@ Default is TRUE.}
 crawling. Default is FALSE.}
 
 \item{overwrite}{A logical value indicating whether to overwrite scraped
-pages and index if they already exist. Default is FALSE.}
-
-\item{num_cores}{Number of cores to use. Defaults to
+pages and index if they already exist. Default is FALSE.
 \code{parallel::detectCores() - 1}}
 
 \item{pkg_version}{Package version number}

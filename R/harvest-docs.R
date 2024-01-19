@@ -207,7 +207,8 @@ crawl <- function(url,
       create_index(local_domain_name,
         overwrite = overwrite,
         pkg_version = pkg_version,
-        local_embeddings = TRUE
+        local_embeddings = TRUE,
+        dont_ask = TRUE
       )
     }
   }

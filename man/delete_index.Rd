@@ -8,6 +8,6 @@ delete_index()
 }
 \description{
 Interactively deletes a specified index file from a user-defined directory.
-Presents the user with a list of available index files and prompts for confirmation
-before deletion.
+Presents the user with a list of available index files and prompts for
+confirmation before deletion.
 }
