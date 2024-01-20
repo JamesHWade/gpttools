@@ -22,4 +22,26 @@
 }
 
 
-utils::globalVariables(".rs.invokeShinyPaneViewer")
+global_vars <- c(
+  "Package",
+  "ReposVer",
+  "Version",
+  "chunks",
+  "content",
+  "embedding",
+  "embeddings",
+  "head",
+  "installed.packages",
+  "link",
+  "name",
+  "old.packages",
+  "package",
+  "parent",
+  "run_code",
+  "scraped",
+  "similarity",
+  "text",
+  ".rs.invokeShinyPaneViewer"
+)
+
+utils::globalVariables(global_vars)
