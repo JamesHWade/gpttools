@@ -27,7 +27,6 @@ Imports:
     jsonlite,
     lsa,
     lubridate,
-    miniUI,
     pdftools,
     purrr (>= 1.0.0),
     R.utils,
