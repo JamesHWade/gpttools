@@ -117,7 +117,7 @@ recursive_hyperlinks <- function(local_domain,
 #' @param pkg_version Package version number
 #' @param pkg_name Package name
 #' @param service The service to use for scraping. Default is "openai". Options
-#' are "openai", "local", and "azure".
+#' are "openai" and "local".
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
@@ -129,7 +129,7 @@ crawl <- function(url,
                   pkg_version = NULL,
                   pkg_name = NULL,
                   service = "openai") {
-  rlang::arg_match(service, c("openai", "local", "azure"))
+  rlang::arg_match(service, c("openai", "local"))
   parsed_url <- urltools::url_parse(url)
   local_domain <- parsed_url$domain
   url_path <- parsed_url$path
@@ -197,13 +197,7 @@ crawl <- function(url,
     sink = scraped_text_file
   )
   if (index_create) {
-    if (service == "azure") {
-      create_index_azure(local_domain_name,
-        overwrite = overwrite,
-        pkg_version = pkg_version,
-        pkg_name = pkg_name
-      )
-    } else if (service == "openai") {
+    if (service == "openai") {
       create_index(local_domain_name,
         overwrite = overwrite,
         pkg_version = pkg_version,
