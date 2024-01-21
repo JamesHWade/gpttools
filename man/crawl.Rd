@@ -10,6 +10,7 @@ crawl(
   aggressive = FALSE,
   overwrite = FALSE,
   pkg_version = NULL,
+  pkg_name = NULL,
   service = "openai"
 )
 }
@@ -27,6 +28,8 @@ pages and index if they already exist. Default is FALSE.
 \code{parallel::detectCores() - 1}}
 
 \item{pkg_version}{Package version number}
+
+\item{pkg_name}{Package name}
 
 \item{service}{The service to use for scraping. Default is "openai". Options
 are "openai", "local", and "azure".}

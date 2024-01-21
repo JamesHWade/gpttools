@@ -69,7 +69,8 @@ add_embeddings_azure <- function(index) {
 create_index_azure <- function(domain,
                                overwrite = FALSE,
                                dont_ask = FALSE,
-                               pkg_version = NULL) {
+                               pkg_version = NULL,
+                               pkg_name = NULL) {
   index_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "index")
   index_file <-
@@ -105,7 +106,10 @@ create_index_azure <- function(domain,
     index <-
       index |>
       add_embeddings_azure() |>
-      dplyr::mutate(version = pkg_version)
+      dplyr::mutate(
+        version = pkg_version,
+        package = pkg_name
+      )
     if (rlang::is_false(dir.exists(index_dir))) {
       dir.create(index_dir, recursive = TRUE)
     }

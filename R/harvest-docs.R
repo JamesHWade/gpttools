@@ -116,6 +116,7 @@ recursive_hyperlinks <- function(local_domain,
 #' pages and index if they already exist. Default is FALSE.
 #'  `parallel::detectCores() - 1`
 #' @param pkg_version Package version number
+#' @param pkg_name Package name
 #' @param service The service to use for scraping. Default is "openai". Options
 #' are "openai", "local", and "azure".
 #'
@@ -127,6 +128,7 @@ crawl <- function(url,
                   aggressive = FALSE,
                   overwrite = FALSE,
                   pkg_version = NULL,
+                  pkg_name = NULL,
                   service = "openai") {
   rlang::arg_match(service, c("openai", "local", "azure"))
   parsed_url <- urltools::url_parse(url)
@@ -197,17 +199,20 @@ crawl <- function(url,
     if (service == "azure") {
       create_index_azure(local_domain_name,
         overwrite = overwrite,
-        pkg_version = pkg_version
+        pkg_version = pkg_version,
+        pkg_name = pkg_name
       )
     } else if (service == "openai") {
       create_index(local_domain_name,
         overwrite = overwrite,
-        pkg_version = pkg_version
+        pkg_version = pkg_version,
+        pkg_name = pkg_name
       )
     } else if (service == "local") {
       create_index(local_domain_name,
         overwrite = overwrite,
         pkg_version = pkg_version,
+        pkg_name = pkg_name,
         local_embeddings = TRUE,
         dont_ask = TRUE
       )

@@ -1,21 +1,17 @@
 get_pkg_doc_page <- function(package_name) {
-  package_path <- system.file(package = package_name)
-
-  if (package_path == "") {
-    cli_abort("The package is not installed.")
+  if (!rlang::is_installed(package_name)) {
+    return(NA)
   }
-
-  desc_path <- file.path(package_path, "DESCRIPTION")
-  desc <- read.dcf(desc_path)
-
-  # Extract the URL and BugReports fields from the DESCRIPTION file
-  if (!is.null(desc)) {
-    desc[1, "URL"] |>
-      stringr::str_split(",\\s*") |>
-      unlist()
-  } else {
-    NULL
+  links <- packageDescription(package_name)$URL |>
+    stringr::str_split("\n", simplify = TRUE) |>
+    stringr::str_split(", ", simplify = TRUE) |>
+    stringr::str_remove_all(",")
+  to_remove <- "github.com|arxiv.org|https://discourse"
+  doc_link <- links[!stringr::str_detect(links, to_remove)][1]
+  if (length(doc_link) == 0 | is.na(doc_link)) {
+    return(NA)
   }
+  doc_link
 }
 
 get_outdated_pkgs <- function() {
@@ -44,63 +40,72 @@ read_indexed_pkgs <- function(local = FALSE) {
   }
 }
 
-get_pkgs_to_scrape <- function(local = FALSE) {
-  if (!is_installed(c("tidyverse", "tidymodels"))) {
-    cli_abort(
-      "This function assumes tidymodels and tidyverse are installed."
-    )
-  }
+get_pkgs_to_scrape <- function(local = TRUE,
+                               pkgs = getOption("gpttools.pkgs")) {
+  indices <-
+    read_indexed_pkgs(local = local) |>
+    dplyr::select(name, version) |>
+    dplyr::distinct() |>
+    tibble::as_tibble() |>
+    dplyr::rename(indexed_version = version)
 
-  installed_packages <- tibble::as_tibble(installed.packages())
-
-  pkgs <- c(
-    tidyverse::tidyverse_packages(),
-    tidymodels::tidymodels_packages(),
-    "shiny", "bslib", "shinyjs", "waiter", "golem",
-    "vetiver", "plumber", "embed", "textrecipes", "gptstudio",
-    "devtools", "usethis", "roxygen2", "pkgdown", "testthat",
-    "knitr", "rmarkdown", "bookdown", "blogdown",
-    "tidytext", "tidygraph", "tidybayes", "tidylog",
-    "rstanarm", "rstan", "brms", "rstantools", "bayesplot", "httr2"
-  )
-
-  package_info <- installed_packages |>
-    dplyr::select(Package, Version) |>
-    dplyr::rename(
+  installed.packages() |>
+    tibble::as_tibble() |>
+    dplyr::transmute(
       name = Package,
-      version = Version
+      installed_version = Version
     ) |>
     dplyr::filter(name %in% pkgs) |>
-    dplyr::mutate(url = purrr::map(name, purrr::possibly(get_pkg_doc_page))) |>
-    tidyr::unnest_longer(url, indices_include = FALSE) |>
-    dplyr::mutate(
-      indexed = FALSE,
-      source = urltools::domain(url)
-    ) |>
-    dplyr::left_join(get_outdated_pkgs(), by = "name")
-
-  indices <- read_indexed_pkgs(local = local)
-  if (!rlang::is_null(indices)) {
-    # to do
-  }
-
-  package_info |>
-    dplyr::filter(!stringr::str_detect(url, "github.com|arxiv.org"))
+    dplyr::mutate(url = purrr::map_chr(name, get_pkg_doc_page)) |>
+    tidyr::drop_na(url) |>
+    dplyr::mutate(source = urltools::domain(url)) |>
+    dplyr::left_join(get_outdated_pkgs(), by = "name") |>
+    dplyr::left_join(indices, by = c("name" = "name")) |>
+    dplyr::distinct(name, .keep_all = TRUE) |>
+    dplyr::filter(is.na(indexed_version) |
+      indexed_version != installed_version) |>
+    dplyr::rename(version = installed_version)
 }
 
-scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = FALSE),
-                             service,
-                             index_create = FALSE,
-                             overwrite = FALSE) {
+scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
+                             service = "local",
+                             index_create = TRUE,
+                             overwrite = TRUE) {
+  if (nrow(sites) == 0) {
+    cli_alert_info("No packages to scrape.")
+    return(invisible())
+  }
+
+  cli::cli_text("You are about to scrape {nrow(sites)} package site page{?s}")
+  usethis::ui_yeah("Do you want to continue?")
+
   sites |>
-    dplyr::select(url, version) |>
-    purrr::pmap(.f = \(url, version) {
+    dplyr::select(url, version, name) |>
+    purrr::pmap(.f = \(url, version, name) {
       crawl(
         url = url,
         index_create = index_create,
         overwrite = overwrite,
         pkg_version = version,
+        pkg_name = name,
         service = service
       )
     })
+}
+
+use_default_pkgs <- function() {
+  c(
+    "broom", "conflicted", "cli", "dbplyr", "dplyr", "dtplyr", "forcats",
+    "ggplot2", "googledrive", "googlesheets4", "haven", "hms", "httr",
+    "jsonlite", "lubridate", "magrittr", "modelr", "pillar", "purrr",
+    "ragg", "readr", "readxl", "reprex", "rlang", "rstudioapi", "rvest",
+    "stringr", "tibble", "tidyr", "xml2", "tidyverse", "broom", "cli",
+    "conflicted", "dials", "dplyr", "ggplot2", "hardhat", "infer", "modeldata",
+    "parsnip", "purrr", "recipes", "rlang", "rsample", "rstudioapi", "tibble",
+    "tidyr", "tune", "workflows", "workflowsets", "yardstick", "tidymodels",
+    "shiny", "bslib", "shinyjs", "golem", "httr2", "vetiver", "plumber",
+    "embed", "textrecipes", "tidytext", "devtools", "usethis", "roxygen2",
+    "pkgdown", "testthat", "knitr", "rmarkdown", "quarto", "gptstudio",
+    "rstanarm", "brms", "bayesplot"
+  )
 }

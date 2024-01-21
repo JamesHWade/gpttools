@@ -18,6 +18,11 @@
     if (any(toset)) options(op_gpttools[toset])
   }
 
+  pkgs <- !("gpttools.pkgs" %in% names(options()))
+  if (any(pkgs)) {
+    options(gpttools.pkgs = use_default_pkgs())
+  }
+
   invisible()
 }
 

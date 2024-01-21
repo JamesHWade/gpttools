@@ -122,6 +122,7 @@ create_index <- function(domain,
                          overwrite = FALSE,
                          dont_ask = FALSE,
                          pkg_version = NULL,
+                         pkg_name = NULL,
                          local_embeddings = FALSE) {
   index_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "index")
@@ -169,7 +170,10 @@ create_index <- function(domain,
       # join_embeddings_from_index() |>
       add_embeddings(local_embeddings = local_embeddings) |>
       tidyr::unnest(embeddings) |>
-      dplyr::mutate(version = pkg_version)
+      dplyr::mutate(
+        version = pkg_version,
+        name = pkg_name
+      )
     if (rlang::is_false(dir.exists(index_dir))) {
       dir.create(index_dir, recursive = TRUE)
     }
