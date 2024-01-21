@@ -38,16 +38,12 @@ gpt_chat <- function(instructions,
         content = glue("{query}")
       )
     )
-  cli::cli_process_start(msg = "Sending query to {service}")
-  cli::cli_progress_update()
+  cli::cli_inform("Service: {service}")
+  cli::cli_inform("Model: {model}")
+  cli::cli_inform("Sending query... this can take up to 3 minutes.")
   simple_prompt <- prompt |>
     purrr::map_chr(.f = "content") |>
     paste(collapse = "\n\n")
-
-  cat(simple_prompt, "\n\n")
-
-  cli::cli_inform("Service: {service}")
-  cli::cli_inform("Model: {model}")
 
   answer <-
     gptstudio:::gptstudio_create_skeleton(
@@ -59,11 +55,7 @@ gpt_chat <- function(instructions,
     gptstudio:::gptstudio_request_perform()
 
   cli::cli_process_done(msg_done = "Received response from {service}")
-  text_to_insert <- c(
-    as.character(query),
-    as.character(answer$choices$message.content)
-  )
-  cli::cli_inform("Text to insert: {text_to_insert}")
+  text_to_insert <- as.character(answer$response)
   insert_text(text_to_insert)
 }
 

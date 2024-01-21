@@ -39,6 +39,8 @@ global_vars <- c(
   "embeddings",
   "head",
   "installed.packages",
+  "indexed_version",
+  "installed_version",
   "link",
   "name",
   "old.packages",
