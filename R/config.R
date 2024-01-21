@@ -75,3 +75,24 @@ set_user_config <- function(path = NULL) {
     return(FALSE)
   }
 }
+
+save_pkgs_to_scrape <- function(pkgs) {
+  dir <- tools::R_user_dir("gpttools", which = "config")
+  if (!dir.exists(dir)) dir.create(dir, recursive = TRUE)
+  path <- file.path(dir, "pkgs_to_scrape.rds")
+  saveRDS(pkgs, path)
+  TRUE
+}
+
+load_pkgs_to_scrape <- function() {
+  path <- file.path(
+    tools::R_user_dir("gpttools", which = "config"),
+    "pkgs_to_scrape.rds"
+  )
+  if (file.exists(path)) {
+    pkgs <- readRDS(path)
+    return(pkgs)
+  } else {
+    invisible(NULL)
+  }
+}

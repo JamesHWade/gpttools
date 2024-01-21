@@ -183,7 +183,11 @@ server <- function(input, output, session) {
   height <- window_height_server("height")
   index <- reactive({
     if (input$local == TRUE) {
-      load_index(glue::glue("local/{input$source}"))
+      if (input$source == "All") {
+        load_index(domain = "All", local_embeddings = TRUE)
+      } else {
+        load_index(glue::glue("local/{input$source}"), local_embeddings = TRUE)
+      }
     } else {
       load_index(input$source)
     }

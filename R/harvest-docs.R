@@ -60,7 +60,6 @@ recursive_hyperlinks <- function(local_domain,
   if (length(links) < 1) {
     return(expanded_urls)
   }
-
   if (aggressive) {
     domain_pattern <- glue("^https?://(?:.*\\.)?{local_domain}/?")
   } else {
@@ -139,7 +138,9 @@ crawl <- function(url,
   }
   scraped_data_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "text")
-  local_domain_name <- stringr::str_replace_all(local_domain, "/|\\.", "-")
+  local_domain_name <-
+    stringr::str_replace_all(local_domain, "/|\\.", "-") |>
+    stringr::str_remove("-$")
   scraped_text_file <-
     glue::glue("{scraped_data_dir}/{local_domain_name}.parquet")
 
