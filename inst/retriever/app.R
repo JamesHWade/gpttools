@@ -239,12 +239,9 @@ server <- function(input, output, session) {
       model = input$model,
       index = index(),
       add_context = TRUE,
-      chat_history = read_history(),
+      chat_history = read_history(local = input$local),
       session_history = r$all_chats,
-      # temporarily saving as FALSE because of
-      # incompatibility with local vs openai embeddings
-      add_history = FALSE,
-      # add_history = input$save_history,
+      add_history = input$save_history,
       task = input$task,
       k_context = input$n_docs,
       k_history = input$n_history,

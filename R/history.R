@@ -1,14 +1,23 @@
-get_history_path <- function(file_name = "chat_history") {
-  file.path(
-    tools::R_user_dir("gpttools", which = "data"),
-    glue::glue("{file_name}.parquet")
-  )
+get_history_path <- function(file_name = "chat_history", local = FALSE) {
+  if (local) {
+    file.path(
+      tools::R_user_dir("gpttools", which = "data"),
+      glue::glue("local/{file_name}.parquet")
+    )
+  } else {
+    file.path(
+      tools::R_user_dir("gpttools", which = "data"),
+      glue::glue("{file_name}.parquet")
+    )
+  }
 }
 
 #' Read chat history from a file
 #'
 #' @param file_name Name of the chat history file to read from. Default is
 #'   "chat_history".
+#' @param local Whether to read from history made with local or OpenAI
+#' embeddings.
 #'
 #' @return A dataframe containing the chat history or NULL if the file doesn't
 #'   exist.
@@ -19,8 +28,8 @@ get_history_path <- function(file_name = "chat_history") {
 #' # Read chat history from the default file
 #' history <- read_history()
 #' }
-read_history <- function(file_name = "chat_history") {
-  file_path <- get_history_path(file_name)
+read_history <- function(file_name = "chat_history", local) {
+  file_path <- get_history_path(file_name, local = local)
   if (file.exists(file_path)) {
     arrow::read_parquet(file_path)
   } else {
@@ -34,6 +43,8 @@ read_history <- function(file_name = "chat_history") {
 #' directory. It lists all the .parquet files in the gpttools data directory and
 #' prompts the user for confirmation before deleting each file.
 #'
+#' @param local Whether to delete history made with local or OpenAI embeddings.
+#'
 #' @export
 #'
 #' @examples
@@ -41,14 +52,11 @@ read_history <- function(file_name = "chat_history") {
 #' # Interactively delete chat history files
 #' delete_history()
 #' }
-delete_history <- function() {
+delete_history <- function(local = FALSE) {
   if (!interactive()) {
     invisible()
   }
-  history_files <- list.files(tools::R_user_dir("gpttools", which = "data"),
-    pattern = "*.parquet",
-    full.names = TRUE
-  )
+  history_files <- get_history_path(local = local)
 
   purrr::map(history_files, \(x) {
     delete_file <- usethis::ui_yeah("Do you want to delete {basename(x)}?")
@@ -62,8 +70,15 @@ delete_history <- function() {
 }
 
 create_history <- function(file_name = "chat_history",
+                           local = FALSE,
                            overwrite = FALSE) {
-  file_path <- get_history_path(file_name)
+  file_path <- get_history_path(file_name, local = local)
+
+  if (!dir.exists(tools::file_path_sans_ext(file_path))) {
+    dir.create(tools::file_path_sans_ext(file_path),
+      recursive = TRUE, showWarnings = FALSE
+    )
+  }
 
   if (!file.exists(file_path) || overwrite) {
     query_history <- tibble::tibble(
@@ -80,29 +95,39 @@ create_history <- function(file_name = "chat_history",
 save_user_history <- function(file_name = "chat_history",
                               role,
                               content,
+                              local = FALSE,
+                              model = NULL,
                               overwrite = FALSE) {
-  create_history(file_name, overwrite = overwrite)
-  history <- read_history(file_name)
-  embedding <- create_openai_embedding(content)
+  create_history(file_name, overwrite = overwrite, local = local)
+  history <- read_history(file_name, local = local)
+  embedding <- get_query_embedding(content, local = local, model = model)
 
   new_entry <- tibble::tibble(
     id        = max(0, history$id, na.rm = TRUE) + 1,
     timestamp = lubridate::now(),
     role      = role,
     content   = content,
-    embedding = embedding$embedding,
+    embedding = list(embedding),
     hash      = hash_md5(content)
   )
 
   new_entry |>
     rbind(history) |>
-    arrow::write_parquet(get_history_path(file_name))
+    arrow::write_parquet(get_history_path(file_name, local = local))
 }
 
-get_query_embedding <- function(query) {
-  create_openai_embedding(input_text = query) |>
-    dplyr::pull(embedding) |>
-    unlist()
+get_query_embedding <- function(query, local = FALSE, model = NULL) {
+  if (local) {
+    create_text_embeddings(query,
+      model = model
+    ) |>
+      dplyr::pull(embedding) |>
+      unlist()
+  } else {
+    create_openai_embedding(input_text = query) |>
+      dplyr::pull(embedding) |>
+      unlist()
+  }
 }
 
 get_query_context <- function(query_embedding, full_context, k) {
@@ -112,11 +137,11 @@ get_query_context <- function(query_embedding, full_context, k) {
 
 check_context <- function(context) {
   if (rlang::is_null(context)) {
-    cli_abort(
+    cli_warn(
       "You specified that context should be added but none was provided."
     )
   } else if (!is.data.frame(context)) {
-    cli_abort(
+    cli_warn(
       "You passed a {class(context)} to but a data.frame was expected."
     )
   }
@@ -180,17 +205,17 @@ chat_with_context <- function(query,
                               local = FALSE) {
   arg_match(task, c("Context Only", "Permissive Chat"))
 
+  if (local) {
+    embedding_model <- get_transformer_model()
+  } else {
+    embedding_model <- NULL
+  }
+
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
-    if (local) {
-      embedding_model <- get_transformer_model()
-      query_embedding <- create_text_embeddings(query,
-        model = embedding_model
-      ) |>
-        dplyr::pull("embedding") |>
-        unlist()
-    } else {
-      query_embedding <- get_query_embedding(query)
-    }
+    query_embedding <- get_query_embedding(query,
+      local = local,
+      model = embedding_model
+    )
   }
 
   if (rlang::is_true(add_context)) {
@@ -209,18 +234,20 @@ chat_with_context <- function(query,
 
   if (add_history) {
     cli::cli_inform("Attempting to add chat history to query.")
-    if (nrow(chat_history) == 0) {
+    cli::cli_inform("Chat history: {class(chat_history)}")
+    if (rlang::is_null(chat_history)) {
       related_history <- "No related history found."
+    } else {
+      related_history <-
+        get_query_context(
+          query_embedding,
+          chat_history,
+          k_history
+        ) |>
+        dplyr::distinct(content) |>
+        dplyr::pull(content) |>
+        paste(collapse = "\n\n")
     }
-    related_history <-
-      get_query_context(
-        query_embedding,
-        chat_history,
-        k_history
-      ) |>
-      dplyr::distinct(content) |>
-      dplyr::pull(content) |>
-      paste(collapse = "\n\n")
   } else {
     cli::cli_inform("Not attempting to add chat history to query.")
     related_history <- "No related history found."
@@ -323,6 +350,8 @@ chat_with_context <- function(query,
         file_name = history_name,
         role      = "system",
         content   = x$content,
+        local     = local,
+        model     = embedding_model,
         overwrite = overwrite
       )
     })
@@ -330,6 +359,8 @@ chat_with_context <- function(query,
       file_name = history_name,
       role      = "assistant",
       content   = answer$response,
+      local     = local,
+      model     = embedding_model,
       overwrite = overwrite
     )
   }

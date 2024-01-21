@@ -4,11 +4,14 @@
 \alias{read_history}
 \title{Read chat history from a file}
 \usage{
-read_history(file_name = "chat_history")
+read_history(file_name = "chat_history", local)
 }
 \arguments{
 \item{file_name}{Name of the chat history file to read from. Default is
 "chat_history".}
+
+\item{local}{Whether to read from history made with local or OpenAI
+embeddings.}
 }
 \value{
 A dataframe containing the chat history or NULL if the file doesn't
