@@ -67,6 +67,25 @@ get_pkgs_to_scrape <- function(local = TRUE,
     dplyr::rename(version = installed_version)
 }
 
+#' Scrape packaging sites
+#'
+#' @details This function scrapes the websites for the packages specified in the
+#'   `sites` dataframe. If `sites` is empty, it alerts the user with no packages
+#'   to scrape and returns `NULL` invisibly. If the user confirms to proceed, it
+#'   scrapes each package site using the supplied details.
+#'
+#'
+#' @param sites A data frame containing the package sites to be scraped. If not
+#'   provided, it defaults to `get_pkgs_to_scrape(local = TRUE)`.
+#' @param service The service to be used for scraping, defaults to "local".
+#' @param index_create Logical indicating whether to create an index, defaults
+#'   to `TRUE`.
+#' @param overwrite Logical indicating whether to overwrite existing content,
+#'   defaults to `TRUE`.
+#' @return Invisible `NULL`. The function is called for its side effects.
+#' @examplesIf rlang::is_interactive()
+#' scrape_pkg_sites()
+#' @export
 scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
                              service = "local",
                              index_create = TRUE,
@@ -76,12 +95,22 @@ scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
     return(invisible())
   }
 
-  cli::cli_text("You are about to scrape {nrow(sites)} package site page{?s}")
-  usethis::ui_yeah("Do you want to continue?")
+  if (rlang::is_interactive()) {
+    cli::cli_text("You are about to scrape {nrow(sites)} package site page{?s}")
+    continue <- usethis::ui_yeah("Do you want to continue?")
+  } else {
+    continue <- TRUE
+  }
+
+  if (!continue) {
+    cli_alert_info("Scraping aborted.")
+    return(invisible())
+  }
 
   sites |>
     dplyr::select(url, version, name) |>
     purrr::pmap(.f = \(url, version, name) {
+      # Helper function `crawl` is assumed to be defined elsewhere
       crawl(
         url = url,
         index_create = index_create,

@@ -10,13 +10,15 @@ navbar:
     left: [addins, services, reference, news]
     right: [search, github]
   components:
-    # addins:
-    #   text: Addins
-    #   menu:
-    #   - text: Chat
-    #     href: articles/chat.html
-    #   - text: Chat in Source
-    #     href: articles/chat-in-source.html
+    addins:
+      text: Addins
+      menu:
+      - text: Chat with Retrieval
+        href: articles/chat-with-retrieval.html
+      - text: Scrape Packages
+        href: articles/scrape-pkgs.html
+      - text: Other Addins
+        href: articles/other-addins.html
     services:
       text: Services
       menu:

@@ -174,20 +174,16 @@ check_context <- function(context) {
 #' @param overwrite Whether to overwrite the history file or not. Default is
 #'   FALSE.
 #' @param local Whether to use the local model or not. Default is FALSE.
+#' @param embedding_model A model object to use for embedding. Only needed if
+#' local is TRUE. Default is NULL.
 #'
 #' @return A list containing the prompt, context, and answer.
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' # Define a query and context
+#' @examplesIf rlang::is_interactive()
+#' rlang::is_interactive()
 #' query <- "What is the capital of France?"
-#' context <- "France is a country in Western Europe. Its capital is a famous
-#' city known for its culture, art, and history."
-#'
-#' # Call the chat_with_context function
 #' result <- chat_with_context(query = query, context = context)
-#' }
 chat_with_context <- function(query,
                               service = "openai",
                               model = "gpt-4",
@@ -202,14 +198,15 @@ chat_with_context <- function(query,
                               k_history = 4,
                               save_history = TRUE,
                               overwrite = FALSE,
-                              local = FALSE) {
+                              local = FALSE,
+                              embedding_model = NULL) {
   arg_match(task, c("Context Only", "Permissive Chat"))
 
-  if (local) {
-    embedding_model <- get_transformer_model()
-  } else {
-    embedding_model <- NULL
-  }
+  need_context <- is_context_needed(
+    user_prompt = query,
+    service = service,
+    model = model
+  )
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
     query_embedding <- get_query_embedding(query,
@@ -218,7 +215,7 @@ chat_with_context <- function(query,
     )
   }
 
-  if (rlang::is_true(add_context)) {
+  if (rlang::is_true(add_context) && rlang::is_true(need_context)) {
     full_context <-
       get_query_context(
         query_embedding,
@@ -229,10 +226,11 @@ chat_with_context <- function(query,
       dplyr::pull("chunks") |>
       paste(collapse = "\n\n")
   } else {
+    full_context <- "No context provided."
     context <- "No additional context provided."
   }
 
-  if (add_history) {
+  if (rlang::is_true(add_history) & rlang::is_true(need_context)) {
     cli::cli_inform("Attempting to add chat history to query.")
     cli::cli_inform("Chat history: {class(chat_history)}")
     if (rlang::is_null(chat_history)) {
@@ -261,11 +259,11 @@ chat_with_context <- function(query,
             role = "system",
             content =
               glue(
-                "You are a helpful chat bot that answers questions based on ",
-                "the context provided by the user. If the user does not ",
-                "provide related context, say \"I am not able to answer that ",
-                "question. Maybe try rephrasing your question in a different ",
-                "way.\""
+                "You are a helpful chat bot that answers questions based on
+                     the context provided by the user. If the user does not
+                     provide related context and you need context to respond
+                     accurately, say \"I am not able to answer that question.
+                     Maybe try rephrasing your question in a different way.\""
               )
           )
         ),
@@ -275,11 +273,12 @@ chat_with_context <- function(query,
             role = "system",
             content =
               glue(
-                "You are a helpful chat bot that answers questions based on ",
-                "on the context provided by the user. If the user does not ",
-                "provide context, answer the quest but first say \"I am not ",
-                "able to answer that question with the context you gave me, ",
-                "but here is my best answer.",
+                "You are a helpful chat bot that answers questions based on
+                     on the context provided by the user. If the user does not
+                     provide context and you need context to respond correctly,
+                     answer the quest but first say \"I am not able to answer
+                     that question with the context you gave me, but here is my
+                     best but here is my best answer."
               )
           )
         )
@@ -369,4 +368,25 @@ chat_with_context <- function(query,
     c(session_history, prompt_query)
 
   list(prompt_without_context, full_context, answer$response)
+}
+
+
+is_context_needed <- function(user_prompt,
+                              service = getOption("gpttools.service"),
+                              model = getOption("gpttools.model")) {
+  prompt <-
+    glue::glue("Would additional context or history be helpful to respond to
+               this prompt from the user. If yes, answer TRUE. If no, answer
+               FALSE. ONLY answer TRUE or FALSE. It is crucial that you only
+               answer TRUE or FALSE.\n\n{user_prompt}")
+
+  gptstudio:::gptstudio_create_skeleton(
+    service = service,
+    model = model,
+    prompt = prompt,
+    stream = FALSE
+  ) |>
+    gptstudio:::gptstudio_request_perform() |>
+    purrr::pluck("response") |>
+    as.logical()
 }

@@ -37,7 +37,7 @@ repos:
     rev: v4.5.0
     hooks:
     -   id: check-added-large-files
-        args: ['--maxkb=2000']
+        args: ['--maxkb=25000']
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
     rev: v1.6.1
     hooks:

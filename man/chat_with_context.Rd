@@ -19,7 +19,8 @@ chat_with_context(
   k_history = 4,
   save_history = TRUE,
   overwrite = FALSE,
-  local = FALSE
+  local = FALSE,
+  embedding_model = NULL
 )
 }
 \arguments{
@@ -57,6 +58,9 @@ is TRUE.}
 FALSE.}
 
 \item{local}{Whether to use the local model or not. Default is FALSE.}
+
+\item{embedding_model}{A model object to use for embedding. Only needed if
+local is TRUE. Default is NULL.}
 }
 \value{
 A list containing the prompt, context, and answer.
@@ -67,13 +71,9 @@ on the provided context and chat history. It uses GPT-4 architecture to
 generate responses.
 }
 \examples{
-\dontrun{
-# Define a query and context
+\dontshow{if (rlang::is_interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+rlang::is_interactive()
 query <- "What is the capital of France?"
-context <- "France is a country in Western Europe. Its capital is a famous
-city known for its culture, art, and history."
-
-# Call the chat_with_context function
 result <- chat_with_context(query = query, context = context)
-}
+\dontshow{\}) # examplesIf}
 }

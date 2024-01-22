@@ -32,7 +32,7 @@ pages and index if they already exist. Default is FALSE.
 \item{pkg_name}{Package name}
 
 \item{service}{The service to use for scraping. Default is "openai". Options
-are "openai", "local", and "azure".}
+are "openai" and "local".}
 }
 \value{
 NULL. The resulting tibble is saved into a parquet file.

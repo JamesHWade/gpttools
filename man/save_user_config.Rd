@@ -8,7 +8,7 @@ save_user_config(
   service = "openai",
   model = "gpt-4-1106-preview",
   task = "Permissive Chat",
-  embeddings = "local",
+  embeddings = TRUE,
   k_context = 4,
   k_history = 4,
   save_history = TRUE,

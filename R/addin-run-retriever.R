@@ -1,6 +1,6 @@
-#' Run Chat GPT with Retrieval
+#' Run Chat with Retrieval
 #'
-#' Run the ChatGPT shiny app with semantic search and document retrieval
+#' Run the Chat with Retrieval shiny app
 #'
 #' @export
 #'
@@ -9,9 +9,9 @@
 #' @examples
 #' # Call the function as an RStudio addin
 #' \dontrun{
-#' addin_run_retriever()
+#' chat_with_retrieval()
 #' }
-addin_run_retriever <- function() {
+chat_with_retrieval <- function() {
   indices <- list_index()
   if (length(indices) == 0) {
     cli::cli_abort(

@@ -60,15 +60,12 @@ api_services <-
   ) |>
   purrr::discard(~ .x == "gptstudio_request_perform.default")
 
-ui <- page_fluid(
-  waiter::use_waiter(),
+ui <- page_fillable(
+  waiter::useWaiter(),
+  waiter::waiterOnBusy(html = waiter::spin_3circles(), color = waiter::transparent(0.5)),
   window_height_ui("height"),
-  theme = bs_theme(bootswatch = "morph", version = 5),
-  tags$style("
-    .card, .accordion {
-      box-shadow: none !important;
-    }
-  "),
+  theme = bs_theme(bootswatch = "litera", version = 5) |>
+    bs_add_rules(".scrollable-popover .popover-body { max-height: 300px; overflow-y: auto; }"),
   tags$head(tags$script(HTML("
   $(document).on('keydown', '#chat_input', function(e) {
     if ((e.keyCode == 10 || e.keyCode == 13) && (!e.shiftKey)) {
@@ -79,95 +76,96 @@ ui <- page_fluid(
      }
   });"))),
   title = "Retreiver from gpttools",
-  br(),
-  layout_column_wrap(
-    width = 1,
-    height = "100%",
-    heights_equal = "row",
-    card(
-      card_header("Write Prompt",
-        class = "bg-primary d-flex align-items-center",
-        popover(
-          id = "settings",
-          bs_icon("gear", class = "ms-auto"),
-          accordion_panel(
-            "Data & Task",
-            icon = bs_icon("robot", class = "ms-auto"),
-            selectInput(
-              "source", "Data Source",
-              choices = NULL,
-              multiple = TRUE
-            ),
-            selectInput(
-              "task", "Task",
-              choices = c("Context Only", "Permissive Chat"),
-              selected = getOption("gpttools.task", "Permissive Chat")
-            )
+  card(
+    card_header("Chat with Retrieva",
+      class = "bg-primary d-flex align-items-center",
+      popover(
+        id = "settings",
+        options = list(customClass = "scrollable-popover"),
+        bs_icon("gear", class = "ms-auto"),
+        accordion_panel(
+          "Data & Task",
+          icon = bs_icon("robot", class = "ms-auto"),
+          selectInput(
+            "source", "Data Source",
+            choices = NULL,
+            multiple = TRUE
           ),
-          br(),
-          accordion_panel(
-            "Preferences",
-            icon = bs_icon("sliders", class = "ms-auto"),
-            selectInput(
-              "service", "AI Service",
-              choices = api_services,
-              selected = getOption("gpttools.service", "openai")
-            ),
-            selectInput("model", "Model",
-              choices = NULL
-            ),
-            radioButtons(
-              "save_history", "Save & Use History",
-              choiceNames = c("Yes", "No"),
-              choiceValues = c(TRUE, FALSE),
-              selected = getOption("gpttools.save_history", FALSE),
-              inline = TRUE,
-            ),
-            radioButtons(
-              "local", "Local Embeddings",
-              choiceNames = c("Yes", "No"),
-              choiceValues = c(TRUE, FALSE),
-              selected = getOption("gpttools.local_embed"),
-              inline = TRUE,
-            ),
-            sliderInput(
-              "n_docs", "Docs to Include (#)",
-              min = 0,
-              max = 20,
-              value = getOption("gpttools.k_context", 4)
-            ),
-            sliderInput(
-              "n_history", "Chat History to Include (#)",
-              min = 0, max = 20,
-              value = getOption("gpttools.k_history", 4)
-            )
-          ),
-          br(),
-          actionButton(
-            "save_settings", "Save Settings",
-            icon = icon("save", class = "ms-auto"),
-            class = "btn-primary"
-          ),
-          title = "Plot settings"
-        )
-      ),
-      uiOutput("all_chats_box"),
-      layout_column_wrap(
-        width = NULL, fill = FALSE,
-        style = htmltools::css(grid_template_columns = "3fr 1fr"),
-        card(
-          textAreaInput(
-            inputId = "chat_input", label = NULL,
-            value = "", resize = "vertical", rows = 1,
-            width = "100%"
+          selectInput(
+            "task", "Task",
+            choices = c("Context Only", "Permissive Chat"),
+            selected = getOption("gpttools.task", "Permissive Chat")
           )
         ),
-        card(
-          class = "btn-primary",
+        br(),
+        accordion_panel(
+          "Preferences",
+          icon = bs_icon("sliders", class = "ms-auto"),
+          selectInput(
+            "service", "AI Service",
+            choices = api_services,
+            selected = getOption("gpttools.service", "openai")
+          ),
+          selectInput("model", "Model",
+            choices = NULL
+          ),
+          radioButtons(
+            "save_history", "Save & Use History",
+            choiceNames = c("Yes", "No"),
+            choiceValues = c(TRUE, FALSE),
+            selected = getOption("gpttools.save_history", FALSE),
+            inline = TRUE,
+          ),
+          radioButtons(
+            "local", "Local Embeddings",
+            choiceNames = c("Yes", "No"),
+            choiceValues = c(TRUE, FALSE),
+            selected = getOption("gpttools.local_embed"),
+            inline = TRUE,
+          ),
+          sliderInput(
+            "n_docs", "Docs to Include (#)",
+            min = 0,
+            max = 20,
+            value = getOption("gpttools.k_context", 4)
+          ),
+          sliderInput(
+            "n_history", "Chat History to Include (#)",
+            min = 0, max = 20,
+            value = getOption("gpttools.k_history", 4)
+          )
+        ),
+        br(),
+        actionButton(
+          "save_settings", "Save Settings",
+          icon = icon("save", class = "ms-auto"),
+          class = "btn-primary"
+        ),
+        title = "App Settings"
+      )
+    ),
+    uiOutput("all_chats_box"),
+    div(
+      class = "mt-auto",
+      style = htmltools::css(
+        "margin-left" = "20px",
+        "margin-right" = "20px"
+      ),
+      fluidRow(
+        column(
+          10,
+          textAreaInput(
+            inputId = "chat_input", label = NULL, rows = 1,
+            value = "", width = "100%", resize = "vertical"
+          )
+        ),
+        column(
+          2,
           actionButton(
-            inputId = "chat", label = "Chat",
-            icon = icon("robot"),
-            width = "100%", class = "btn-sucess"
+            inputId = "chat",
+            label = icon("fas fa-paper-plane"),
+            class = "btn-primary m-1",
+            width = "100%"
           )
         )
       )
@@ -181,17 +179,35 @@ server <- function(input, output, session) {
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
   height <- window_height_server("height")
+  transformer_model <- reactive({
+    if (input$local) {
+      get_transformer_model()
+    } else {
+      NULL
+    }
+  })
   index <- reactive({
     if (input$local == TRUE) {
       if (input$source == "All") {
         load_index(domain = "All", local_embeddings = TRUE)
       } else {
-        load_index(glue::glue("local/{input$source}"), local_embeddings = TRUE)
+        purrr::map(input$source, \(x) {
+          load_index(glue::glue("local/{input$source}"),
+            local_embeddings = TRUE
+          ) |>
+            tibble::as_tibble()
+        }) |> dplyr::bind_rows()
       }
     } else {
-      load_index(input$source)
+      purrr::map(input$source, \(x) {
+        load_index(input$source,
+          local_embeddings = TRUE
+        ) |>
+          tibble::as_tibble()
+      }) |> dplyr::bind_rows()
     }
   })
+
   indices <- reactive({
     if (input$local == TRUE) {
       list_index(dir = "index/local") |> tools::file_path_sans_ext()
@@ -226,13 +242,6 @@ server <- function(input, output, session) {
     )
   }) |> bindEvent(input$save_settings)
   observe({
-    waiter_show(
-      html = tagList(
-        waiter::spin_facebook(),
-        h3("Asking ChatGPT...")
-      ),
-      color = waiter::transparent(0.5)
-    )
     interim <- chat_with_context(
       query = input$chat_input,
       service = input$service,
@@ -247,10 +256,24 @@ server <- function(input, output, session) {
       k_history = input$n_history,
       save_history = input$save_history,
       overwrite = FALSE,
-      local = input$local
+      local = input$local,
+      embedding_model = transformer_model()
     )
     new_response <- interim[[3]]
-    r$context_links <- c(r$context_links, interim[[2]]$link)
+
+    if (is.character(interim[[2]])) {
+      if (length(r$context_links) == 0) {
+        r$context_links <- "No context used so far."
+      }
+    } else {
+      new_links <- interim[[2]]$link
+      r$context_links <- c(r$context_links, new_links)
+    }
+    if (length(r$context_links) > 1) {
+      r$context_links <-
+        r$context_links[r$context_links != "No context used so far."]
+    }
+
     r$all_chats <-
       c(
         interim[[1]],
@@ -262,7 +285,6 @@ server <- function(input, output, session) {
         )
       )
     r$all_chats_formatted <- make_chat_history(r$all_chats)
-    waiter::waiter_hide()
     updateTextAreaInput(session, "chat_input", value = "")
   }) |>
     bindEvent(input$chat)
@@ -270,7 +292,7 @@ server <- function(input, output, session) {
   output$all_chats_box <- renderUI({
     req(length(r$context_links) > 0)
     card(
-      height = height() - 300,
+      height = height() - 200,
       card_body(
         r$all_chats_formatted,
         markdown("**Sources**"),
