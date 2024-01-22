@@ -128,11 +128,16 @@ create_index <- function(domain,
     file.path(tools::R_user_dir("gpttools", which = "data"), "index")
 
   if (local_embeddings) {
-    index_file <- glue::glue("{index_dir}/local/{domain}.parquet")
-  } else {
-    index_file <- glue::glue("{index_dir}/{domain}.parquet")
+    index_dir <- file.path(index_dir, "local")
   }
 
+  if (!dir.exists(index_dir)) {
+    dir.create(index_dir, recursive = TRUE)
+  }
+
+  index_file <- glue::glue("{index_dir}/{domain}.parquet")
+
+  cli::cli_alert_info("index_file: {index_file}")
 
   if (file.exists(index_file) && rlang::is_false(overwrite)) {
     cli::cli_abort(
@@ -174,9 +179,6 @@ create_index <- function(domain,
         version = pkg_version,
         name = pkg_name
       )
-    if (rlang::is_false(dir.exists(index_dir))) {
-      dir.create(index_dir, recursive = TRUE)
-    }
     arrow::write_parquet(
       x    = index,
       sink = index_file
@@ -223,9 +225,25 @@ load_index <- function(domain, local_embeddings = FALSE) {
     data_dir <-
       glue::glue('{tools::R_user_dir("gpttools", which = "data")}/index')
   }
+
   if (!dir.exists(data_dir)) {
-    invisible(NULL)
+    cli::cli_inform("No index found. Using sample index for gpttools.")
+
+    if (local_embeddings) {
+      sample_index <-
+        system.file("sample-index/local/jameshwade-github-io-gpttools.parquet",
+          package = "gpttools"
+        )
+    } else {
+      sample_index <-
+        system.file("sample-index/jameshwade-github-io-gpttools.parquet",
+          package = "gpttools"
+        )
+    }
+    index <- arrow::read_parquet(sample_index)
+    invisible(index)
   }
+
   if (domain == "All") {
     arrow::open_dataset(data_dir) |> tibble::as_tibble()
   } else {
