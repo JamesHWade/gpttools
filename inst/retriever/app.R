@@ -77,7 +77,7 @@ ui <- page_fillable(
   });"))),
   title = "Retreiver from gpttools",
   card(
-    card_header("Chat with Retrieva",
+    card_header("Chat with Retrieval",
       class = "bg-primary d-flex align-items-center",
       popover(
         id = "settings",
