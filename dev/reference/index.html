@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gpttools</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,14 +18,28 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-addins">Addins</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-addins">
+    <a class="dropdown-item" href="../articles/chat-with-retrieval.html">Chat with Retrieval</a>
+    <a class="dropdown-item" href="../articles/scrape-pkgs.html">Scrape Packages</a>
+    <a class="dropdown-item" href="../articles/other-addins.html">Other Addins</a>
+  </div>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/retriever.html">Create Your Own Data Retreival Database</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-services">Services</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-services">
+    <a class="dropdown-item" href="../articles/openai.html">OpenAI</a>
+    <a class="dropdown-item" href="../articles/ollama.html">Local Models with Ollama</a>
+    <a class="dropdown-item" href="../articles/huggingface.html">HuggingFace</a>
+    <a class="dropdown-item" href="../articles/anthropic.html">Anthropic</a>
+    <a class="dropdown-item" href="../articles/azure.html">Azure OpenAI</a>
+    <a class="dropdown-item" href="../articles/google.html">Google AI Studio</a>
+    <a class="dropdown-item" href="../articles/perplexity.html">Perplexity</a>
   </div>
+</li>
+<li class="active nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -67,9 +81,14 @@
         <dd>Add Roxygen documentation to a function</dd>
       </dl><dl><dt>
           
-          <code><a href="addin_run_retriever.html">addin_run_retriever()</a></code> 
+          <code><a href="addin_run_scrape_pkgs.html">addin_run_scrape_pkgs()</a></code> 
         </dt>
-        <dd>Run Chat GPT with Retrieval</dd>
+        <dd>Addin to scrape installed packages</dd>
+      </dl><dl><dt>
+          
+          <code><a href="addin_run_select_pkgs.html">addin_run_select_pkgs()</a></code> 
+        </dt>
+        <dd>Run Package Selector App</dd>
       </dl><dl><dt>
           
           <code><a href="chat_with_context.html">chat_with_context()</a></code> 
@@ -77,9 +96,9 @@
         <dd>chat_with_context</dd>
       </dl><dl><dt>
           
-          <code><a href="chat_with_context_azure.html">chat_with_context_azure()</a></code> 
+          <code><a href="chat_with_retrieval.html">chat_with_retrieval()</a></code> 
         </dt>
-        <dd>chat_with_context_azure</dd>
+        <dd>Run Chat with Retrieval</dd>
       </dl><dl><dt>
           
           <code><a href="collect_dataframes.html">collect_dataframes()</a></code> 
@@ -102,9 +121,19 @@
         <dd>Create index from PDF</dd>
       </dl><dl><dt>
           
+          <code><a href="create_transcript.html">create_transcript()</a></code> 
+        </dt>
+        <dd>Get Transcription from Audio</dd>
+      </dl><dl><dt>
+          
           <code><a href="delete_history.html">delete_history()</a></code> 
         </dt>
         <dd>Delete chat history files</dd>
+      </dl><dl><dt>
+          
+          <code><a href="delete_index.html">delete_index()</a></code> 
+        </dt>
+        <dd>Delete an Index File</dd>
       </dl><dl><dt>
           
           <code><a href="document_data.html">document_data()</a></code> 
@@ -117,9 +146,9 @@
         <dd>Wrapper around selectionGet to help with testthat</dd>
       </dl><dl><dt>
           
-          <code><a href="gpt_insert.html">gpt_insert()</a></code> 
+          <code><a href="get_transformer_model.html">get_transformer_model()</a></code> 
         </dt>
-        <dd>Use GPT to improve text</dd>
+        <dd>Get Transformer Model</dd>
       </dl><dl><dt>
           
           <code><a href="gpt_sitrep.html">gpt_sitrep()</a></code> 
@@ -157,11 +186,6 @@
         <dd>Preps OpenAI model prompt for data documentation</dd>
       </dl><dl><dt>
           
-          <code><a href="query_index.html">query_index()</a></code> 
-        </dt>
-        <dd>Query an Index</dd>
-      </dl><dl><dt>
-          
           <code><a href="read_history.html">read_history()</a></code> 
         </dt>
         <dd>Read chat history from a file</dd>
@@ -177,6 +201,21 @@
         <dd>Shiny app that supports Document Data addin</dd>
       </dl><dl><dt>
           
+          <code><a href="run_select_pkgs_app.html">run_select_pkgs_app()</a></code> 
+        </dt>
+        <dd>Run a Shiny App to Select and Save Installed Packages</dd>
+      </dl><dl><dt>
+          
+          <code><a href="save_user_config.html">save_user_config()</a></code> 
+        </dt>
+        <dd>Save user configuration settings for gpttools</dd>
+      </dl><dl><dt>
+          
+          <code><a href="scrape_pkg_sites.html">scrape_pkg_sites()</a></code> 
+        </dt>
+        <dd>Scrape packaging sites</dd>
+      </dl><dl><dt>
+          
           <code><a href="scrape_url.html">scrape_url()</a></code> 
         </dt>
         <dd>Scrape text from a URL</dd>
@@ -185,6 +224,11 @@
           <code><a href="script_to_function_addin.html">script_to_function_addin()</a></code> 
         </dt>
         <dd>Convert Script to Function Addin</dd>
+      </dl><dl><dt>
+          
+          <code><a href="set_user_config.html">set_user_config()</a></code> 
+        </dt>
+        <dd>Set user configuration settings for gpttools from a file</dd>
       </dl><dl><dt>
           
           <code><a href="suggest_code_improvements.html">suggest_code_improvements()</a></code> 

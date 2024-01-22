@@ -12,7 +12,7 @@ data into a tibble format. It saves the resulting tibble into a parquet file."><
     
     <a class="navbar-brand me-2" href="../index.html">gpttools</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,14 +20,28 @@ data into a tibble format. It saves the resulting tibble into a parquet file."><
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-addins">Addins</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-addins">
+    <a class="dropdown-item" href="../articles/chat-with-retrieval.html">Chat with Retrieval</a>
+    <a class="dropdown-item" href="../articles/scrape-pkgs.html">Scrape Packages</a>
+    <a class="dropdown-item" href="../articles/other-addins.html">Other Addins</a>
+  </div>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/retriever.html">Create Your Own Data Retreival Database</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-services">Services</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-services">
+    <a class="dropdown-item" href="../articles/openai.html">OpenAI</a>
+    <a class="dropdown-item" href="../articles/ollama.html">Local Models with Ollama</a>
+    <a class="dropdown-item" href="../articles/huggingface.html">HuggingFace</a>
+    <a class="dropdown-item" href="../articles/anthropic.html">Anthropic</a>
+    <a class="dropdown-item" href="../articles/azure.html">Azure OpenAI</a>
+    <a class="dropdown-item" href="../articles/google.html">Google AI Studio</a>
+    <a class="dropdown-item" href="../articles/perplexity.html">Perplexity</a>
   </div>
+</li>
+<li class="active nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -65,9 +79,9 @@ data into a tibble format. It saves the resulting tibble into a parquet file.</p
 <span>  index_create <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  aggressive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  num_cores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
 <span>  pkg_version <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  use_azure_openai <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  pkg_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  service <span class="op">=</span> <span class="st">"openai"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,11 +103,7 @@ crawling. Default is FALSE.</p></dd>
 
 <dt>overwrite</dt>
 <dd><p>A logical value indicating whether to overwrite scraped
-pages and index if they already exist. Default is FALSE.</p></dd>
-
-
-<dt>num_cores</dt>
-<dd><p>Number of cores to use. Defaults to
+pages and index if they already exist. Default is FALSE.
 <code>parallel::detectCores() - 1</code></p></dd>
 
 
@@ -101,8 +111,13 @@ pages and index if they already exist. Default is FALSE.</p></dd>
 <dd><p>Package version number</p></dd>
 
 
-<dt>use_azure_openai</dt>
-<dd><p>Whether to use Azure OpenAI for index creation</p></dd>
+<dt>pkg_name</dt>
+<dd><p>Package name</p></dd>
+
+
+<dt>service</dt>
+<dd><p>The service to use for scraping. Default is "openai". Options
+are "openai" and "local".</p></dd>
 
 </dl></div>
     <div class="section level2">

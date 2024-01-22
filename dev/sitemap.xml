@@ -16,7 +16,37 @@
     <loc>https://jameshwade.github.io/gpttools/dev/SUPPORT.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/anthropic.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/azure.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/google.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/huggingface.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/dev/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/chat-with-retrieval.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/ollama.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/other-addins.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/scrape-pkgs.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/openai.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/articles/perplexity.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/dev/articles/retriever.html</loc>
@@ -34,13 +64,16 @@
     <loc>https://jameshwade.github.io/gpttools/dev/reference/add_roxygen_addin.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/addin_run_retriever.html</loc>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/addin_run_scrape_pkgs.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/addin_run_select_pkgs.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/chat_with_context.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/chat_with_context_azure.html</loc>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/chat_with_retrieval.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/collect_dataframes.html</loc>
@@ -55,7 +88,13 @@
     <loc>https://jameshwade.github.io/gpttools/dev/reference/create_index_from_pdf.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/create_transcript.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/delete_history.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/delete_index.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/document_data.html</loc>
@@ -64,7 +103,7 @@
     <loc>https://jameshwade.github.io/gpttools/dev/reference/get_selection.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/gpt_insert.html</loc>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/get_transformer_model.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/gpt_sitrep.html</loc>
@@ -94,9 +133,6 @@
     <loc>https://jameshwade.github.io/gpttools/dev/reference/prep_data_prompt.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/query_index.html</loc>
-  </url>
-  <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/read_history.html</loc>
   </url>
   <url>
@@ -106,10 +142,22 @@
     <loc>https://jameshwade.github.io/gpttools/dev/reference/run_document_data.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/run_select_pkgs_app.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/save_user_config.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/scrape_pkg_sites.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/scrape_url.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/script_to_function_addin.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/dev/reference/set_user_config.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/dev/reference/suggest_code_improvements.html</loc>

@@ -14,7 +14,7 @@ prompts the user for confirmation before deleting each file."><meta property="og
     
     <a class="navbar-brand me-2" href="../index.html">gpttools</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,14 +22,28 @@ prompts the user for confirmation before deleting each file."><meta property="og
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-addins">Addins</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-addins">
+    <a class="dropdown-item" href="../articles/chat-with-retrieval.html">Chat with Retrieval</a>
+    <a class="dropdown-item" href="../articles/scrape-pkgs.html">Scrape Packages</a>
+    <a class="dropdown-item" href="../articles/other-addins.html">Other Addins</a>
+  </div>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/retriever.html">Create Your Own Data Retreival Database</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-services">Services</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-services">
+    <a class="dropdown-item" href="../articles/openai.html">OpenAI</a>
+    <a class="dropdown-item" href="../articles/ollama.html">Local Models with Ollama</a>
+    <a class="dropdown-item" href="../articles/huggingface.html">HuggingFace</a>
+    <a class="dropdown-item" href="../articles/anthropic.html">Anthropic</a>
+    <a class="dropdown-item" href="../articles/azure.html">Azure OpenAI</a>
+    <a class="dropdown-item" href="../articles/google.html">Google AI Studio</a>
+    <a class="dropdown-item" href="../articles/perplexity.html">Perplexity</a>
   </div>
+</li>
+<li class="active nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -63,9 +77,15 @@ prompts the user for confirmation before deleting each file.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">delete_history</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">delete_history</span><span class="op">(</span>local <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>local</dt>
+<dd><p>Whether to delete history made with local or OpenAI embeddings.</p></dd>
+
+</dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
