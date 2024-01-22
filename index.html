@@ -19,8 +19,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Extensions and Tools for gptstudio">
 <meta property="og:description" content="gpttools is an R package that provides extensions to
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="index.html">gpttools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,14 +52,28 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="reference/index.html">Reference</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-addins">Addins</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-addins">
+    <a class="dropdown-item" href="articles/chat-with-retrieval.html">Chat with Retrieval</a>
+    <a class="dropdown-item" href="articles/scrape-pkgs.html">Scrape Packages</a>
+    <a class="dropdown-item" href="articles/other-addins.html">Other Addins</a>
+  </div>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/retriever.html">Create Your Own Data Retreival Database</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-services">Services</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-services">
+    <a class="dropdown-item" href="articles/openai.html">OpenAI</a>
+    <a class="dropdown-item" href="articles/ollama.html">Local Models with Ollama</a>
+    <a class="dropdown-item" href="articles/huggingface.html">HuggingFace</a>
+    <a class="dropdown-item" href="articles/anthropic.html">Anthropic</a>
+    <a class="dropdown-item" href="articles/azure.html">Azure OpenAI</a>
+    <a class="dropdown-item" href="articles/google.html">Google AI Studio</a>
+    <a class="dropdown-item" href="articles/perplexity.html">Perplexity</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
@@ -118,83 +132,118 @@
 <span><span class="co"># Browse the gpttools manual pages</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"gpttools"</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="available-ai-services-and-models">Available AI Services and Models<a class="anchor" aria-label="anchor" href="#available-ai-services-and-models"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="23%">
+<col width="34%">
+<col width="31%">
+<col width="10%">
+</colgroup>
+<thead><tr class="header">
+<th>AI Service</th>
+<th>Models</th>
+<th>Documentation</th>
+<th>Setup</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://platform.openai.com" class="external-link">OpenAI</a></td>
+<td>gpt-4-turbo, gpt-4, gpt-3.5-turbo (<a href="https://platform.openai.com/docs/models" class="external-link">latest models</a>)</td>
+<td><a href="https://platform.openai.com/docs/api-reference" class="external-link">OpenAI API Docs</a></td>
+<td><a href="articles/openai.html">OpenAI Setup</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://huggingface.co/" class="external-link">HuggingFace</a></td>
+<td>various</td>
+<td><a href="https://huggingface.co/docs/hub/models-inference" class="external-link">HF Inference API Docs</a></td>
+<td><a href="articles/huggingface.html">HF Setup</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://docs.anthropic.com/claude/docs/guide-to-anthropics-prompt-engineering-resources" class="external-link">Anthropic</a></td>
+<td>claude-2.1, claude-instant-1.2</td>
+<td><a href="https://docs.anthropic.com/claude/reference/getting-started-with-the-api" class="external-link">Anthropic API Docs</a></td>
+<td><a href="articles/anthropic.html">Anthropic Setup</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://ollama.ai/" class="external-link">Ollama</a></td>
+<td>mistral, llama2, mixtral, phi (<a href="https://ollama.ai/library" class="external-link">latest models</a>)</td>
+<td><a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md" class="external-link">Ollama API Docs</a></td>
+<td><a href="articles/ollama.html">Ollama Setup</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.perplexity.ai" class="external-link">Perplexity</a></td>
+<td>pplx-7b-chat, pplx-70b-chat, pplx-7b-online, pplx-70b-online, llama-2-70b-chat, codellama-34b-instruct, mistral-7b-instruct, and mixtral-8x7b-instruct</td>
+<td><a href="https://docs.perplexity.ai/reference/post_chat_completions" class="external-link">Perplexity API Docs</a></td>
+<td><a href="articles/perplexity.html">Perplexity Setup</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://ai.google.dev/tutorials/ai-studio_quickstart" class="external-link">Google AI Studio</a></td>
+<td>Gemini and Palm (legacy)</td>
+<td><a href="https://ai.google.dev/docs" class="external-link">Google AI Studio Docs</a></td>
+<td><a href="articles/googleai.html">Google AI Studio Setup</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/overview" class="external-link">Azure OpenAI</a></td>
+<td>gpt-4, gpt-3.5-turbo (<a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models#gpt-4-and-gpt-4-turbo-preview" class="external-link">latest models</a>)</td>
+<td><a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/quickstart?tabs=command-line,python&amp;pivots=rest-api" class="external-link">Azure OpenAI API Docs</a></td>
+<td><a href="articles/azure.html">Azure OpenAI Setup</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="default-ai-service-openai">Default AI Service: OpenAI<a class="anchor" aria-label="anchor" href="#default-ai-service-openai"></a>
+</h3>
+<p>To get started, you must first set up an API service. The package is configured to work with several AI service providers, allowing for flexibility and choice based on your specific needs. The default configuration is set to use OpenAI’s services. To use it you need:</p>
+<ol style="list-style-type: decimal">
+<li><p>Make an OpenAI account. <a href="https://platform.openai.com/" class="external-link">Sign up here</a>.</p></li>
+<li><p><a href="https://platform.openai.com/account/api-keys" class="external-link">Create an OpenAI API key</a> to use with the package.</p></li>
+<li><p>Set the API key up in Rstudio. See the section below on configuring the API key.</p></li>
+</ol>
+<div class="section level4">
+<h4 id="configuring-openai-api-key">Configuring OpenAI API Key<a class="anchor" aria-label="anchor" href="#configuring-openai-api-key"></a>
+</h4>
+<p>To interact with the OpenAI API, it’s required to have a valid <code>OPENAI_API_KEY</code> environment variable. Here are the steps to configure it.</p>
+<p>You can establish this environment variable globally by including it in your project’s .Renviron file. This approach ensures that the environment variable persists across all sessions as the Shiny app runs in the background.</p>
+<p>Here is a set of commands to open the .Renviron file for modification:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://usethis.r-lib.org" class="external-link">usethis</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_environ</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>For a persistent setting that loads every time you launch this project, add the following line to .Renviron, replacing <code>"&lt;APIKEY&gt;"</code> with your actual API key:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span><span class="st">"&lt;APIKEY&gt;"</span></span></code></pre></div>
+<p><strong>Caution:</strong> If you’re using version control systems like GitHub or GitLab, remember to include .Renviron in your .gitignore file to prevent exposing your API key!</p>
+<p><strong>Important Note:</strong> OpenAI API will not function without valid payment details entered into your OpenAI account. This is a restriction imposed by OpenAI and is unrelated to this package.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="alternative-ai-service-providers">Alternative AI Service Providers<a class="anchor" aria-label="anchor" href="#alternative-ai-service-providers"></a>
+</h3>
+<p>While OpenAI is the default and currently considered one of the most robust options, <code>gpttools</code> is also compatible with other AI service providers. These include <a href="articles/anthropic.html">Anthropic</a>, <a href="articles/huggingface.html">HuggingFace</a>, <a href="articles/googleai.html">Google AI Studio</a>, <a href="articles/azure.html">Azure OpenAI</a>, and <a href="articles/perplexity.html">Perplexity</a>. You can select any of these providers based on your preference or specific requirements. You can also run local models with <a href="articles/ollama.html">Ollama</a>. This requires more setup but at the benefit of not sharing your data with any third party.</p>
+<p>To use an alternative provider, you will need to obtain the relevant API key or access credentials from the chosen provider and configure them similarly.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="privacy-notice-for-gpttools">Privacy Notice for gpttools<a class="anchor" aria-label="anchor" href="#privacy-notice-for-gpttools"></a>
 </h2>
-<p>This privacy notice is applicable to the R package that utilizes the GPT-3 and GPT-3.5 API provided by OpenAI. By using this package, you agree to adhere to the privacy terms and conditions set by OpenAI.</p>
+<p>This privacy notice is applicable to the R package that uses popular language models like gpt-4 turbo and claude-2.1. By using this package, you agree to adhere to the privacy terms and conditions set by the API service.</p>
 <div class="section level3">
-<h3 id="data-sharing-with-openai">Data Sharing with OpenAI<a class="anchor" aria-label="anchor" href="#data-sharing-with-openai"></a>
+<h3 id="data-sharing-with-ai-services">Data Sharing with AI Services<a class="anchor" aria-label="anchor" href="#data-sharing-with-ai-services"></a>
 </h3>
-<p>When using this R package, the text or code that you highlight/select with your cursor, or the prompt you enter within the built-in applications, will be sent to OpenAI as part of an API request. This data sharing is governed by the privacy notice, rules, and exceptions that you agreed to with OpenAI when creating an account.</p>
+<p>When using this R package, any text or code you highlight/select with your cursor, or the prompt you enter within the built-in applications, will be sent to the selected AI service provider (e.g., OpenAI, Anthropic, HuggingFace, Google AI Studio, Azure OpenAI) as part of an API request. This data sharing is governed by the privacy notice, rules, and exceptions that you agreed to with the respective service provider when creating an account.</p>
 </div>
 <div class="section level3">
-<h3 id="security-and-data-usage-by-openai">Security and Data Usage by OpenAI<a class="anchor" aria-label="anchor" href="#security-and-data-usage-by-openai"></a>
+<h3 id="security-and-data-usage-by-ai-service-providers">Security and Data Usage by AI Service Providers<a class="anchor" aria-label="anchor" href="#security-and-data-usage-by-ai-service-providers"></a>
 </h3>
-<p>We cannot guarantee the security of the data you send to OpenAI via the API, nor can we provide details on how OpenAI processes or uses your data. However, OpenAI has stated that they utilize prompts and results to enhance their AI models, as outlined in their terms of use. You can opt-out of this data usage by contacting OpenAI directly and making an explicit request.</p>
+<p>We cannot guarantee the security of the data you send via the API to any AI service provider, nor can we provide details on how each service processes or uses your data. However, these providers often state that they use prompts and results to enhance their AI models, as outlined in their terms of use. Be sure to review the terms of use of the respective AI service provider directly.</p>
 </div>
 <div class="section level3">
 <h3 id="limiting-data-sharing">Limiting Data Sharing<a class="anchor" aria-label="anchor" href="#limiting-data-sharing"></a>
 </h3>
-<p>The R package is designed to share only the text or code that you specifically highlight/select or include in a prompt through our built-in applications. No other elements of your R environment will be shared. It is your responsibility to ensure that you do not accidentally share sensitive data with OpenAI.</p>
+<p>The R package is designed to share only the text or code that you specifically highlight/select or include in a prompt through our built-in applications. No other elements of your R environment will be shared unless you turn those features on. It is your responsibility to ensure that you do not accidentally share sensitive data with any AI service provider.</p>
 <p><strong>IMPORTANT: To maintain the privacy of your data, do not highlight, include in a prompt, or otherwise upload any sensitive data, code, or text that should remain confidential.</strong></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h2>
-<ol style="list-style-type: decimal">
-<li><p>Make an OpenAI account.</p></li>
-<li><p><a href="https://platform.openai.com/account/api-keys" class="external-link">Create an OpenAI API key</a> to use with the package.</p></li>
-<li><p>Set the API key up in Rstudio</p></li>
-</ol>
-<div class="section level3">
-<h3 id="setting-openai-api-key">Setting OpenAI API Key<a class="anchor" aria-label="anchor" href="#setting-openai-api-key"></a>
-</h3>
-<p>By default, API calls will look for <code>OPENAI_API_KEY</code> environment variable. If you want to set a global environment variable, you can use the following command, where <code>"&lt;APIKEY&gt;"</code> should be replaced with your actual key:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OPENAI_API_KEY <span class="op">=</span> <span class="st">"&lt;APIKEY&gt;"</span><span class="op">)</span></span></code></pre></div>
-<p>Otherwise, you can add the key to the .Renviron file of the project. The following commands will open .Renviron for editing:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://usethis.r-lib.org" class="external-link">usethis</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_environ</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"project"</span><span class="op">)</span></span></code></pre></div>
-<p>You can add the following line to .Renviron (again, replace <code>"&lt;APIKEY&gt;"</code> with your actual key):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span> <span class="st">"&lt;APIKEY&gt;"</span><span class="er">)</span></span></code></pre></div>
-<p>This now set the API key every time you start up this particular project. Note: If you are using GitHub/Gitlab, do not forget to add .Renviron to .gitignore!</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
-</h2>
-<p>The package has four addins:</p>
-<ul>
-<li><p>Comment code: uses code-davinci-edit-001 model from OpenAI to add comments to your code with the prompt: “add comments to each line of code, explaining what the code does”</p></li>
-<li><p>Add roxygen: uses text-davinci-003 model from OpenAI to add and fill out a roxygen skeleton to your highlight code (should be a function) with the prompt: “insert roxygen skeleton to document this function”</p></li>
-<li><p>Convert script to function: uses code-davinci-edit-001 model from OpenAI to convert a highlighted script into a function with the prompt: “convert this R code into an R function”</p></li>
-<li><p>Write a unit test for a function with testthat: uses text-davinci-003 model from OpenAI to suggest a unit test for a selected function with the prompt: “Suggest a unit test for this function using the testthat package”</p></li>
-<li><p>A freeform addins that let’s you specify the prompt using the “edit” functionality of ChatGPT</p></li>
-</ul>
-<p>You can access these addins through the addin toolbar or use the command pallet: <code>CMD/CTRL+SHIFT+P</code>. Examples of each of the addins in action is below.</p>
-<p><img src="reference/figures/image-1429395462.png"></p>
-<div class="section level3">
-<h3 id="comment-code">Comment Code<a class="anchor" aria-label="anchor" href="#comment-code"></a>
-</h3>
-<video src="https://user-images.githubusercontent.com/6314313/209890944-3d6a00fa-2d8c-4df7-8a11-f5a5ec3a1391.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890944-3d6a00fa-2d8c-4df7-8a11-f5a5ec3a1391.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;"></video>
-</div>
-<div class="section level3">
-<h3 id="add-roxygen">Add Roxygen<a class="anchor" aria-label="anchor" href="#add-roxygen"></a>
-</h3>
-<video src="https://user-images.githubusercontent.com/6314313/209890939-ebd7afea-7d68-40b4-b482-b3fe51485ab1.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890939-ebd7afea-7d68-40b4-b482-b3fe51485ab1.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;"></video>
-</div>
-<div class="section level3">
-<h3 id="convert-a-script-into-functions">Convert a Script into Functions<a class="anchor" aria-label="anchor" href="#convert-a-script-into-functions"></a>
-</h3>
-<video src="https://user-images.githubusercontent.com/6314313/209890949-4da2bdd7-bcac-4769-9b11-7759b4abb760.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890949-4da2bdd7-bcac-4769-9b11-7759b4abb760.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;"></video>
-</div>
-<div class="section level3">
-<h3 id="suggest-a-unit-test-for-a-function">Suggest a Unit Test for a Function<a class="anchor" aria-label="anchor" href="#suggest-a-unit-test-for-a-function"></a>
-</h3>
-<video src="https://user-images.githubusercontent.com/6314313/209890959-fca623d9-5e8e-463c-ac64-80f3db9875d9.mov" data-canonical-src="https://user-images.githubusercontent.com/6314313/209890959-fca623d9-5e8e-463c-ac64-80f3db9875d9.mov" controls="controls" muted="muted" class="d-block rounded-bottom-2 width-fit" style="max-height:640px;"></video>
 </div>
 </div>
 <div class="section level2">

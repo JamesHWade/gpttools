@@ -19,7 +19,37 @@
     <loc>https://jameshwade.github.io/gpttools/SUPPORT.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/anthropic.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/azure.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/google.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/huggingface.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/no-build/chat-with-retrieval.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/no-build/ollama.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/no-build/other-addins.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/no-build/scrape-pkgs.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/openai.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/articles/perplexity.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/articles/retriever.html</loc>
@@ -37,13 +67,16 @@
     <loc>https://jameshwade.github.io/gpttools/reference/add_roxygen_addin.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/addin_run_retriever.html</loc>
+    <loc>https://jameshwade.github.io/gpttools/reference/addin_run_scrape_pkgs.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/addin_run_select_pkgs.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/chat_with_context.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/chat_with_context_azure.html</loc>
+    <loc>https://jameshwade.github.io/gpttools/reference/chat_with_retrieval.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/collect_dataframes.html</loc>
@@ -58,13 +91,22 @@
     <loc>https://jameshwade.github.io/gpttools/reference/create_index_from_pdf.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/create_transcript.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/delete_history.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/delete_index.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/document_data.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/get_selection.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/get_transformer_model.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/gpt_sitrep.html</loc>
@@ -94,9 +136,6 @@
     <loc>https://jameshwade.github.io/gpttools/reference/prep_data_prompt.html</loc>
   </url>
   <url>
-    <loc>https://jameshwade.github.io/gpttools/reference/query_index.html</loc>
-  </url>
-  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/read_history.html</loc>
   </url>
   <url>
@@ -106,10 +145,22 @@
     <loc>https://jameshwade.github.io/gpttools/reference/run_document_data.html</loc>
   </url>
   <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/run_select_pkgs_app.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/save_user_config.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/scrape_pkg_sites.html</loc>
+  </url>
+  <url>
     <loc>https://jameshwade.github.io/gpttools/reference/scrape_url.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/script_to_function_addin.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshwade.github.io/gpttools/reference/set_user_config.html</loc>
   </url>
   <url>
     <loc>https://jameshwade.github.io/gpttools/reference/suggest_code_improvements.html</loc>
