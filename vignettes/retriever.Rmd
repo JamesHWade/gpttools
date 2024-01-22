@@ -1,0 +1,41 @@
+---
+title: "Create Your Own Data Retreival Database"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Create Your Own Data Retreival Database}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gpttools)
+```
+
+This tutorial will walk you through the process of creating and using your own vector database with gpttools in R. This will help enhance ChatGPT's ability to provide accurate and context-specific results.
+
+## Step 1: Scraping text data
+
+First, you need to scrape the text data from the website you want to build the vector database for. Use the `crawl()` function provided by gpttools to do this:
+
+```{r}
+#| eval: false
+library(gpttools)
+crawl("https://r4ds.hadley.nz/")
+```
+
+The `crawl()` function will automatically generate embeddings and create a vector store that we’ll call an index. This index will enable efficient searching and retrieval of relevant information from the scraped data. By default, it will save the generated embeddings and index in the location specified by  `tools::R_user_dir("gpttools", which = "data")`.
+
+## Step 2: Using ChatGPT with Retriever
+
+gpttools also comes with a Shiny app that allows you to use the vector database as a plugin in RStudio. To launch the app, open the command palette (Cmd/Ctrl + Shift + P), type "gpttools", and select the "gpttools: ChatGPT with Retrieval" option.
+
+![ChatGPT with Retrieval](images/shiny_retriveal_app.jpg){width="800"}
+
+By creating your own data retriever with gpttools, you can harness the power of ChatGPT to answer questions and generate information specific to your domain of interest, providing more accurate and relevant results tailored to your needs.

@@ -1,0 +1,5 @@
+library(gpttools)
+cli::cli_inform("Scraping package sites and creating an index for each.")
+options(repos = c(CRAN = "https://packagemanager.posit.co/all/latest"))
+options("repos")
+scrape_pkg_sites()
