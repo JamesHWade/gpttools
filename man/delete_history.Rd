@@ -4,7 +4,10 @@
 \alias{delete_history}
 \title{Delete chat history files}
 \usage{
-delete_history()
+delete_history(local = FALSE)
+}
+\arguments{
+\item{local}{Whether to delete history made with local or OpenAI embeddings.}
 }
 \description{
 This function interactively deletes chat history files stored in the user's

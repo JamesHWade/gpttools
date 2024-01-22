@@ -4,8 +4,8 @@
 #'
 #' @export
 document_data <- function() {
-  gptstudio::check_api()
   withr::local_options(shiny.launch.browser = ".rs.invokeShinyPaneViewer")
+  rlang::check_installed("miniUI")
   run_document_data()
 }
 
@@ -14,90 +14,74 @@ document_data <- function() {
 #' @return Nothing is returned, a shiny app is run
 #' @export
 run_document_data <- function() {
-  ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar(
+  ui <- shiny::fluidPage(
+    shiny::titlePanel(
       title = "Document your data with gpttools",
-      left  = NULL,
-      right = miniUI::miniTitleBarButton("done", "Done", primary = TRUE)
+      windowTitle = "GPT Tool"
     ),
-    miniUI::miniContentPanel(
-      shiny::fillCol(
-        shiny::fillRow(
-          shiny::fillCol(
-            flex = c(1, 1, 1.5, 2, 1),
-            shiny::fillRow(
-              shiny::selectInput(
-                inputId = "dataframes",
-                label   = "Select data",
-                choices = NULL,
-                width   = "90%"
-              ),
-              shiny::selectInput(
-                inputId = "sum_method",
-                label = "Select summary method",
-                choices = c("skimr", "skimr_lite", "column_types", "summary"),
-                width = "90%"
-              )
-            ),
-            shiny::helpText(
-              "Only dataframes in the global environment are shown.\n
-                   Summary methods may produce different skeletons."
-            ),
-            shiny::fillRow(
-              shiny::sliderInput(
-                inputId = "temperature",
-                label = "Model temperature",
-                min = 0,
-                max = 1,
-                value = .7,
-                width = "90%"
-              ),
-              shiny::sliderInput(
-                inputId = "max_tokens",
-                label = "Maximum tokens",
-                min = 12,
-                max = 1000,
-                value = 100,
-                width = "90%"
-              )
-            ),
-            shiny::helpText(
-              "Temperature is a parameter for controlling the randomness of
-              the GPT model's output. Tokens refers to the cost of a model
-              query. One token refers to about 4 letters. If your reponse is
-              cutoff, you can increase the number of tokens (at increase
-              cost!)."
-            ),
-            shiny::fillRow(
-              shiny::actionButton(
-                inputId = "update_prompt",
-                label = "Update Prompt",
-                icon = shiny::icon("rotate-right"),
-                width = "90%"
-              ),
-              shiny::actionButton(
-                inputId = "query_gpt",
-                label = "Document Data",
-                icon = shiny::icon("wand-magic-sparkles"),
-                width = "90%"
-              )
-            )
-          ),
-          shiny::column(
-            width = 12,
-            shiny::textAreaInput(
-              inputId = "prompt",
-              label = "Prompt for the model to use to document your data",
-              value = "",
-              rows = 10,
-              width = "100%"
-            ),
-            shiny::h3("Model Response"),
-            shiny::verbatimTextOutput(
-              outputId = "response",
-              placeholder = TRUE
-            )
-          )
+    shiny::sidebarLayout(
+      shiny::sidebarPanel(
+        shiny::selectInput(
+          inputId = "dataframes",
+          label   = "Select data",
+          choices = NULL
+        ),
+        shiny::selectInput(
+          inputId = "sum_method",
+          label = "Select summary method",
+          choices = c("skimr", "skimr_lite", "column_types", "summary")
+        ),
+        shiny::helpText(
+          "Only dataframes in the global environment are shown.\n
+         Summary methods may produce different skeletons."
+        ),
+        shiny::sliderInput(
+          inputId = "temperature",
+          label = "Model temperature",
+          min = 0,
+          max = 1,
+          value = .7
+        ),
+        shiny::sliderInput(
+          inputId = "max_tokens",
+          label = "Maximum tokens",
+          min = 12,
+          max = 1000,
+          value = 100
+        ),
+        shiny::helpText(
+          "Temperature is a parameter for controlling the randomness of
+         the GPT model's output. Tokens refers to the cost of a model
+         query. One token refers to about 4 letters. If your response is
+         cutoff, you can increase the number of tokens (at increased
+         cost!)."
+        ),
+        shiny::actionButton(
+          inputId = "update_prompt",
+          label = "Update Prompt",
+          icon = shiny::icon("rotate-right")
+        ),
+        shiny::actionButton(
+          inputId = "query_gpt",
+          label = "Document Data",
+          icon = shiny::icon("wand-magic-sparkles")
+        ),
+        shiny::actionButton(
+          inputId = "done",
+          label = "Done"
+        )
+      ),
+      shiny::mainPanel(
+        shiny::textAreaInput(
+          inputId = "prompt",
+          label = "Prompt for the model to use to document your data",
+          value = "",
+          rows = 10
+        ),
+        shiny::h3("Model Response"),
+        shiny::verbatimTextOutput(
+          outputId = "response",
+          placeholder = TRUE
         )
       )
     )

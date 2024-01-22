@@ -1,6 +1,6 @@
 Package: gpttools
 Title: Extensions and Tools for gptstudio
-Version: 0.0.7
+Version: 0.0.8
 Authors@R: 
     person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9740-1905"))
@@ -17,22 +17,16 @@ Depends:
     R (>= 4.1)
 Imports: 
     arrow,
-    assertthat,
-    bslib (>= 0.5),
     callr,
     cli,
     dplyr,
-    furrr,
-    future,
     glue,
     gptstudio (>= 0.2.0),
-    httr,
     httr2,
     janitor,
     jsonlite,
     lsa,
     lubridate,
-    miniUI,
     pdftools,
     purrr (>= 1.0.0),
     R.utils,
@@ -40,7 +34,6 @@ Imports:
     rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
     rvest,
-    scales,
     shiny,
     skimr,
     stats,
@@ -49,14 +42,16 @@ Imports:
     tidyr,
     tokenizers,
     tools,
-    tuneR,
     urltools,
     usethis,
-    xml2
+    xml2,
+    yaml
 Suggests: 
+    bslib,
     bsicons,
     covr,
     htmltools,
+    httr,
     knitr,
     later,
     mockr,
@@ -69,6 +64,7 @@ Suggests:
     testthat (>= 3.0.0),
     tidymodels,
     tidyverse,
+    tuneR,
     uuid,
     waiter,
     withr

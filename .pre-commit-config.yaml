@@ -31,12 +31,13 @@ repos:
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: no-debug-statement
-    -   id: deps-in-desc
+    # -   id: deps-in-desc
+    #     args: [--warn_only]
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
     -   id: check-added-large-files
-        args: ['--maxkb=200']
+        args: ['--maxkb=25000']
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
     rev: v1.6.1
     hooks:

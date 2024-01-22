@@ -1,13 +1,12 @@
 get_hyperlinks <- function(url) {
   status <- check_url(url)
   if (identical(status, 200L)) {
-    tibble::tibble(
-      parent = url,
-      link = rvest::read_html(url) |>
-        rvest::html_nodes("a[href]") |>
-        rvest::html_attr("href") |>
-        unique()
-    )
+    links <- rvest::read_html(url) |>
+      rvest::html_nodes("a[href]") |>
+      rvest::html_attr("href") |>
+      unique()
+
+    tibble::tibble(parent = url, link = links)
   } else {
     cli::cli_warn(c(
       "!" = "URL not valid.",
@@ -26,7 +25,7 @@ check_url <- function(url) {
   status
 }
 
-validate_link <- function(link, original_link, try_fix = TRUE) {
+validate_link <- function(link, try_fix = TRUE) {
   if (is_null(link)) {
     return(invisible())
   }
@@ -46,7 +45,6 @@ validate_link <- function(link, original_link, try_fix = TRUE) {
     cli::cli_warn(c(
       "!" = "URL not valid.",
       "i" = "Tried to scrape {link}",
-      "i" = "Original link: {original_link}",
       "i" = "Status code: {status}"
     ))
     NULL
@@ -55,39 +53,52 @@ validate_link <- function(link, original_link, try_fix = TRUE) {
 
 recursive_hyperlinks <- function(local_domain,
                                  url,
+                                 expanded_urls = NULL,
                                  checked_urls = NULL,
                                  aggressive = FALSE) {
-  links <- url[!(url %in% checked_urls)]
+  links <- url[!(url %in% expanded_urls)]
   if (length(links) < 1) {
-    return(checked_urls)
+    return(expanded_urls)
   }
-
   if (aggressive) {
     domain_pattern <- glue("^https?://(?:.*\\.)?{local_domain}/?")
   } else {
     domain_pattern <- glue("^https?://{local_domain}/?")
   }
 
-  checked_urls <- c(checked_urls, links)
-  cli::cli_inform(c("i" = "Total urls: {length(checked_urls)}"))
-  links_df <- furrr::future_map(links, get_hyperlinks) |>
+  expanded_urls <- c(expanded_urls, links)
+  cli::cli_inform(c("i" = "Total urls: {length(expanded_urls)}"))
+  links_df <- purrr::map(links, get_hyperlinks,
+    .progress = "Getting more links"
+  ) |>
     dplyr::bind_rows() |>
-    dplyr::filter(!stringr::str_detect(link, "^\\.$|mailto:|^\\.\\.|\\#|^\\_$"))
+    dplyr::filter(!stringr::str_detect(link, "^\\.$|mailto:|\\#|^\\_$")) |>
+    dplyr::mutate(link = purrr::map2_chr(parent, link,
+      .f = \(x, y) xml2::url_absolute(y, x)
+    ))
+
+  cli::cli_inform("Going to check {length(unique(links_df$link))} links")
 
   new_links <-
-    furrr::future_pmap(as.list(links_df), \(parent, link) {
-      clean_link <- xml2::url_absolute(link, parent)
-      if (rlang::is_true(stringr::str_detect(clean_link, domain_pattern))) {
-        validate_link(clean_link, link)
+    purrr::map(unique(links_df$link), \(x) {
+      if (rlang::is_true(stringr::str_detect(x, domain_pattern))) {
+        validate_link(x)
       } else {
         NULL
       }
-    }) |>
+    },
+    .progress = "Validating Links"
+    ) |>
     unlist()
+
+  checked_urls <- c(checked_urls, links_df$link) |> unique()
+
+  cli::cli_inform("Checked urls: {length(checked_urls)}")
+
   exclude_exts <- "\\.(xml|mp4|pdf|zip|rar|gz|tar|csv|docx|pptx|xlsx|avi)$"
   new_links <-
     new_links[!grepl(exclude_exts, new_links, ignore.case = TRUE)] |> unique()
-  recursive_hyperlinks(local_domain, unique(new_links), checked_urls)
+  recursive_hyperlinks(local_domain, unique(new_links), expanded_urls, checked_urls)
 }
 
 #' Scrape and process all hyperlinks within a given URL
@@ -102,10 +113,11 @@ recursive_hyperlinks <- function(local_domain,
 #' crawling. Default is FALSE.
 #' @param overwrite A logical value indicating whether to overwrite scraped
 #' pages and index if they already exist. Default is FALSE.
-#' @param num_cores Number of cores to use. Defaults to
 #'  `parallel::detectCores() - 1`
 #' @param pkg_version Package version number
-#' @param use_azure_openai Whether to use Azure OpenAI for index creation
+#' @param pkg_name Package name
+#' @param service The service to use for scraping. Default is "openai". Options
+#' are "openai" and "local".
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
@@ -114,23 +126,21 @@ crawl <- function(url,
                   index_create = TRUE,
                   aggressive = FALSE,
                   overwrite = FALSE,
-                  num_cores = parallel::detectCores() - 1,
                   pkg_version = NULL,
-                  use_azure_openai = FALSE) {
+                  pkg_name = NULL,
+                  service = "openai") {
+  rlang::arg_match(service, c("openai", "local"))
   parsed_url <- urltools::url_parse(url)
   local_domain <- parsed_url$domain
   url_path <- parsed_url$path
-  if (!rlang::is_na(url_path)) {
+  if (!rlang::is_na(url_path) && rlang::is_false(aggressive)) {
     local_domain <- glue("{local_domain}/{url_path}")
   }
-  withr::local_options(list(
-    cli.progress_show_after = 0,
-    cli.progress_clear = FALSE
-  ))
-  future::plan(future::multisession, workers = num_cores)
   scraped_data_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "text")
-  local_domain_name <- stringr::str_replace_all(local_domain, "/|\\.", "-")
+  local_domain_name <-
+    stringr::str_replace_all(local_domain, "/|\\.", "-") |>
+    stringr::str_remove("-$")
   scraped_text_file <-
     glue::glue("{scraped_data_dir}/{local_domain_name}.parquet")
 
@@ -149,12 +159,16 @@ crawl <- function(url,
     "i" = "This may take a while.",
     "i" = "Gathering links to scrape"
   ))
+
+  cli::cli_inform("Local domain: {local_domain}")
+  cli::cli_inform("Url: {url}")
+
   links <-
     recursive_hyperlinks(local_domain, url, aggressive = aggressive) |>
     unique()
   cli_inform(c("i" = "Scraping validated links"))
   scraped_data <-
-    furrr::future_map(links, \(x) {
+    purrr::map(links, \(x) {
       if (identical(check_url(x), 200L)) {
         tibble::tibble(
           source  = local_domain,
@@ -169,7 +183,9 @@ crawl <- function(url,
           "i" = "Status code: {status}"
         ))
       }
-    }) |>
+    },
+    .progress = "Scraping Pages"
+    ) |>
     dplyr::bind_rows() |>
     dplyr::distinct()
   cli_inform(c("i" = "Saving scraped data"))
@@ -181,15 +197,19 @@ crawl <- function(url,
     sink = scraped_text_file
   )
   if (index_create) {
-    if (use_azure_openai) {
-      create_index_azure(local_domain_name,
-        overwrite = overwrite,
-        pkg_version = pkg_version
-      )
-    } else {
+    if (service == "openai") {
       create_index(local_domain_name,
         overwrite = overwrite,
-        pkg_version = pkg_version
+        pkg_version = pkg_version,
+        pkg_name = pkg_name
+      )
+    } else if (service == "local") {
+      create_index(local_domain_name,
+        overwrite = overwrite,
+        pkg_version = pkg_version,
+        pkg_name = pkg_name,
+        local_embeddings = TRUE,
+        dont_ask = TRUE
       )
     }
   }
@@ -240,20 +260,39 @@ scrape_url <- function(url) {
 
 
 extract_text <- function(url, use_html_text2 = TRUE) {
-  exclude_classes <- c(
-    "js-", "script", "style", "head", "meta", "link", "button", "form", "img",
-    "svg", "input", "select", "option", "textarea", "label", "noscript",
-    "canvas", "map", "area", "object", "param", "source", "track", "embed",
-    "iframe", "video", "audio", "picture", "figure", "nav", "footer",
-    "container", "template-article"
+  exclude_tags <- c(
+    "script", "style", "head", "meta", "button", "form", "img", "svg",
+    "input", "select", "option", "textarea", "label", "noscript", "canvas",
+    "map", "area", "object", "param", "source", "track", "embed", "iframe",
+    "video", "audio", "picture", "figure", "nav", "footer", "container",
+    "template-article", "header", "datalist", "details", "dialog",
+    "mark", "menuitem", "meter", "progress", "time"
   )
+
+  exclude_attributes <- c(
+    "js-", "json", "html-widget", "html-fill-item", "html-widget-content",
+    "plotly"
+  )
+
+  xpath_tags <- exclude_tags |>
+    purrr::map_chr(.f = \(x) glue::glue("self::{x}")) |>
+    stringr::str_c(collapse = " or ")
+
+  xpath_attributes <- exclude_attributes |>
+    purrr::map_chr(.f = \(x) glue::glue("contains(concat(' ', normalize-space(@class), ' '), ' {x}')")) |>
+    stringr::str_c(collapse = " or ")
+
+  # Handling general attribute selectors
+  general_attributes <- c("role", "aria-", "data-", "id", "class", "style")
+  xpath_general_attributes <- general_attributes |>
+    purrr::map_chr(.f = \(x) glue::glue("@{x}")) |>
+    stringr::str_c(collapse = " or ")
+
+  xpath_combined <- glue::glue("//body//*[not({xpath_tags} or {xpath_attributes} or {xpath_general_attributes})]")
+
   nodes <- rvest::read_html(url) |>
-    rvest::html_elements(
-      xpath = paste0(
-        "//body//*[not(self::",
-        paste(exclude_classes, collapse = " or self::"), ")]"
-      )
-    )
+    rvest::html_elements(xpath = xpath_combined)
+
   if (use_html_text2) {
     text <- rvest::html_text2(nodes)
   } else {
@@ -261,40 +300,3 @@ extract_text <- function(url, use_html_text2 = TRUE) {
   }
   text |> remove_lines_and_spaces()
 }
-
-url <- "https://rstudio.github.io/bslib/articles/cards.html"
-
-exclude_classes <- c(
-  "js-", "script", "style", "head", "meta", "link", "button", "form", "img",
-  "svg", "input", "select", "option", "textarea", "label", "noscript",
-  "canvas", "map", "area", "object", "param", "source", "track", "embed",
-  "iframe", "video", "audio", "picture", "figure", "nav", "footer", "nsewdrag",
-  "drag"
-)
-
-exclude_xpath <- paste0(
-  "//*[not(contains(@class, '",
-  paste(exclude_classes,
-    collapse = "') and not(contains(@class, '"
-  ),
-  "'))]"
-)
-
-
-html <- rvest::read_html(url) |>
-  rvest::html_elements(
-    xpath = paste0(
-      "//body//*[not(self::",
-      paste(exclude_classes, collapse = " or self::"), ")]"
-    )
-  )
-
-a <- html |> rvest::html_text()
-
-node_info <- tibble::tibble(
-  index = seq_along(head(html, n = 100)),
-  text_length = purrr::map_int(
-    head(html, n = 100),
-    ~ nchar(rvest::html_text(.x))
-  )
-)

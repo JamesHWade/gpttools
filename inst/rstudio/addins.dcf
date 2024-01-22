@@ -1,10 +1,10 @@
-Name: ChatGPT with Retrieval
-Description: Semantic search and document retrieval for use with ChatGPT
-Binding: addin_run_retriever
+Name: Chat with Retrieval
+Description: Chat app with Retrieval for use with various AI services
+Binding: chat_with_retrieval
 Interactive: true
 
 Name: Convert script to function
-Description: Uses OpenAI's GPT-3.5 to generate comments for your code
+Description: Generate comments for your code
 Binding: script_to_function_addin
 Interactive: false
 
@@ -19,11 +19,21 @@ Binding: suggest_unit_test_addin
 Interactive: false
 
 Name: Document Data
-Description: Uses OpenAI's GPT-3.5 to document data for a package with help from the user
+Description: Document data for a package with help from the user
 Binding: document_data
 Interactive: true
 
 Name: Suggest Improvements
-Description: Uses OpenAI's GPT-3.5 to make suggestions to improve user selected code
+Description: Make suggestions to improve user selected code
 Binding: suggest_code_improvements
 Interactive: false
+
+Name: Select Packages to Scrape
+Description: Select packages to scrape for use in Chat with Retrieval app
+Binding: addin_run_select_pkgs
+Interactive: true
+
+Name: Scrape Packages
+Description: Scrape packages for use in Chat with Retrieval app
+Binding: addin_run_scrape_pkgs
+Interactive: true

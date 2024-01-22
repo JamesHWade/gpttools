@@ -4,10 +4,12 @@
 \alias{list_index}
 \title{List Index Files}
 \usage{
-list_index(dir = "index")
+list_index(dir = "index", full_path = FALSE)
 }
 \arguments{
 \item{dir}{Name of the directory, defaults to "index"}
+
+\item{full_path}{If TRUE, returns the full path to the index files.}
 }
 \value{
 A character vector containing the names of the index files found in

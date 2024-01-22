@@ -4,16 +4,17 @@ prepare_scraped_files <- function(domain) {
     arrow::read_parquet(glue("{scraped_dir}/text/{domain}.parquet"))
 
   if (max(scraped$n_words) > 2e5) {
-    max_index <- which.max(scraped$n_words)
+    max_index <- scraped[which.max(scraped$n_words), ]
+    print(max_index |> dplyr::select(-text))
     cli_warn(
       c(
-        "!" = "Entry {max_index} of {domain} has at least 200,000 words.",
+        "!" = "Entry {max_index$link} of {domain} has at least 200,000 words.",
         "i" = "You probably do not want that. Please inspect scraped data."
       )
     )
     dont_embed <- usethis::ui_nope(
       c(
-        "Entry {max_index} of {domain} has at least 200,000 words.",
+        "Entry {max_index$link} of {domain} has at least 200,000 words.",
         "You probably do not want that. Please inspect scraped data.",
         "Do you want to continue?"
       )
@@ -68,10 +69,14 @@ create_openai_embedding <-
       model = model,
       input = input_text
     )
-    embedding <- query_openai_api(body, openai_api_key, task = "embeddings")
+    embedding <- gptstudio:::query_openai_api(
+      task = "embeddings",
+      request_body = body,
+      openai_api_key = openai_api_key
+    )
     tibble::tibble(
       usage = embedding$usage$total_tokens,
-      embedding = embedding$data$embedding
+      embedding = embedding$data[[1]]$embedding |> list()
     )
   }
 
@@ -81,10 +86,12 @@ add_embeddings <- function(index,
     model <- get_transformer_model()
     index |>
       dplyr::mutate(
-        embeddings = purrr::map(chunks, \(x) {
-          create_text_embeddings(x, model)
-        }),
-        embedding_method = "local"
+        embeddings = purrr::map(
+          .x = chunks,
+          .f = \(x) create_text_embeddings(x, model),
+          .progress = "Creating Embeddings Locally"
+        ),
+        embedding_method = glue::glue("local: {model$name_or_path}")
       )
   } else {
     index |>
@@ -114,11 +121,18 @@ join_embeddings_from_index <- function(x) {
 create_index <- function(domain,
                          overwrite = FALSE,
                          dont_ask = FALSE,
-                         pkg_version = NULL) {
+                         pkg_version = NULL,
+                         pkg_name = NULL,
+                         local_embeddings = FALSE) {
   index_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "index")
-  index_file <-
-    glue::glue("{index_dir}/{domain}.parquet")
+
+  if (local_embeddings) {
+    index_file <- glue::glue("{index_dir}/local/{domain}.parquet")
+  } else {
+    index_file <- glue::glue("{index_dir}/{domain}.parquet")
+  }
+
 
   if (file.exists(index_file) && rlang::is_false(overwrite)) {
     cli::cli_abort(
@@ -130,19 +144,22 @@ create_index <- function(domain,
   }
 
   index <- prepare_scraped_files(domain = domain)
-  n_tokens <- sum(index$n_tokens) |> scales::scientific()
-
-  cli::cli_inform(c(
-    "!" = "You are about to create embeddings for {domain}.",
-    "i" = "This will use approx. {n_tokens} tokens.",
-    "i" = "Only proceed if you understand the cost.",
-    "i" = "Read more about embeddings at {.url
-      https://platform.openai.com/docs/guides/embeddings}."
-  ))
+  n_tokens <- sum(index$n_tokens) |> scales_scientific()
 
   if (dont_ask) {
+    cli::cli_inform(c(
+      "!" = "You are about to create embeddings for {domain}.",
+      "i" = "This will use approx. {n_tokens} tokens."
+    ))
     ask_user <- TRUE
   } else {
+    cli::cli_inform(c(
+      "!" = "You are about to create embeddings for {domain}.",
+      "i" = "This will use approx. {n_tokens} tokens.",
+      "i" = "Only proceed if you understand the cost.",
+      "i" = "Read more about embeddings at {.url
+      https://platform.openai.com/docs/guides/embeddings}."
+    ))
     ask_user <- usethis::ui_yeah(
       "Would you like to continue with creating embeddings?"
     )
@@ -151,8 +168,12 @@ create_index <- function(domain,
     index <-
       index |>
       # join_embeddings_from_index() |>
-      add_embeddings() |>
-      dplyr::mutate(version = pkg_version)
+      add_embeddings(local_embeddings = local_embeddings) |>
+      tidyr::unnest(embeddings) |>
+      dplyr::mutate(
+        version = pkg_version,
+        name = pkg_name
+      )
     if (rlang::is_false(dir.exists(index_dir))) {
       dir.create(index_dir, recursive = TRUE)
     }
@@ -167,6 +188,7 @@ create_index <- function(domain,
 
 get_top_matches <- function(index, query_embedding, k = 5) {
   k <- min(k, nrow(index))
+  print(index)
   index |>
     dplyr::mutate(
       similarity = purrr::map_dbl(embedding, \(x) {
@@ -182,6 +204,8 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' This function loads the index data for a given domain from a parquet file.
 #'
 #' @param domain A character string indicating the name of the domain.
+#' @param local_embeddings A logical indicating whether to load the local
+#' embeddings or the OpenAI embeddings. Defaults to FALSE.
 #'
 #' @return A data frame containing the index data for the specified domain.
 #'
@@ -191,10 +215,16 @@ get_top_matches <- function(index, query_embedding, k = 5) {
 #' \dontrun{
 #' load_index("example_domain")
 #' }
-load_index <- function(domain) {
-  data_dir <- glue('{tools::R_user_dir("gpttools", which = "data")}/index')
+load_index <- function(domain, local_embeddings = FALSE) {
+  if (local_embeddings) {
+    data_dir <-
+      glue::glue('{tools::R_user_dir("gpttools", which = "data")}/index/local')
+  } else {
+    data_dir <-
+      glue::glue('{tools::R_user_dir("gpttools", which = "data")}/index')
+  }
   if (!dir.exists(data_dir)) {
-    return(NULL)
+    invisible(NULL)
   }
   if (domain == "All") {
     arrow::open_dataset(data_dir) |> tibble::as_tibble()
@@ -216,94 +246,6 @@ load_scraped_data <- function(dir_name, file_name) {
       file_name
     )
   arrow::read_parquet(file_path)
-}
-
-#' Query an Index
-#'
-#' This function queries an index with a given question or prompt and returns a
-#' set of suggested answers.
-#'
-#' @param index A pre-built index of text data.
-#' @param query A character string representing the question or prompt to query
-#'   the index with.
-#' @param history A list of the previous chat responses
-#' @param task A character string indicating the task to perform, such as
-#'   "conservative q&a".
-#' @param k An integer specifying the number of top matches to retrieve.
-#'
-#' @return A list containing the instructions for answering the question, the
-#'   context in which the question was asked, and the suggested answer.
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' index <- build_index(data)
-#' query_index(index, "What is the capital of France?")
-#' }
-query_index <- function(index, query, history, task = "Context Only", k = 4) {
-  arg_match(task, c("Context Only", "Permissive Chat"))
-
-  query_embedding <- create_openai_embedding(input_text = query) |>
-    dplyr::pull(embedding) |>
-    unlist()
-
-  full_context <- get_top_matches(index, query_embedding, k = k)
-
-  context <-
-    full_context |>
-    dplyr::pull(chunks) |>
-    paste(collapse = "\n\n")
-
-  instructions <-
-    switch(task,
-      "Context Only" =
-        list(
-          list(
-            role = "system",
-            content =
-              glue(
-                "You are a helpful chat bot that answere questions based on the
-                context provided by the user. If the user does not provide
-                context, say \"I am not able to answer that question. Maybe
-                try rephrasing your question in a different way.\"\n\n
-                Context: {context}"
-              )
-          ),
-          list(
-            role = "user",
-            content = glue("{query}")
-          )
-        ),
-      "Permissive Chat" =
-        list(
-          list(
-            role = "system",
-            content =
-              glue(
-                "You are a helpful chat bot that answere questions based on the
-                context provided by the user. If the user does not provide
-                context, say \"I am not able to answer that question with the
-                context you gave me, but here is my best answer. Maybe
-                try rephrasing your question in a different way.\"\n\n
-                Context: {context}"
-              )
-          ),
-          list(
-            role = "user",
-            content = glue("{query}")
-          )
-        )
-    )
-  history <-
-    purrr::map(history, \(x) if (x$role == "system") NULL else x) |>
-    purrr::compact()
-
-  prompt <- c(history, instructions)
-
-  answer <- gptstudio::openai_create_chat_completion(prompt)
-
-  list(prompt, full_context, answer)
 }
 
 
@@ -338,42 +280,12 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
   purrr::map(chunks, \(x) stringr::str_c(x, collapse = " "))
 }
 
-query_openai_api <- function(body, openai_api_key, task) {
-  arg_match(task, c("completions", "chat/completions", "edits", "embeddings"))
-
-  base_url <- glue("https://api.openai.com/v1/{task}")
-
-  headers <- c(
-    "Authorization" = glue("Bearer {openai_api_key}"),
-    "Content-Type" = "application/json"
-  )
-
-  response <-
-    httr::RETRY("POST",
-      url = base_url,
-      httr::add_headers(headers), body = body,
-      encode = "json",
-      quiet = TRUE
-    )
-
-  parsed <- response |>
-    httr::content(as = "text", encoding = "UTF-8") |>
-    jsonlite::fromJSON(flatten = TRUE)
-
-  if (httr::http_error(response)) {
-    cli_alert_warning(c(
-      "x" = glue("OpenAI API request failed [{httr::status_code(response)}]."),
-      "i" = glue("Error message: {parsed$error$message}")
-    ))
-  }
-  parsed
-}
-
 #' List Index Files
 #'
 #' This function lists the index files in the specified directory.
 #'
 #' @param dir Name of the directory, defaults to "index"
+#' @param full_path If TRUE, returns the full path to the index files.
 #'
 #' @return A character vector containing the names of the index files found in
 #' the specified directory.
@@ -383,8 +295,42 @@ query_openai_api <- function(body, openai_api_key, task) {
 #' list_index()
 #' }
 #' @export
-list_index <- function(dir = "index") {
-  list.files(
-    file.path(tools::R_user_dir("gpttools", "data"), dir)
-  )
+list_index <- function(dir = "index", full_path = FALSE) {
+  loc <- file.path(tools::R_user_dir("gpttools", "data"), dir)
+  cli::cli_inform("Access your index files here: {.file {loc}}")
+  if (full_path) {
+    list.files(loc, full.names = TRUE)
+  } else {
+    list.files(loc)
+  }
+}
+
+
+#' Delete an Index File
+#'
+#' Interactively deletes a specified index file from a user-defined directory.
+#' Presents the user with a list of available index files and prompts for
+#' confirmation before deletion.
+
+#' @export
+delete_index <- function() {
+  files <- list_index()
+  if (length(files) == 0) {
+    cli_alert_warning("No index files found.")
+    return(invisible())
+  }
+  cli::cli_alert("Select the index file you want to delete.")
+  to_delete <- utils::menu(files)
+  confirm_delete <-
+    usethis::ui_yeah("Are you sure you want to delete {files[to_delete]}?")
+  if (confirm_delete) {
+    file.remove(file.path(
+      tools::R_user_dir("gpttools", "data"),
+      "index",
+      files[to_delete]
+    ))
+    cli_alert_success("Index deleted.")
+  } else {
+    cli_alert_warning("Index not deleted.")
+  }
 }

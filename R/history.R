@@ -1,14 +1,23 @@
-get_history_path <- function(file_name = "chat_history") {
-  file.path(
-    tools::R_user_dir("gpttools", which = "data"),
-    glue::glue("{file_name}.parquet")
-  )
+get_history_path <- function(file_name = "chat_history", local = FALSE) {
+  if (local) {
+    file.path(
+      tools::R_user_dir("gpttools", which = "data"),
+      glue::glue("local/{file_name}.parquet")
+    )
+  } else {
+    file.path(
+      tools::R_user_dir("gpttools", which = "data"),
+      glue::glue("{file_name}.parquet")
+    )
+  }
 }
 
 #' Read chat history from a file
 #'
 #' @param file_name Name of the chat history file to read from. Default is
 #'   "chat_history".
+#' @param local Whether to read from history made with local or OpenAI
+#' embeddings.
 #'
 #' @return A dataframe containing the chat history or NULL if the file doesn't
 #'   exist.
@@ -19,8 +28,8 @@ get_history_path <- function(file_name = "chat_history") {
 #' # Read chat history from the default file
 #' history <- read_history()
 #' }
-read_history <- function(file_name = "chat_history") {
-  file_path <- get_history_path(file_name)
+read_history <- function(file_name = "chat_history", local) {
+  file_path <- get_history_path(file_name, local = local)
   if (file.exists(file_path)) {
     arrow::read_parquet(file_path)
   } else {
@@ -34,6 +43,8 @@ read_history <- function(file_name = "chat_history") {
 #' directory. It lists all the .parquet files in the gpttools data directory and
 #' prompts the user for confirmation before deleting each file.
 #'
+#' @param local Whether to delete history made with local or OpenAI embeddings.
+#'
 #' @export
 #'
 #' @examples
@@ -41,14 +52,11 @@ read_history <- function(file_name = "chat_history") {
 #' # Interactively delete chat history files
 #' delete_history()
 #' }
-delete_history <- function() {
+delete_history <- function(local = FALSE) {
   if (!interactive()) {
     invisible()
   }
-  history_files <- list.files(tools::R_user_dir("gpttools", which = "data"),
-    pattern = "*.parquet",
-    full.names = TRUE
-  )
+  history_files <- get_history_path(local = local)
 
   purrr::map(history_files, \(x) {
     delete_file <- usethis::ui_yeah("Do you want to delete {basename(x)}?")
@@ -62,8 +70,15 @@ delete_history <- function() {
 }
 
 create_history <- function(file_name = "chat_history",
+                           local = FALSE,
                            overwrite = FALSE) {
-  file_path <- get_history_path(file_name)
+  file_path <- get_history_path(file_name, local = local)
+
+  if (!dir.exists(tools::file_path_sans_ext(file_path))) {
+    dir.create(tools::file_path_sans_ext(file_path),
+      recursive = TRUE, showWarnings = FALSE
+    )
+  }
 
   if (!file.exists(file_path) || overwrite) {
     query_history <- tibble::tibble(
@@ -77,32 +92,42 @@ create_history <- function(file_name = "chat_history",
   }
 }
 
-save_history <- function(file_name = "chat_history",
-                         role,
-                         content,
-                         overwrite = FALSE) {
-  create_history(file_name, overwrite = overwrite)
-  history <- read_history(file_name)
-  embedding <- create_openai_embedding(content)
+save_user_history <- function(file_name = "chat_history",
+                              role,
+                              content,
+                              local = FALSE,
+                              model = NULL,
+                              overwrite = FALSE) {
+  create_history(file_name, overwrite = overwrite, local = local)
+  history <- read_history(file_name, local = local)
+  embedding <- get_query_embedding(content, local = local, model = model)
 
   new_entry <- tibble::tibble(
     id        = max(0, history$id, na.rm = TRUE) + 1,
     timestamp = lubridate::now(),
     role      = role,
     content   = content,
-    embedding = embedding$embedding,
+    embedding = list(embedding),
     hash      = hash_md5(content)
   )
 
   new_entry |>
     rbind(history) |>
-    arrow::write_parquet(get_history_path(file_name))
+    arrow::write_parquet(get_history_path(file_name, local = local))
 }
 
-get_query_embedding <- function(query) {
-  create_openai_embedding(input_text = query) |>
-    dplyr::pull(embedding) |>
-    unlist()
+get_query_embedding <- function(query, local = FALSE, model = NULL) {
+  if (local) {
+    create_text_embeddings(query,
+      model = model
+    ) |>
+      dplyr::pull(embedding) |>
+      unlist()
+  } else {
+    create_openai_embedding(input_text = query) |>
+      dplyr::pull(embedding) |>
+      unlist()
+  }
 }
 
 get_query_context <- function(query_embedding, full_context, k) {
@@ -112,11 +137,11 @@ get_query_context <- function(query_embedding, full_context, k) {
 
 check_context <- function(context) {
   if (rlang::is_null(context)) {
-    cli_abort(
+    cli_warn(
       "You specified that context should be added but none was provided."
     )
   } else if (!is.data.frame(context)) {
-    cli_abort(
+    cli_warn(
       "You passed a {class(context)} to but a data.frame was expected."
     )
   }
@@ -130,6 +155,7 @@ check_context <- function(context) {
 #' generate responses.
 #'
 #' @param query The input query to be processed.
+#' @param service Name of the AI service to use, defaults to openai.
 #' @param model Name of the openai model to use, defaults to gpt-3.5-turbo
 #' @param index Index to look for context.
 #' @param add_context Whether to add context to the query or not. Default is
@@ -147,22 +173,20 @@ check_context <- function(context) {
 #' @param save_history Whether to save the chat history or not. Default is TRUE.
 #' @param overwrite Whether to overwrite the history file or not. Default is
 #'   FALSE.
+#' @param local Whether to use the local model or not. Default is FALSE.
+#' @param embedding_model A model object to use for embedding. Only needed if
+#' local is TRUE. Default is NULL.
 #'
 #' @return A list containing the prompt, context, and answer.
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' # Define a query and context
+#' @examplesIf rlang::is_interactive()
+#' rlang::is_interactive()
 #' query <- "What is the capital of France?"
-#' context <- "France is a country in Western Europe. Its capital is a famous
-#' city known for its culture, art, and history."
-#'
-#' # Call the chat_with_context function
 #' result <- chat_with_context(query = query, context = context)
-#' }
 chat_with_context <- function(query,
-                              model = "gpt-3.5-turbo",
+                              service = "openai",
+                              model = "gpt-4",
                               index = NULL,
                               add_context = TRUE,
                               chat_history = NULL,
@@ -173,14 +197,25 @@ chat_with_context <- function(query,
                               k_context = 4,
                               k_history = 4,
                               save_history = TRUE,
-                              overwrite = FALSE) {
+                              overwrite = FALSE,
+                              local = FALSE,
+                              embedding_model = NULL) {
   arg_match(task, c("Context Only", "Permissive Chat"))
 
+  need_context <- is_context_needed(
+    user_prompt = query,
+    service = service,
+    model = model
+  )
+
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
-    query_embedding <- get_query_embedding(query)
+    query_embedding <- get_query_embedding(query,
+      local = local,
+      model = embedding_model
+    )
   }
 
-  if (rlang::is_true(add_context)) {
+  if (rlang::is_true(add_context) && rlang::is_true(need_context)) {
     full_context <-
       get_query_context(
         query_embedding,
@@ -191,25 +226,30 @@ chat_with_context <- function(query,
       dplyr::pull("chunks") |>
       paste(collapse = "\n\n")
   } else {
+    full_context <- "No context provided."
     context <- "No additional context provided."
   }
 
-  if (rlang::is_true(add_history) && !rlang::is_null(chat_history)) {
-    if (nrow(chat_history) == 0) {
+  if (rlang::is_true(add_history) & rlang::is_true(need_context)) {
+    cli::cli_inform("Attempting to add chat history to query.")
+    cli::cli_inform("Chat history: {class(chat_history)}")
+    if (rlang::is_null(chat_history)) {
       related_history <- "No related history found."
+    } else {
+      related_history <-
+        get_query_context(
+          query_embedding,
+          chat_history,
+          k_history
+        ) |>
+        dplyr::distinct(content) |>
+        dplyr::pull(content) |>
+        paste(collapse = "\n\n")
     }
-    related_history <-
-      get_query_context(
-        query_embedding,
-        chat_history,
-        k_history
-      ) |>
-      dplyr::pull("content") |>
-      paste(collapse = "\n\n")
   } else {
+    cli::cli_inform("Not attempting to add chat history to query.")
     related_history <- "No related history found."
   }
-
 
   prompt_instructions <-
     switch(task,
@@ -219,11 +259,11 @@ chat_with_context <- function(query,
             role = "system",
             content =
               glue(
-                "You are a helpful chat bot that answers questions based on ",
-                "the context provided by the user. If the user does not ",
-                "provide related context, say \"I am not able to answer that ",
-                "question. Maybe try rephrasing your question in a different ",
-                "way.\""
+                "You are a helpful chat bot that answers questions based on
+                     the context provided by the user. If the user does not
+                     provide related context and you need context to respond
+                     accurately, say \"I am not able to answer that question.
+                     Maybe try rephrasing your question in a different way.\""
               )
           )
         ),
@@ -233,11 +273,12 @@ chat_with_context <- function(query,
             role = "system",
             content =
               glue(
-                "You are a helpful chat bot that answers questions based on ",
-                "on the context provided by the user. If the user does not ",
-                "provide context, answer the quest but first say \"I am not ",
-                "able to answer that question with the context you gave me, ",
-                "but here is my best answer.",
+                "You are a helpful chat bot that answers questions based on
+                     on the context provided by the user. If the user does not
+                     provide context and you need context to respond correctly,
+                     answer the quest but first say \"I am not able to answer
+                     that question with the context you gave me, but here is my
+                     best but here is my best answer."
               )
           )
         )
@@ -284,23 +325,41 @@ chat_with_context <- function(query,
     prompt_query
   )
 
-  cli::cat_print(prompt)
+  simple_prompt <- prompt |>
+    purrr::map_chr(.f = "content") |>
+    paste(collapse = "\n\n")
 
-  answer <- query_openai(body = prompt)
+  cat(simple_prompt, "\n\n")
 
-  if (rlang::is_true(save_history)) {
+  cli::cli_inform("Service: {service}")
+  cli::cli_inform("Model: {model}")
+
+  answer <-
+    gptstudio:::gptstudio_create_skeleton(
+      service = service,
+      model = model,
+      prompt = simple_prompt,
+      stream = FALSE
+    ) |>
+    gptstudio:::gptstudio_request_perform()
+
+  if (save_history) {
     purrr::map(prompt, \(x) {
-      save_history_azure(
+      save_user_history(
         file_name = history_name,
         role      = "system",
         content   = x$content,
+        local     = local,
+        model     = embedding_model,
         overwrite = overwrite
       )
     })
-    save_history_azure(
+    save_user_history(
       file_name = history_name,
       role      = "assistant",
-      content   = answer$choices$message.content,
+      content   = answer$response,
+      local     = local,
+      model     = embedding_model,
       overwrite = overwrite
     )
   }
@@ -308,5 +367,26 @@ chat_with_context <- function(query,
   prompt_without_context <-
     c(session_history, prompt_query)
 
-  list(prompt_without_context, full_context, answer)
+  list(prompt_without_context, full_context, answer$response)
+}
+
+
+is_context_needed <- function(user_prompt,
+                              service = getOption("gpttools.service"),
+                              model = getOption("gpttools.model")) {
+  prompt <-
+    glue::glue("Would additional context or history be helpful to respond to
+               this prompt from the user. If yes, answer TRUE. If no, answer
+               FALSE. ONLY answer TRUE or FALSE. It is crucial that you only
+               answer TRUE or FALSE.\n\n{user_prompt}")
+
+  gptstudio:::gptstudio_create_skeleton(
+    service = service,
+    model = model,
+    prompt = prompt,
+    stream = FALSE
+  ) |>
+    gptstudio:::gptstudio_request_perform() |>
+    purrr::pluck("response") |>
+    as.logical()
 }

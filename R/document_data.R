@@ -9,10 +9,8 @@ collect_dataframes <- function() {
   objects <- names(rlang::global_env())
   purrr::map_chr(
     .x = objects,
-    .f = \(x) if (is.data.frame(get(x))) {
-      x
-    } else {
-      NA
+    .f = \(x) {
+      if (is.data.frame(get(x))) x else NA
     }
   ) |>
     stats::na.omit()
@@ -58,8 +56,6 @@ summarize_data <- function(data,
                              "column_types",
                              "summary"
                            )) {
-  assertthat::assert_that(is.data.frame(data))
-
   rlang::arg_match(method)
 
   switch(method,
@@ -88,9 +84,6 @@ summarize_data <- function(data,
 #'   prompt = "This is a test prompt."
 #' )
 prep_data_prompt <- function(data, method, prompt) {
-  assertthat::assert_that(is.data.frame(data))
-  assertthat::assert_that(assertthat::is.string(prompt))
-
   summarized_data <- summarize_data(data = data, method = method)
 
   paste(testthat::capture_output(print(summarized_data)), prompt, sep = "\n")

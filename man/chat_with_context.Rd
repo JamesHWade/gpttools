@@ -6,7 +6,8 @@
 \usage{
 chat_with_context(
   query,
-  model = "gpt-3.5-turbo",
+  service = "openai",
+  model = "gpt-4",
   index = NULL,
   add_context = TRUE,
   chat_history = NULL,
@@ -17,11 +18,15 @@ chat_with_context(
   k_context = 4,
   k_history = 4,
   save_history = TRUE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  local = FALSE,
+  embedding_model = NULL
 )
 }
 \arguments{
 \item{query}{The input query to be processed.}
+
+\item{service}{Name of the AI service to use, defaults to openai.}
 
 \item{model}{Name of the openai model to use, defaults to gpt-3.5-turbo}
 
@@ -51,6 +56,11 @@ is TRUE.}
 
 \item{overwrite}{Whether to overwrite the history file or not. Default is
 FALSE.}
+
+\item{local}{Whether to use the local model or not. Default is FALSE.}
+
+\item{embedding_model}{A model object to use for embedding. Only needed if
+local is TRUE. Default is NULL.}
 }
 \value{
 A list containing the prompt, context, and answer.
@@ -61,13 +71,9 @@ on the provided context and chat history. It uses GPT-4 architecture to
 generate responses.
 }
 \examples{
-\dontrun{
-# Define a query and context
+\dontshow{if (rlang::is_interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+rlang::is_interactive()
 query <- "What is the capital of France?"
-context <- "France is a country in Western Europe. Its capital is a famous
-city known for its culture, art, and history."
-
-# Call the chat_with_context function
 result <- chat_with_context(query = query, context = context)
-}
+\dontshow{\}) # examplesIf}
 }

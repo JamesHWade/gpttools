@@ -9,7 +9,6 @@
 ^cran-comments\.md$
 ^docs$
 ^gpttools\.Rproj$
-^images$
 ^pkgdown$
 ^revdep$
 ^.lintr$
@@ -19,3 +18,4 @@
 ^inst/positgpt-app/indices$
 ^inst/longevity$
 ^inst/azure-retriever/rsconnect/$
+^media/

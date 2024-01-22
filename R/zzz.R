@@ -1,16 +1,56 @@
 .onLoad <- function(lib, pkg) {
-  op <- options()
-  op_gpttools <- list(
-    gpttools.valid_api        = FALSE,
-    gpttools.openai_key       = NULL,
-    gpttools.max_tokens       = 500,
-    gpttools.valid_rstudioapi = FALSE
-  )
+  user_config <- set_user_config()
 
-  toset <- !(names(op_gpttools) %in% names(op))
-  if (any(toset)) options(op_gpttools[toset])
+  if (rlang::is_false(user_config)) {
+    op <- options()
+    op_gpttools <- list(
+      gpttools.service      = "openai",
+      gpttools.model        = "gpt-4-1106-preview",
+      gpttools.local_embed  = TRUE,
+      gpttools.task         = "Permissive Chat",
+      gpttools.k_context    = 4,
+      gpttools.k_history    = 4,
+      gpttools.save_history = FALSE,
+      gpttools.sources      = "All"
+    )
+
+    toset <- !(names(op_gpttools) %in% names(op))
+    if (any(toset)) options(op_gpttools[toset])
+  }
+
+  pkgs <- load_pkgs_to_scrape()
+  if (is.null(pkgs)) {
+    pkg_op <- !("gpttools.pkgs" %in% names(options()))
+    if (pkg_op) options(gpttools.pkgs = use_default_pkgs())
+  } else {
+    options(gpttools.pkgs = pkgs)
+  }
   invisible()
 }
 
 
-utils::globalVariables(".rs.invokeShinyPaneViewer")
+global_vars <- c(
+  "Package",
+  "ReposVer",
+  "Version",
+  "chunks",
+  "content",
+  "embedding",
+  "embeddings",
+  "head",
+  "installed.packages",
+  "indexed_version",
+  "installed_version",
+  "link",
+  "name",
+  "old.packages",
+  "package",
+  "parent",
+  "run_code",
+  "scraped",
+  "similarity",
+  "text",
+  ".rs.invokeShinyPaneViewer"
+)
+
+utils::globalVariables(global_vars)

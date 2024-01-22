@@ -9,9 +9,9 @@ crawl(
   index_create = TRUE,
   aggressive = FALSE,
   overwrite = FALSE,
-  num_cores = parallel::detectCores() - 1,
   pkg_version = NULL,
-  use_azure_openai = FALSE
+  pkg_name = NULL,
+  service = "openai"
 )
 }
 \arguments{
@@ -24,14 +24,15 @@ Default is TRUE.}
 crawling. Default is FALSE.}
 
 \item{overwrite}{A logical value indicating whether to overwrite scraped
-pages and index if they already exist. Default is FALSE.}
-
-\item{num_cores}{Number of cores to use. Defaults to
+pages and index if they already exist. Default is FALSE.
 \code{parallel::detectCores() - 1}}
 
 \item{pkg_version}{Package version number}
 
-\item{use_azure_openai}{Whether to use Azure OpenAI for index creation}
+\item{pkg_name}{Package name}
+
+\item{service}{The service to use for scraping. Default is "openai". Options
+are "openai" and "local".}
 }
 \value{
 NULL. The resulting tibble is saved into a parquet file.
