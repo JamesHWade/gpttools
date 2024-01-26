@@ -55,7 +55,7 @@ get_pkgs_to_scrape <- function(local = TRUE,
       name = Package,
       installed_version = Version
     ) |>
-    dplyr::filter(name %in% pkgs$Package) |>
+    dplyr::filter(name %in% pkgs) |>
     dplyr::mutate(url = purrr::map_chr(name, get_pkg_doc_page)) |>
     tidyr::drop_na(url) |>
     dplyr::mutate(source = urltools::domain(url)) |>

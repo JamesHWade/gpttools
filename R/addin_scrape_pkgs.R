@@ -97,7 +97,8 @@ run_select_pkgs_app <- function() {
     shiny::observe({
       selected_pkgs <-
         installed_packages |>
-        dplyr::filter(Package %in% input$selected_pkg)
+        dplyr::filter(Package %in% input$selected_pkg) |>
+        dplyr::pull(Package)
       try_to_save <- save_pkgs_to_scrape(selected_pkgs)
       if (try_to_save) {
         shiny::showNotification("Saved packages to scrape.")
