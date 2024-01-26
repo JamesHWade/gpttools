@@ -12,7 +12,7 @@ to a YAML file."><meta property="og:image" content="https://jameshwade.github.io
     
     <a class="navbar-brand me-2" href="../index.html">gpttools</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,9 +76,11 @@ to a YAML file.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">save_user_config</span><span class="op">(</span></span>
 <span>  service <span class="op">=</span> <span class="st">"openai"</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"gpt-4-1106-preview"</span>,</span>
+<span>  model <span class="op">=</span> <span class="st">"gpt-4-turbo-preview"</span>,</span>
 <span>  task <span class="op">=</span> <span class="st">"Permissive Chat"</span>,</span>
 <span>  embeddings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  openai_embed_model <span class="op">=</span> <span class="st">"text-embedding-3-small"</span>,</span>
+<span>  local_embed_model <span class="op">=</span> <span class="st">"BAAI/bge-large-en-v1.5"</span>,</span>
 <span>  k_context <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  k_history <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  save_history <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -103,6 +105,16 @@ to a YAML file.</p>
 
 <dt>embeddings</dt>
 <dd><p>The location of embeddings, default is "local".</p></dd>
+
+
+<dt>openai_embed_model</dt>
+<dd><p>The OpenAI embeddings model to use, default is
+"text-embedding-3-small".</p></dd>
+
+
+<dt>local_embed_model</dt>
+<dd><p>The local embeddings model to use, default is
+"BAAI/bge-large-en-v1.5".</p></dd>
 
 
 <dt>k_context</dt>
