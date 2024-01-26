@@ -67,7 +67,9 @@ Suggests:
     tuneR,
     uuid,
     waiter,
-    withr
+    withr,
+    future,
+    furrr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

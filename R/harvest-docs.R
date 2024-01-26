@@ -108,16 +108,17 @@ recursive_hyperlinks <- function(local_domain,
 #'
 #' @param url A character string with the URL to be scraped.
 #' @param index_create A logical value indicating whether to create an index.
-#' Default is TRUE.
+#'   Default is TRUE.
 #' @param aggressive A logical value indicating whether to use aggressive link
-#' crawling. Default is FALSE.
+#'   crawling. Default is FALSE.
 #' @param overwrite A logical value indicating whether to overwrite scraped
-#' pages and index if they already exist. Default is FALSE.
-#'  `parallel::detectCores() - 1`
+#'   pages and index if they already exist. Default is FALSE.
+#' @param update A logical value indicating whether to update scraped pages,
+#'   defaults to FALSE.
 #' @param pkg_version Package version number
 #' @param pkg_name Package name
 #' @param service The service to use for scraping. Default is "openai". Options
-#' are "openai" and "local".
+#'   are "openai" and "local".
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
@@ -126,7 +127,8 @@ crawl <- function(url,
                   index_create = TRUE,
                   aggressive = FALSE,
                   overwrite = FALSE,
-                  pkg_version = NULL,
+                  update = FALSE,
+                  pkg_version = "not a package",
                   pkg_name = NULL,
                   service = "openai") {
   rlang::arg_match(service, c("openai", "local"))
@@ -136,6 +138,8 @@ crawl <- function(url,
   if (!rlang::is_na(url_path) && rlang::is_false(aggressive)) {
     local_domain <- glue("{local_domain}/{url_path}")
   }
+
+  # check if url has already been scraped
   scraped_data_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "text")
   local_domain_name <-
@@ -144,58 +148,79 @@ crawl <- function(url,
   scraped_text_file <-
     glue::glue("{scraped_data_dir}/{local_domain_name}.parquet")
 
-  if (file.exists(scraped_text_file) && rlang::is_false(overwrite)) {
-    cli::cli_warn(
+  cli::cli_inform("Scraped data file: {file.exists(scraped_text_file)}")
+  cli::cli_inform("Update: {rlang::is_false(update)}")
+  cli::cli_inform("Combined: {file.exists(scraped_text_file) && rlang::is_false(update)}")
+
+  if (file.exists(scraped_text_file) && rlang::is_false(update)) {
+    cli::cli_alert_warning(
       c(
         "!" = "Scraped data already exists for this domain.",
+        "i" = "Use {.code crawl(<url>, update = TRUE)} to scrape site again."
+      )
+    )
+  } else {
+    cli_rule("Crawling {.url {url}}")
+    cli_inform(c(
+      "i" = "This may take a while.",
+      "i" = "Gathering links to scrape"
+    ))
+
+    cli::cli_inform("Local domain: {local_domain}")
+    cli::cli_inform("Url: {url}")
+
+    links <-
+      recursive_hyperlinks(local_domain, url, aggressive = aggressive) |>
+      unique()
+    cli_inform(c("i" = "Scraping validated links"))
+    scraped_data <-
+      purrr::map(links, \(x) {
+        if (identical(check_url(x), 200L)) {
+          tibble::tibble(
+            source  = local_domain,
+            link    = x,
+            text    = paste(scrape_url(x), collapse = " "),
+            n_words = tokenizers::count_words(text),
+            scraped = lubridate::now()
+          )
+        } else {
+          cli::cli_inform(c(
+            "!" = "Skipped {url}",
+            "i" = "Status code: {status}"
+          ))
+        }
+      },
+      .progress = "Scraping Pages"
+      ) |>
+      dplyr::bind_rows() |>
+      dplyr::distinct()
+    cli_inform(c("i" = "Saving scraped data"))
+    if (rlang::is_false(dir.exists(scraped_data_dir))) {
+      dir.create(scraped_data_dir, recursive = TRUE)
+    }
+    arrow::write_parquet(
+      x    = scraped_data,
+      sink = scraped_text_file
+    )
+  }
+
+  index_dir <-
+    file.path(tools::R_user_dir("gpttools", which = "data"), "index")
+
+  if (service == "local") index_dir <- file.path(index_dir, "local")
+
+  index_file <- glue::glue("{index_dir}/{local_domain_name}.parquet")
+
+  if (file.exists(index_file) && rlang::is_false(overwrite)) {
+    cli::cli_warn(
+      c(
+        "!" = "Index already exists for this domain.",
         "i" = "Use {.code crawl(<url>, overwrite = TRUE)} to overwrite."
       )
     )
     return(NULL)
   }
 
-  cli_rule("Crawling {.url {url}}")
-  cli_inform(c(
-    "i" = "This may take a while.",
-    "i" = "Gathering links to scrape"
-  ))
-
-  cli::cli_inform("Local domain: {local_domain}")
-  cli::cli_inform("Url: {url}")
-
-  links <-
-    recursive_hyperlinks(local_domain, url, aggressive = aggressive) |>
-    unique()
-  cli_inform(c("i" = "Scraping validated links"))
-  scraped_data <-
-    purrr::map(links, \(x) {
-      if (identical(check_url(x), 200L)) {
-        tibble::tibble(
-          source  = local_domain,
-          link    = x,
-          text    = paste(scrape_url(x), collapse = " "),
-          n_words = tokenizers::count_words(text),
-          scraped = lubridate::now()
-        )
-      } else {
-        cli::cli_inform(c(
-          "!" = "Skipped {url}",
-          "i" = "Status code: {status}"
-        ))
-      }
-    },
-    .progress = "Scraping Pages"
-    ) |>
-    dplyr::bind_rows() |>
-    dplyr::distinct()
-  cli_inform(c("i" = "Saving scraped data"))
-  if (rlang::is_false(dir.exists(scraped_data_dir))) {
-    dir.create(scraped_data_dir, recursive = TRUE)
-  }
-  arrow::write_parquet(
-    x    = scraped_data,
-    sink = scraped_text_file
-  )
   if (index_create) {
     if (service == "openai") {
       create_index(local_domain_name,

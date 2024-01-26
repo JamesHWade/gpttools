@@ -9,7 +9,8 @@ crawl(
   index_create = TRUE,
   aggressive = FALSE,
   overwrite = FALSE,
-  pkg_version = NULL,
+  update = FALSE,
+  pkg_version = "not a package",
   pkg_name = NULL,
   service = "openai"
 )
@@ -24,8 +25,10 @@ Default is TRUE.}
 crawling. Default is FALSE.}
 
 \item{overwrite}{A logical value indicating whether to overwrite scraped
-pages and index if they already exist. Default is FALSE.
-\code{parallel::detectCores() - 1}}
+pages and index if they already exist. Default is FALSE.}
+
+\item{update}{A logical value indicating whether to update scraped pages,
+defaults to FALSE.}
 
 \item{pkg_version}{Package version number}
 

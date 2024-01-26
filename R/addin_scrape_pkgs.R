@@ -35,8 +35,7 @@ addin_run_scrape_pkgs <- function() {
   proceed <-
     rstudioapi::showQuestion(
       title = "Scrape Packages",
-      message = "This will scrape installed packages and create indices to use
-      with the \"Chat with Retrieval\" app. Would you like to proceed?"
+      message = "This will scrape installed packages and create indices to use with the \"Chat with Retrieval\" app. Would you like to proceed?"
     )
 
   # Proceed with scraping if the user agrees
@@ -109,7 +108,7 @@ run_select_pkgs_app <- function() {
       {
         installed_packages |> dplyr::filter(Package %in% input$selected_pkg)
       },
-      # options = list(pageLength = 5)
+      options = list(pageLength = 5)
     )
   }
 

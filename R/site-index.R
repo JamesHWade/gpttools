@@ -34,9 +34,9 @@ read_indexed_pkgs <- function(local = FALSE) {
       glue::glue('{tools::R_user_dir("gpttools", which = "data")}/index')
   }
   if (dir.exists(data_dir)) {
-    indices <- arrow::open_dataset(data_dir)
+    arrow::open_dataset(data_dir)
   } else {
-    indices <- NULL
+    NULL
   }
 }
 
@@ -82,6 +82,9 @@ get_pkgs_to_scrape <- function(local = TRUE,
 #'   to `TRUE`.
 #' @param overwrite Logical indicating whether to overwrite existing content,
 #'   defaults to `TRUE`.
+#' @param parallel Logical indicating whether to use parallel processing,
+#' defaults to `FALSE`.
+#'
 #' @return Invisible `NULL`. The function is called for its side effects.
 #' @examplesIf rlang::is_interactive()
 #' scrape_pkg_sites()
@@ -89,7 +92,8 @@ get_pkgs_to_scrape <- function(local = TRUE,
 scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
                              service = "local",
                              index_create = TRUE,
-                             overwrite = TRUE) {
+                             overwrite = TRUE,
+                             parallel = FALSE) {
   if (nrow(sites) == 0) {
     cli_alert_info("No packages to scrape.")
     return(invisible())
@@ -107,19 +111,43 @@ scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
     return(invisible())
   }
 
-  sites |>
-    dplyr::select(url, version, name) |>
-    purrr::pmap(.f = \(url, version, name) {
-      # Helper function `crawl` is assumed to be defined elsewhere
-      crawl(
-        url = url,
-        index_create = index_create,
-        overwrite = overwrite,
-        pkg_version = version,
-        pkg_name = name,
-        service = service
-      )
-    })
+  if (rlang::is_true(parallel)) {
+    if (rlang::is_installed("furrr")) {
+      multisession <- TRUE
+    } else {
+      multisession <- FALSE
+      cli::cli_alert_info("Package `furrr` not installed, using sequential scraping.")
+    }
+  }
+
+  if (rlang::is_true(multisession)) {
+    future::plan(multisession, workers = future::availableCores() - 1)
+    sites |>
+      dplyr::select(url, version, name) |>
+      furrr::future_pmap(.f = \(url, version, name) {
+        crawl(
+          url = url,
+          index_create = index_create,
+          overwrite = overwrite,
+          pkg_version = version,
+          pkg_name = name,
+          service = service
+        )
+      })
+  } else {
+    sites |>
+      dplyr::select(url, version, name) |>
+      purrr::pmap(.f = \(url, version, name) {
+        crawl(
+          url = url,
+          index_create = index_create,
+          overwrite = overwrite,
+          pkg_version = version,
+          pkg_name = name,
+          service = service
+        )
+      })
+  }
 }
 
 use_default_pkgs <- function() {
