@@ -94,7 +94,7 @@ add_embeddings <- function(index,
           .f = \(x) create_text_embeddings(x, model),
           .progress = "Creating Embeddings Locally"
         ),
-        embedding_method = glue::glue("local: {model$name_or_path}")
+        embedding_method = glue::glue("local: {getOption(\"gpttools.local_embed_model\")}")
       )
   } else {
     index |>
