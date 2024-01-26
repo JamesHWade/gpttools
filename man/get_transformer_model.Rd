@@ -4,12 +4,14 @@
 \alias{get_transformer_model}
 \title{Get Transformer Model}
 \usage{
-get_transformer_model(model_name = getOption("gpttools.local_embed_model"))
+get_transformer_model(
+  model_name = getOption("gpttools.local_embed_model", "BAAI/bge-small-en-v1.5")
+)
 }
 \arguments{
 \item{model_name}{The name of the transformer model to download. This should
 be in the format "username/modelname" as recognized by the transformers
-library. Default is "jinaai/jina-embeddings-v2-base-en".}
+library. Default is "BAAI/bge-small-en-v1.5".}
 }
 \value{
 An object of the downloaded transformer model.
@@ -34,4 +36,5 @@ get_transformer_model()
 # To get a custom transformer model by specifying the model name:
 get_transformer_model("bert-base-uncased")
 }
+
 }

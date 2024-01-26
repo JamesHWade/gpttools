@@ -186,7 +186,7 @@ check_context <- function(context) {
 #' result <- chat_with_context(query = query, context = context)
 chat_with_context <- function(query,
                               service = "openai",
-                              model = "gpt-4",
+                              model = "gpt-4-turbo-preview",
                               index = NULL,
                               add_context = TRUE,
                               chat_history = NULL,
@@ -209,6 +209,7 @@ chat_with_context <- function(query,
   )
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
+    cli::cli_inform("Creating embedding from query.")
     query_embedding <- get_query_embedding(query,
       local = local,
       model = embedding_model
@@ -216,6 +217,7 @@ chat_with_context <- function(query,
   }
 
   if (rlang::is_true(add_context) && rlang::is_true(need_context)) {
+    cli::cli_inform("Attempting to add context to query.")
     full_context <-
       get_query_context(
         query_embedding,

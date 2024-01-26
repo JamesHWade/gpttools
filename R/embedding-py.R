@@ -1,15 +1,3 @@
-# nolint
-# get_transformer_model <-
-# function(model_name = "jinaai/jina-embeddings-v2-base-en") {
-#   py_pkg_is_available()
-#   transformer <- reticulate::import("sentence_transformers")
-#   cli::cli_process_start("Downloading model. This may take a few minutes.")
-#   model <- transformer$SentenceTransformer(model_name)
-#   cli::cli_process_done()
-#   model
-# }
-# nolint end
-
 #' Get Transformer Model
 #'
 #' This function is designed to download and load a pre-trained transformer
@@ -19,11 +7,9 @@
 #'
 #' @param model_name The name of the transformer model to download. This should
 #' be in the format "username/modelname" as recognized by the transformers
-#' library. Default is "jinaai/jina-embeddings-v2-base-en".
+#' library. Default is "BAAI/bge-small-en-v1.5".
 #'
 #' @return An object of the downloaded transformer model.
-#'
-#' @export
 #'
 #' @note Users of this function need to ensure that the Python environment
 #' is set up with the 'transformers' package installed. The function uses
@@ -38,14 +24,18 @@
 #' # To get a custom transformer model by specifying the model name:
 #' get_transformer_model("bert-base-uncased")
 #' }
+#'
+#' @export
+#'
 get_transformer_model <-
-  function(model_name = getOption("gpttools.local_embed_model")) {
-    py_pkg_is_available("transformers")
-    transformer <- reticulate::import("transformers")
+  function(model_name = getOption(
+             "gpttools.local_embed_model",
+             "BAAI/bge-small-en-v1.5"
+           )) {
+    py_pkg_is_available()
+    transformer <- reticulate::import("sentence_transformers")
     cli::cli_process_start("Downloading model. This may take a few minutes.")
-    model <- transformer$AutoModel$from_pretrained(model_name,
-      trust_remote_code = TRUE
-    )
+    model <- transformer$SentenceTransformer(model_name)
     cli::cli_process_done()
     model
   }

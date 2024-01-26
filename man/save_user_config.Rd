@@ -10,7 +10,7 @@ save_user_config(
   task = "Permissive Chat",
   embeddings = TRUE,
   openai_embed_model = "text-embedding-3-small",
-  local_embed_model = "BAAI/bge-large-en-v1.5",
+  local_embed_model = "BAAI/bge-small-en-v1.5",
   k_context = 4,
   k_history = 4,
   save_history = TRUE,
@@ -31,7 +31,7 @@ save_user_config(
 "text-embedding-3-small".}
 
 \item{local_embed_model}{The local embeddings model to use, default is
-"BAAI/bge-large-en-v1.5".}
+"BAAI/bge-small-en-v1.5".}
 
 \item{k_context}{The amount of context to keep, default is 4.}
 
