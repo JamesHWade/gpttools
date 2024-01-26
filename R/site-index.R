@@ -118,7 +118,7 @@ scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
   }
 
   if (rlang::is_true(multisession)) {
-    future::plan(multisession, workers = future::availableCores())
+    future::plan(multisession, workers = future::availableCores() - 1)
     sites |>
       dplyr::select(url, version, name) |>
       furrr::future_pmap(.f = \(url, version, name) {

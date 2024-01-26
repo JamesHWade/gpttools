@@ -10,7 +10,7 @@ crawl(
   aggressive = FALSE,
   overwrite = FALSE,
   update = FALSE,
-  pkg_version = NULL,
+  pkg_version = "not a package",
   pkg_name = NULL,
   service = "openai"
 )

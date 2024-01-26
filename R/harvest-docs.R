@@ -108,16 +108,17 @@ recursive_hyperlinks <- function(local_domain,
 #'
 #' @param url A character string with the URL to be scraped.
 #' @param index_create A logical value indicating whether to create an index.
-#' Default is TRUE.
+#'   Default is TRUE.
 #' @param aggressive A logical value indicating whether to use aggressive link
-#' crawling. Default is FALSE.
+#'   crawling. Default is FALSE.
 #' @param overwrite A logical value indicating whether to overwrite scraped
-#' pages and index if they already exist. Default is FALSE.
-#'  `parallel::detectCores() - 1`
+#'   pages and index if they already exist. Default is FALSE.
+#' @param update A logical value indicating whether to update scraped pages,
+#'   defaults to FALSE.
 #' @param pkg_version Package version number
 #' @param pkg_name Package name
 #' @param service The service to use for scraping. Default is "openai". Options
-#' are "openai" and "local".
+#'   are "openai" and "local".
 #'
 #' @return NULL. The resulting tibble is saved into a parquet file.
 #'
