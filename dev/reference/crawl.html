@@ -79,7 +79,8 @@ data into a tibble format. It saves the resulting tibble into a parquet file.</p
 <span>  index_create <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  aggressive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  pkg_version <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  update <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pkg_version <span class="op">=</span> <span class="st">"not a package"</span>,</span>
 <span>  pkg_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  service <span class="op">=</span> <span class="st">"openai"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -103,8 +104,12 @@ crawling. Default is FALSE.</p></dd>
 
 <dt>overwrite</dt>
 <dd><p>A logical value indicating whether to overwrite scraped
-pages and index if they already exist. Default is FALSE.
-<code>parallel::detectCores() - 1</code></p></dd>
+pages and index if they already exist. Default is FALSE.</p></dd>
+
+
+<dt>update</dt>
+<dd><p>A logical value indicating whether to update scraped pages,
+defaults to FALSE.</p></dd>
 
 
 <dt>pkg_version</dt>
