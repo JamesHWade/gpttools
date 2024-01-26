@@ -82,6 +82,9 @@ get_pkgs_to_scrape <- function(local = TRUE,
 #'   to `TRUE`.
 #' @param overwrite Logical indicating whether to overwrite existing content,
 #'   defaults to `TRUE`.
+#' @param parallel Logical indicating whether to use parallel processing,
+#' defaults to `FALSE`.
+#'
 #' @return Invisible `NULL`. The function is called for its side effects.
 #' @examplesIf rlang::is_interactive()
 #' scrape_pkg_sites()

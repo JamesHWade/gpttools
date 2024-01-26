@@ -23,6 +23,9 @@ to \code{TRUE}.}
 
 \item{overwrite}{Logical indicating whether to overwrite existing content,
 defaults to \code{TRUE}.}
+
+\item{parallel}{Logical indicating whether to use parallel processing,
+defaults to \code{FALSE}.}
 }
 \value{
 Invisible \code{NULL}. The function is called for its side effects.
