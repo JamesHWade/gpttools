@@ -4,7 +4,7 @@
 \alias{get_transformer_model}
 \title{Get Transformer Model}
 \usage{
-get_transformer_model(model_name = "jinaai/jina-embeddings-v2-base-en")
+get_transformer_model(model_name = getOption("gpttools.local_embed_model"))
 }
 \arguments{
 \item{model_name}{The name of the transformer model to download. This should

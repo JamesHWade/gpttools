@@ -65,7 +65,7 @@ ui <- page_fillable(
   waiter::waiterOnBusy(html = waiter::spin_3circles(), color = waiter::transparent(0.5)),
   window_height_ui("height"),
   theme = bs_theme(bootswatch = "litera", version = 5) |>
-    bs_add_rules(".scrollable-popover .popover-body { max-height: 300px; overflow-y: auto; }"),
+    bs_add_rules(".scrollable-popover .popover-body { max-height: 400px; overflow-y: auto; }"),
   tags$head(tags$script(HTML("
   $(document).on('keydown', '#chat_input', function(e) {
     if ((e.keyCode == 10 || e.keyCode == 13) && (!e.shiftKey)) {
@@ -77,7 +77,8 @@ ui <- page_fillable(
   });"))),
   title = "Retreiver from gpttools",
   card(
-    card_header("Chat with Retrieval",
+    card_header(
+      "Chat with Retrieval",
       class = "bg-primary d-flex align-items-center",
       popover(
         id = "settings",
@@ -99,7 +100,7 @@ ui <- page_fillable(
         ),
         br(),
         accordion_panel(
-          "Preferences",
+          "Service & Model",
           icon = bs_icon("sliders", class = "ms-auto"),
           selectInput(
             "service", "AI Service",
@@ -109,18 +110,47 @@ ui <- page_fillable(
           selectInput("model", "Model",
             choices = NULL
           ),
-          radioButtons(
-            "save_history", "Save & Use History",
-            choiceNames = c("Yes", "No"),
-            choiceValues = c(TRUE, FALSE),
-            selected = getOption("gpttools.save_history", FALSE),
-            inline = TRUE,
+          selectInput(
+            "embed_model", "OpenAI Embedding Model",
+            choices = c(
+              "text-embedding-3-small",
+              "text-embedding-3-large",
+              "text-embedding-ada-002"
+            ),
+            selected = getOption(
+              "gpttools.openai_embed_model",
+              "text-embedding-3-small"
+            )
           ),
           radioButtons(
             "local", "Local Embeddings",
             choiceNames = c("Yes", "No"),
             choiceValues = c(TRUE, FALSE),
             selected = getOption("gpttools.local_embed"),
+            inline = TRUE,
+          ),
+          selectInput(
+            "local_embed_model", "Local Embedding Model",
+            choices = c(
+              "BAAI/bge-large-en-v1.5",
+              "jinaai/jina-embeddings-v2-base-en",
+              "BAAI/bge-small-en-v1.5"
+            ),
+            selected = getOption(
+              "gpttools.local_embed_model",
+              "BAAI/bge-large-en-v1.5"
+            )
+          )
+        ),
+        br(),
+        accordion_panel(
+          "History & Context",
+          icon = bs_icon("book", class = "ms-auto"),
+          radioButtons(
+            "save_history", "Save & Use History",
+            choiceNames = c("Yes", "No"),
+            choiceValues = c(TRUE, FALSE),
+            selected = getOption("gpttools.save_history", FALSE),
             inline = TRUE,
           ),
           sliderInput(
@@ -234,6 +264,8 @@ server <- function(input, output, session) {
       model = input$model,
       task = input$task,
       embeddings = input$local,
+      openai_embed_model = input$openai_embed_model,
+      local_embed_model = input$local_embed_model,
       k_context = input$n_docs,
       k_history = input$n_history,
       save_history = input$save_history,

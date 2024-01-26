@@ -39,7 +39,7 @@
 #' get_transformer_model("bert-base-uncased")
 #' }
 get_transformer_model <-
-  function(model_name = "jinaai/jina-embeddings-v2-base-en") {
+  function(model_name = getOption("gpttools.local_embed_model")) {
     py_pkg_is_available("transformers")
     transformer <- reticulate::import("transformers")
     cli::cli_process_start("Downloading model. This may take a few minutes.")

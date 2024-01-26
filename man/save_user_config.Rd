@@ -6,9 +6,11 @@
 \usage{
 save_user_config(
   service = "openai",
-  model = "gpt-4-1106-preview",
+  model = "gpt-4-turbo-preview",
   task = "Permissive Chat",
   embeddings = TRUE,
+  openai_embed_model = "text-embedding-3-small",
+  local_embed_model = "BAAI/bge-large-en-v1.5",
   k_context = 4,
   k_history = 4,
   save_history = TRUE,
@@ -24,6 +26,12 @@ save_user_config(
 \item{task}{The task to perform, default is "Permissive Chat".}
 
 \item{embeddings}{The location of embeddings, default is "local".}
+
+\item{openai_embed_model}{The OpenAI embeddings model to use, default is
+"text-embedding-3-small".}
+
+\item{local_embed_model}{The local embeddings model to use, default is
+"BAAI/bge-large-en-v1.5".}
 
 \item{k_context}{The amount of context to keep, default is 4.}
 

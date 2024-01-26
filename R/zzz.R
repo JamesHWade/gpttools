@@ -4,14 +4,16 @@
   if (rlang::is_false(user_config)) {
     op <- options()
     op_gpttools <- list(
-      gpttools.service      = "openai",
-      gpttools.model        = "gpt-4-1106-preview",
-      gpttools.local_embed  = TRUE,
-      gpttools.task         = "Permissive Chat",
-      gpttools.k_context    = 4,
-      gpttools.k_history    = 4,
-      gpttools.save_history = FALSE,
-      gpttools.sources      = "All"
+      gpttools.service            = "openai",
+      gpttools.model              = "gpt-4-turbo-preview",
+      gpttools.local_embed        = TRUE,
+      gpttools.local_embed_model  = "BAAI/bge-large-en-v1.5",
+      gpttools.task               = "Permissive Chat",
+      gpttools.k_context          = 4,
+      gpttools.k_history          = 4,
+      gpttools.save_history       = FALSE,
+      gpttools.sources            = "All",
+      gpttools.openai_embed_model = "text-embedding-3-small"
     )
 
     toset <- !(names(op_gpttools) %in% names(op))

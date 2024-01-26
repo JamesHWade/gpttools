@@ -6,6 +6,10 @@
 #' @param model The model to use, default is "gpt-4-1106-preview".
 #' @param task The task to perform, default is "Permissive Chat".
 #' @param embeddings The location of embeddings, default is "local".
+#' @param openai_embed_model The OpenAI embeddings model to use, default is
+#'  "text-embedding-3-small".
+#' @param local_embed_model The local embeddings model to use, default is
+#' "BAAI/bge-large-en-v1.5".
 #' @param k_context The amount of context to keep, default is 4.
 #' @param k_history The amount of history to keep, default is 4.
 #' @param save_history Logical indicating whether history should be saved,
@@ -16,9 +20,11 @@
 #' @return Invisible NULL.
 #' @export
 save_user_config <- function(service = "openai",
-                             model = "gpt-4-1106-preview",
+                             model = "gpt-4-turbo-preview",
                              task = "Permissive Chat",
                              embeddings = TRUE,
+                             openai_embed_model = "text-embedding-3-small",
+                             local_embed_model = "BAAI/bge-large-en-v1.5",
                              k_context = 4,
                              k_history = 4,
                              save_history = TRUE,
