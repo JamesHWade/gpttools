@@ -55,7 +55,7 @@ get_pkgs_to_scrape <- function(local = TRUE,
       name = Package,
       installed_version = Version
     ) |>
-    dplyr::filter(name %in% pkgs) |>
+    dplyr::filter(name %in% pkgs$Package) |>
     dplyr::mutate(url = purrr::map_chr(name, get_pkg_doc_page)) |>
     tidyr::drop_na(url) |>
     dplyr::mutate(source = urltools::domain(url)) |>
@@ -121,7 +121,7 @@ scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
   }
 
   if (rlang::is_true(multisession)) {
-    future::plan(multisession, workers = future::availableCores() - 1)
+    future::plan("future::multisession", workers = future::availableCores() - 1)
     sites |>
       dplyr::select(url, version, name) |>
       furrr::future_pmap(.f = \(url, version, name) {
