@@ -118,6 +118,8 @@ scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
       multisession <- FALSE
       cli::cli_alert_info("Package `furrr` not installed, using sequential scraping.")
     }
+  } else {
+    multisession <- FALSE
   }
 
   if (rlang::is_true(multisession)) {
