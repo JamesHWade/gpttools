@@ -8,7 +8,8 @@ scrape_pkg_sites(
   sites = get_pkgs_to_scrape(local = TRUE),
   service = "local",
   index_create = TRUE,
-  overwrite = TRUE
+  overwrite = TRUE,
+  parallel = FALSE
 )
 }
 \arguments{

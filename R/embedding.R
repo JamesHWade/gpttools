@@ -124,7 +124,7 @@ join_embeddings_from_index <- function(x) {
 create_index <- function(domain,
                          overwrite = FALSE,
                          dont_ask = FALSE,
-                         pkg_version = NULL,
+                         pkg_version = "Not a package",
                          pkg_name = NULL,
                          local_embeddings = FALSE) {
   index_dir <-

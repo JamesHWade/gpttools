@@ -9,6 +9,7 @@ crawl(
   index_create = TRUE,
   aggressive = FALSE,
   overwrite = FALSE,
+  update = FALSE,
   pkg_version = NULL,
   pkg_name = NULL,
   service = "openai"
