@@ -7,7 +7,7 @@
 chat_with_context(
   query,
   service = "openai",
-  model = "gpt-4",
+  model = "gpt-4-turbo-preview",
   index = NULL,
   add_context = TRUE,
   chat_history = NULL,

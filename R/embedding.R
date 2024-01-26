@@ -63,7 +63,10 @@ check_for_duplicate_text <- function(x) {
 
 create_openai_embedding <-
   function(input_text,
-           model = "text-embedding-3-small",
+           model = getOption(
+             "gpttools.openai_embed_model",
+             "text-embedding-3-small"
+           ),
            openai_api_key = Sys.getenv("OPENAI_API_KEY")) {
     body <- list(
       model = model,

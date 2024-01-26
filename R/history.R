@@ -186,7 +186,7 @@ check_context <- function(context) {
 #' result <- chat_with_context(query = query, context = context)
 chat_with_context <- function(query,
                               service = "openai",
-                              model = "gpt-4",
+                              model = "gpt-4-turbo-preview",
                               index = NULL,
                               add_context = TRUE,
                               chat_history = NULL,

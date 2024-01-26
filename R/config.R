@@ -31,7 +31,7 @@ save_user_config <- function(service = "openai",
                              sources = "All",
                              persist = TRUE) {
   ops <- tibble::tibble(
-    service, model, task, embeddings,
+    service, model, task, embeddings, openai_embed_model, local_embed_model,
     k_context, k_history, sources, save_history
   )
 
@@ -73,7 +73,9 @@ set_user_config <- function(path = NULL) {
       gpttools.k_context = ops$k_context,
       gpttools.k_history = ops$k_history,
       gpttools.save_history = ops$save_history,
-      gpttools.sources = ops$sources
+      gpttools.sources = ops$sources,
+      gpttools.openai_embed_model = ops$openai_embed_model,
+      gpttools.local_embed_model = ops$local_embed_model
     )
     return(TRUE)
   } else {
