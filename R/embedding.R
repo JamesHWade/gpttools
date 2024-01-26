@@ -193,7 +193,6 @@ create_index <- function(domain,
 
 get_top_matches <- function(index, query_embedding, k = 5) {
   k <- min(k, nrow(index))
-  print(index)
   index |>
     dplyr::mutate(
       similarity = purrr::map_dbl(embedding, \(x) {

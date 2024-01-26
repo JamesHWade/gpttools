@@ -138,7 +138,7 @@ ui <- page_fillable(
             ),
             selected = getOption(
               "gpttools.local_embed_model",
-              "BAAI/bge-large-en-v1.5"
+              "BAAI/bge-small-en-v1.5"
             )
           )
         ),
@@ -231,7 +231,7 @@ server <- function(input, output, session) {
     } else {
       purrr::map(input$source, \(x) {
         load_index(input$source,
-          local_embeddings = TRUE
+          local_embeddings = FALSE
         ) |>
           tibble::as_tibble()
       }) |> dplyr::bind_rows()
