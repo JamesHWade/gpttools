@@ -336,7 +336,7 @@ repair_index_names <- function(local = TRUE) {
   } else {
     index_dir <- file.path(tools::R_user_dir("gpttools", which = "data"), "index")
   }
-  index_files <- fs::dir_ls(index_dir, glob = "*.parquet")
+  index_files <- list.files(index_dir, pattern = "*.parquet", full.names = TRUE)
   for (index_file in index_files) {
     index <- arrow::read_parquet(index_file)
     has_name <- "name" %in% names(index)

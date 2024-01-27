@@ -40,9 +40,11 @@ based on the function arguments.
 # embeddings, and without interactive prompts.
 
 \dontrun{
-gpttools_index_all_scraped_data(overwrite = FALSE,
-                                local_embeddings = TRUE,
-                                dont_ask = TRUE)
+gpttools_index_all_scraped_data(
+  overwrite = FALSE,
+  local_embeddings = TRUE,
+  dont_ask = TRUE
+)
 }
 
 }
