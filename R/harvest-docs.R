@@ -221,6 +221,10 @@ crawl <- function(url,
     return(NULL)
   }
 
+  if (is.null(pkg_name)) {
+    pkg_name <- urltools::url_parse(url)$domain
+  }
+
   if (index_create) {
     if (service == "openai") {
       create_index(local_domain_name,
@@ -324,4 +328,41 @@ extract_text <- function(url, use_html_text2 = TRUE) {
     text <- rvest::html_text(nodes)
   }
   text |> remove_lines_and_spaces()
+}
+
+repair_index_names <- function(local = TRUE) {
+  if (local) {
+    index_dir <- file.path(tools::R_user_dir("gpttools", which = "data"), "index", "local")
+  } else {
+    index_dir <- file.path(tools::R_user_dir("gpttools", which = "data"), "index")
+  }
+  index_files <- fs::dir_ls(index_dir, glob = "*.parquet")
+  for (index_file in index_files) {
+    index <- arrow::read_parquet(index_file)
+    has_name <- "name" %in% names(index)
+    if (has_name) {
+      cli::cli_inform("Index already has name column.")
+      next
+    } else {
+      domain <- basename(index_file) |> tools::file_path_sans_ext()
+      new_name <-
+        gptstudio:::gptstudio_create_skeleton(
+          prompt = glue::glue("Based on the domain, return the name of the package. If it is not a package, make your best guess at the name of the resource. Do not output any text other than the name. This output will be used to create the index column. For example, you should return \"usethis\" for \"usethis-r-lib-org\" and \"tune\" for \"tune-tidymodels-org\", ''\n\nDomain: {domain}\nName: "),
+          stream = FALSE
+        ) |>
+        gptstudio:::gptstudio_request_perform() |>
+        purrr::pluck("response")
+      cli::cli_inform(glue::glue("Name for {domain} is {new_name}."))
+      use_name <- ui_yeah("Should {new_name} be used as the name for {domain}?")
+      if (use_name) {
+        index <- index |> dplyr::mutate(name = new_name)
+        arrow::write_parquet(index, index_file)
+      } else {
+        # ask user for name in interactive session
+        user_provided_name <- readline(glue::glue("Please provide a name for {domain}: "))
+        index <- index |> dplyr::mutate(name = user_provided_name)
+        arrow::write_parquet(index, index_file)
+      }
+    }
+  }
 }
