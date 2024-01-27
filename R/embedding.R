@@ -152,12 +152,34 @@ create_index <- function(domain,
   cli::cli_alert_info("index_file: {index_file}")
 
   if (file.exists(index_file) && rlang::is_false(overwrite)) {
-    cli::cli_abort(
+    cli::cli_alert_warning(
       c(
-        "!" = "Index already exists for this domain.",
+        "!" = "Index already exists for {domain}.",
         "i" = "Use {.code overwrite = TRUE} to overwrite index."
       )
     )
+    return(invisible(FALSE))
+  } else if (file.exists(index_file) && rlang::is_true(overwrite)) {
+    cli::cli_alert_info(
+      c(
+        "!" = "Index already exists for this domain.",
+        "i" = "Overwriting index."
+      )
+    )
+    old <-
+      arrow::read_parquet(index_file) |>
+      dplyr::distinct(name, version) |>
+      tibble::as_tibble()
+    if (nrow(old) > 1) {
+      cli::cli_abort(
+        c(
+          "!" = "Multiple packages found for this domain.",
+          "i" = "Please specify the package name and version."
+        )
+      )
+    }
+    pkg_name <- old$name
+    pkg_version <- old$version
   }
 
   index <- prepare_scraped_files(domain = domain)
@@ -199,6 +221,59 @@ create_index <- function(domain,
     cli_inform("No index was creates for {domain}")
   }
 }
+
+
+#' Index All Scraped Data
+#'
+#' This function iterates through all the text files in a specified directory,
+#' updating or creating indexes for each domain contained in the file names.
+#' Allows customization of the indexing process through various parameters.
+#'
+#' @param overwrite A logical value determining whether to overwrite existing
+#'   indexes.
+#' @param local_embeddings A logical indicating whether to use local embeddings
+#'   for indexing.
+#' @param dont_ask A logical value that, if TRUE, disables interactive
+#'   confirmation prompts during the indexing process.
+#'
+#' @details The function first retrieves a list of all text files in the
+#'   targeted directory. For each file, it extracts the domain name from the
+#'   filename, prints an informative message about the indexing process for that
+#'   domain, and then proceeds to create or update the index for the domain
+#'   based on the function arguments.
+#'
+#' @return Invisible NULL. The function is called for its side effects.
+#'
+#' @examples
+#' # Index all scraped data without overwriting existing indexes, using local
+#' # embeddings, and without interactive prompts.
+#'
+#' \dontrun{
+#' gpttools_index_all_scraped_data(
+#'   overwrite = FALSE,
+#'   local_embeddings = TRUE,
+#'   dont_ask = TRUE
+#' )
+#' }
+#'
+#' @export
+gpttools_index_all_scraped_data <- function(overwrite = FALSE,
+                                            local_embeddings = TRUE,
+                                            dont_ask = TRUE) {
+  text_files <- list_index("text", full_path = TRUE)
+
+  purrr::walk(text_files, function(file_path) {
+    domain <- tools::file_path_sans_ext(basename(file_path))
+    cli::cli_alert_info(glue("Creating/updating index for domain {domain}..."))
+    create_index(
+      domain = domain,
+      overwrite = overwrite,
+      dont_ask = dont_ask,
+      local_embeddings = local_embeddings
+    )
+  })
+}
+
 
 get_top_matches <- function(index, query_embedding, k = 5) {
   k <- min(k, nrow(index))
