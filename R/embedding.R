@@ -28,7 +28,7 @@ prepare_scraped_files <- function(domain) {
     cli_alert_warning(
       c(
         "!" = "Entries with more than 200,000 words detected.",
-        "i" = "Not an interactive session so not stopping here.",
+        "i" = "Not an interactive session so not stopping here."
       )
     )
   }
