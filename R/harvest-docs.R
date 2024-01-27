@@ -353,7 +353,7 @@ repair_index_names <- function(local = TRUE) {
         gptstudio:::gptstudio_request_perform() |>
         purrr::pluck("response")
       cli::cli_inform(glue::glue("Name for {domain} is {new_name}."))
-      use_name <- ui_yeah("Should {new_name} be used as the name for {domain}?")
+      use_name <- usethis::ui_yeah("Should {new_name} be used as the name for {domain}?")
       if (use_name) {
         index <- index |> dplyr::mutate(name = new_name)
         arrow::write_parquet(index, index_file)
