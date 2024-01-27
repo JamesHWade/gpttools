@@ -6,22 +6,31 @@ prepare_scraped_files <- function(domain) {
   if (max(scraped$n_words) > 2e5) {
     max_index <- scraped[which.max(scraped$n_words), ]
     print(max_index |> dplyr::select(-text))
-    cli_warn(
+    cli_alert_warning(
       c(
         "!" = "Entry {max_index$link} of {domain} has at least 200,000 words.",
         "i" = "You probably do not want that. Please inspect scraped data."
       )
     )
-    dont_embed <- usethis::ui_nope(
+    if (rlang::is_interactive()) {
+      dont_embed <- usethis::ui_nope(
+        c(
+          "Entry {max_index$link} of {domain} has at least 200,000 words.",
+          "You probably do not want that. Please inspect scraped data.",
+          "Do you want to continue?"
+        )
+      )
+      if (dont_embed) {
+        cli_abort("Embedding aborted at your request.")
+      }
+    }
+  } else {
+    cli_alert_warning(
       c(
-        "Entry {max_index$link} of {domain} has at least 200,000 words.",
-        "You probably do not want that. Please inspect scraped data.",
-        "Do you want to continue?"
+        "!" = "Entries with more than 200,000 words detected.",
+        "i" = "Not an interactive session so not stopping here.",
       )
     )
-    if (dont_embed) {
-      cli_abort("Embedding aborted at your request.")
-    }
   }
 
   scraped |>
