@@ -209,7 +209,7 @@ chat_with_context <- function(query,
   )
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
-    cli::cli_inform("Creating embedding from query.")
+    cli_inform("Creating embedding from query.")
     query_embedding <- get_query_embedding(query,
       local = local,
       model = embedding_model
@@ -217,7 +217,7 @@ chat_with_context <- function(query,
   }
 
   if (rlang::is_true(add_context) && rlang::is_true(need_context)) {
-    cli::cli_inform("Attempting to add context to query.")
+    cli_inform("Attempting to add context to query.")
     full_context <-
       get_query_context(
         query_embedding,
@@ -232,9 +232,9 @@ chat_with_context <- function(query,
     context <- "No additional context provided."
   }
 
-  if (rlang::is_true(add_history) & rlang::is_true(need_context)) {
-    cli::cli_inform("Attempting to add chat history to query.")
-    cli::cli_inform("Chat history: {class(chat_history)}")
+  if (rlang::is_true(add_history) && rlang::is_true(need_context)) {
+    cli_inform("Attempting to add chat history to query.")
+    cli_inform("Chat history: {class(chat_history)}")
     if (rlang::is_null(chat_history)) {
       related_history <- "No related history found."
     } else {
@@ -249,7 +249,7 @@ chat_with_context <- function(query,
         paste(collapse = "\n\n")
     }
   } else {
-    cli::cli_inform("Not attempting to add chat history to query.")
+    cli_inform("Not attempting to add chat history to query.")
     related_history <- "No related history found."
   }
 
@@ -333,8 +333,8 @@ chat_with_context <- function(query,
 
   cat(simple_prompt, "\n\n")
 
-  cli::cli_inform("Service: {service}")
-  cli::cli_inform("Model: {model}")
+  cli_inform("Service: {service}")
+  cli_inform("Model: {model}")
 
   answer <-
     gptstudio:::gptstudio_create_skeleton(

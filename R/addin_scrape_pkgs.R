@@ -29,18 +29,20 @@ addin_run_select_pkgs <- function() {
 addin_run_scrape_pkgs <- function() {
   # Check if RStudio API is available
   if (!rstudioapi::isAvailable()) {
-    cli::cli_abort("The rstudioapi is not available.")
+    cli_abort("The rstudioapi is not available.")
   }
   # Get user feedback with rstudioapi
   proceed <-
     rstudioapi::showQuestion(
       title = "Scrape Packages",
+      # nolint start
       message = "This will scrape installed packages and create indices to use with the \"Chat with Retrieval\" app. Would you like to proceed?"
+      # nolint end
     )
 
   # Proceed with scraping if the user agrees
   if (proceed) {
-    cli::cli_alert_info("Scraping packages as a background job.")
+    cli_alert_info("Scraping packages as a background job.")
     # Run the scrape packages script as a background job
     rstudioapi::jobRunScript(
       path = system.file("scripts/scrape_pkgs.R",
@@ -49,7 +51,7 @@ addin_run_scrape_pkgs <- function() {
       name = "Scraping Pacakges"
     )
   } else {
-    cli::cli_alert_info("Scraping cancelled.")
+    cli_alert_info("Scraping cancelled.")
   }
 }
 
@@ -58,11 +60,12 @@ addin_run_scrape_pkgs <- function() {
 #' This function launches a Shiny application that allows users to select from a
 #' list of installed packages and save their selections.
 #'
-#' @return None The function is used for its side effect of launching a Shiny app and doesn't return anything.
+#' @return None The function is used for its side effect of launching a Shiny
+#'   app and doesn't return anything.
 #'
-#' @details
-#' The application provides a sidebar for package selection and an action button to
-#' save the selected packages. It displays the selected packages in a data table.
+#' @details The application provides a sidebar for package selection and an
+#' action button to save the selected packages. It displays the selected
+#' packages in a data table.
 #'
 #' @export
 #'
@@ -103,7 +106,8 @@ run_select_pkgs_app <- function() {
       if (try_to_save) {
         shiny::showNotification("Saved packages to scrape.")
       }
-    }) |> shiny::bindEvent(input$save_pkgs)
+    }) |>
+      shiny::bindEvent(input$save_pkgs)
 
     output$table_packages <- shiny::renderDataTable(
       {

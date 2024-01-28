@@ -14,7 +14,7 @@
 chat_with_retrieval <- function() {
   indices <- list_index()
   if (length(indices) == 0) {
-    cli::cli_abort(
+    cli_abort(
       "No index was found. Create an index with {.code crawl(<url>)}."
     )
   }

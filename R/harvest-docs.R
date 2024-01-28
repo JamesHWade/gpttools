@@ -8,7 +8,7 @@ get_hyperlinks <- function(url) {
 
     tibble::tibble(parent = url, link = links)
   } else {
-    cli::cli_warn(c(
+    cli_warn(c(
       "!" = "URL not valid.",
       "i" = "Tried to scrape {url}",
       "i" = "Status code: {status}"
@@ -42,7 +42,7 @@ validate_link <- function(link, try_fix = TRUE) {
         return(link)
       }
     }
-    cli::cli_warn(c(
+    cli_warn(c(
       "!" = "URL not valid.",
       "i" = "Tried to scrape {link}",
       "i" = "Status code: {status}"
@@ -67,17 +67,19 @@ recursive_hyperlinks <- function(local_domain,
   }
 
   expanded_urls <- c(expanded_urls, links)
-  cli::cli_inform(c("i" = "Total urls: {length(expanded_urls)}"))
+  cli_inform(c("i" = "Total urls: {length(expanded_urls)}"))
   links_df <- purrr::map(links, get_hyperlinks,
     .progress = "Getting more links"
   ) |>
     dplyr::bind_rows() |>
     dplyr::filter(!stringr::str_detect(link, "^\\.$|mailto:|\\#|^\\_$")) |>
-    dplyr::mutate(link = purrr::map2_chr(parent, link,
+    dplyr::mutate(link = purrr::map2_chr(
+      .x = parent,
+      .y = link,
       .f = \(x, y) xml2::url_absolute(y, x)
     ))
 
-  cli::cli_inform("Going to check {length(unique(links_df$link))} links")
+  cli_inform("Going to check {length(unique(links_df$link))} links")
 
   new_links <-
     purrr::map(unique(links_df$link), \(x) {
@@ -93,12 +95,17 @@ recursive_hyperlinks <- function(local_domain,
 
   checked_urls <- c(checked_urls, links_df$link) |> unique()
 
-  cli::cli_inform("Checked urls: {length(checked_urls)}")
+  cli_inform("Checked urls: {length(checked_urls)}")
 
   exclude_exts <- "\\.(xml|mp4|pdf|zip|rar|gz|tar|csv|docx|pptx|xlsx|avi)$"
   new_links <-
     new_links[!grepl(exclude_exts, new_links, ignore.case = TRUE)] |> unique()
-  recursive_hyperlinks(local_domain, unique(new_links), expanded_urls, checked_urls)
+  recursive_hyperlinks(
+    local_domain = local_domain,
+    url = unique(new_links),
+    expanded_urls = expanded_urls,
+    checked_urls = checked_urls
+  )
 }
 
 #' Scrape and process all hyperlinks within a given URL
@@ -139,7 +146,6 @@ crawl <- function(url,
     local_domain <- glue("{local_domain}/{url_path}")
   }
 
-  # check if url has already been scraped
   scraped_data_dir <-
     file.path(tools::R_user_dir("gpttools", which = "data"), "text")
   local_domain_name <-
@@ -148,59 +154,13 @@ crawl <- function(url,
   scraped_text_file <-
     glue::glue("{scraped_data_dir}/{local_domain_name}.parquet")
 
-  cli::cli_inform("Scraped data file: {file.exists(scraped_text_file)}")
-  cli::cli_inform("Update: {rlang::is_false(update)}")
-  cli::cli_inform("Combined: {file.exists(scraped_text_file) && rlang::is_false(update)}")
-
-  if (file.exists(scraped_text_file) && rlang::is_false(update)) {
-    cli::cli_alert_warning(
-      c(
-        "!" = "Scraped data already exists for this domain.",
-        "i" = "Use {.code crawl(<url>, update = TRUE)} to scrape site again."
-      )
-    )
-  } else {
-    cli_rule("Crawling {.url {url}}")
-    cli_inform(c(
-      "i" = "This may take a while.",
-      "i" = "Gathering links to scrape"
-    ))
-
-    cli::cli_inform("Local domain: {local_domain}")
-    cli::cli_inform("Url: {url}")
-
-    links <-
-      recursive_hyperlinks(local_domain, url, aggressive = aggressive) |>
-      unique()
-    cli_inform(c("i" = "Scraping validated links"))
-    scraped_data <-
-      purrr::map(links, \(x) {
-        if (identical(check_url(x), 200L)) {
-          tibble::tibble(
-            source  = local_domain,
-            link    = x,
-            text    = paste(scrape_url(x), collapse = " "),
-            n_words = tokenizers::count_words(text),
-            scraped = Sys.time()
-          )
-        } else {
-          cli::cli_inform(c(
-            "!" = "Skipped {url}",
-            "i" = "Status code: {status}"
-          ))
-        }
-      },
-      .progress = "Scraping Pages"
-      ) |>
-      dplyr::bind_rows() |>
-      dplyr::distinct()
-    cli_inform(c("i" = "Saving scraped data"))
-    if (rlang::is_false(dir.exists(scraped_data_dir))) {
-      dir.create(scraped_data_dir, recursive = TRUE)
-    }
-    arrow::write_parquet(
-      x    = scraped_data,
-      sink = scraped_text_file
+  if (needs_scraping(scraped_text_file, update = update)) {
+    scrape_and_process(
+      url = url,
+      local_domain = local_domain,
+      scraped_data_dir = scraped_data_dir,
+      scraped_text_file = scraped_text_file,
+      aggressive = aggressive
     )
   }
 
@@ -212,7 +172,7 @@ crawl <- function(url,
   index_file <- glue::glue("{index_dir}/{local_domain_name}.parquet")
 
   if (file.exists(index_file) && rlang::is_false(overwrite)) {
-    cli::cli_warn(
+    cli_inform(
       c(
         "!" = "Index already exists for this domain.",
         "i" = "Use {.code crawl(<url>, overwrite = TRUE)} to overwrite."
@@ -242,6 +202,62 @@ crawl <- function(url,
       )
     }
   }
+}
+
+needs_scraping <- function(scraped_text_file, update = FALSE) {
+  if (file.exists(scraped_text_file) && rlang::is_false(update)) {
+    cli_inform(
+      c(
+        "!" = "Scraped data already exists for this domain.",
+        "i" = "Use {.code crawl(<url>, update = TRUE)} to scrape site again."
+      )
+    )
+    return(invisible(FALSE))
+  }
+  return(invisible(TRUE))
+}
+
+scrape_and_process <- function(url,
+                               local_domain,
+                               scraped_data_dir,
+                               scraped_text_file,
+                               aggressive = FALSE) {
+  cli_rule("Crawling {.url {url}}")
+  cli_alert_info("This may take a while. Gathering links to scrape.")
+
+  links <-
+    recursive_hyperlinks(local_domain, url, aggressive = aggressive) |>
+    unique()
+  cli_inform(c("i" = "Scraping validated links"))
+  scraped_data <-
+    purrr::map(links, \(x) {
+      if (identical(check_url(x), 200L)) {
+        tibble::tibble(
+          source  = local_domain,
+          link    = x,
+          text    = paste(scrape_url(x), collapse = " "),
+          n_words = tokenizers::count_words(text),
+          scraped = Sys.time()
+        )
+      } else {
+        cli_inform(c(
+          "!" = "Skipped {url}",
+          "i" = "Status code: {status}"
+        ))
+      }
+    },
+    .progress = "Scraping Pages"
+    ) |>
+    dplyr::bind_rows() |>
+    dplyr::distinct()
+  cli_inform(c("i" = "Saving scraped data"))
+  if (rlang::is_false(dir.exists(scraped_data_dir))) {
+    dir.create(scraped_data_dir, recursive = TRUE)
+  }
+  arrow::write_parquet(
+    x    = scraped_data,
+    sink = scraped_text_file
+  )
 }
 
 #' Remove new lines from a character vector.
@@ -301,7 +317,11 @@ extract_text <- function(url, use_html_text2 = TRUE) {
     stringr::str_c(collapse = " or ")
 
   xpath_attributes <- exclude_attributes |>
-    purrr::map_chr(.f = \(x) glue::glue("contains(concat(' ', normalize-space(@class), ' '), ' {x}')")) |>
+    purrr::map_chr(.f = \(x) {
+      glue::glue(
+        "contains(concat(' ', normalize-space(@class), ' '), ' {x}')"
+      )
+    }) |>
     stringr::str_c(collapse = " or ")
 
   # Handling general attribute selectors
@@ -310,7 +330,11 @@ extract_text <- function(url, use_html_text2 = TRUE) {
     purrr::map_chr(.f = \(x) glue::glue("@{x}")) |>
     stringr::str_c(collapse = " or ")
 
-  xpath_combined <- glue::glue("//body//*[not({xpath_tags} or {xpath_attributes} or {xpath_general_attributes})]")
+  xpath_combined <- xpath_combined <- glue::glue(
+    "//body//*[not({xpath_tags} or ",
+    "{xpath_attributes} or ",
+    "{xpath_general_attributes})]"
+  )
 
   nodes <- rvest::read_html(url) |>
     rvest::html_elements(xpath = xpath_combined)

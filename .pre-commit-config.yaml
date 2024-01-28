@@ -7,23 +7,21 @@ repos:
     -   id: style-files
         args: [--style_pkg=styler, --style_fun=tidyverse_style]
     # -   id: roxygenize
-    #     # roxygen requires loading pkg -> add dependencies from DESCRIPTION
     #     additional_dependencies:
-    #     -    assertthat
-    #     -    cli
-    #     -    httr
-    #     -    git2r
-    #     -    miniUI
-    #     -    openai
-    #     -    purrr
-    #     -    rlang
-    #     -    rstudioapi
-    #     -    shiny
-    #     -    skimr
-    #     -    stats
-    #     -    usethis
-    #-   id: use-tidy-description
-    #    args: [--warn_only]
+    #     - arrow
+    #     - dplyr
+    #     - michelnivard/gptstudio
+    #     - httr2
+    #     - lsa
+    #     - readr
+    #     - rstudioapi
+    #     - rvest
+    #     - shiny
+    #     - tibble
+    #     - tidyr
+    #     - tokenizers
+    #     - urltools
+    -   id: use-tidy-description
     -   id: lintr
         args: [--warn_only]
         verbose: true
@@ -31,8 +29,9 @@ repos:
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: no-debug-statement
-    # -   id: deps-in-desc
-    #     args: [--warn_only]
+    -   id: deps-in-desc
+        args: [--allow_private_imports]
+    -   id: pkgdown
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:

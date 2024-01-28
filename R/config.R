@@ -79,7 +79,7 @@ set_user_config <- function(path = NULL) {
     )
     return(TRUE)
   } else {
-    cli::cli_alert("No config file found. Using default config.")
+    cli_alert("No config file found. Using default config.")
     return(FALSE)
   }
 }

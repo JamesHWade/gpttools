@@ -8,7 +8,7 @@ get_pkg_doc_page <- function(package_name) {
     stringr::str_remove_all(",")
   to_remove <- "github.com|arxiv.org|https://discourse"
   doc_link <- links[!stringr::str_detect(links, to_remove)][1]
-  if (length(doc_link) == 0 | is.na(doc_link)) {
+  if (length(doc_link) == 0 || is.na(doc_link)) {
     return(NA)
   }
   doc_link
@@ -62,8 +62,9 @@ get_pkgs_to_scrape <- function(local = TRUE,
     dplyr::left_join(get_outdated_pkgs(), by = "name") |>
     dplyr::left_join(indices, by = c("name" = "name")) |>
     dplyr::distinct(name, .keep_all = TRUE) |>
-    dplyr::filter(is.na(indexed_version) |
-      indexed_version != installed_version) |>
+    dplyr::filter(
+      is.na(indexed_version) | indexed_version != installed_version
+    ) |>
     dplyr::rename(version = installed_version)
 }
 
@@ -100,7 +101,7 @@ scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
   }
 
   if (rlang::is_interactive()) {
-    cli::cli_text("You are about to scrape {nrow(sites)} package site page{?s}")
+    cli_text("You are about to scrape {nrow(sites)} package site page{?s}")
     continue <- ui_yeah("Do you want to continue?")
   } else {
     continue <- TRUE
@@ -116,7 +117,7 @@ scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
       multisession <- TRUE
     } else {
       multisession <- FALSE
-      cli::cli_alert_info("Package `furrr` not installed, using sequential scraping.")
+      cli_alert_info("Missing package {.pkg furrr}. Using sequential scraping.")
     }
   } else {
     multisession <- FALSE

@@ -7,7 +7,7 @@ scales_scientific <- function(x,
                               scale = 1,
                               prefix = "",
                               suffix = "",
-                              decimal.mark = ".",
+                              decimal_mark = ".",
                               trim = TRUE,
                               ...) {
   if (length(x) == 0) {
@@ -57,16 +57,18 @@ clean_filename <- function(name) {
 #'
 repair_index_names <- function(local = TRUE) {
   if (local) {
-    index_dir <- file.path(tools::R_user_dir("gpttools", which = "data"), "index", "local")
+    index_dir <-
+      file.path(tools::R_user_dir("gpttools", which = "data"), "index", "local")
   } else {
-    index_dir <- file.path(tools::R_user_dir("gpttools", which = "data"), "index")
+    index_dir <-
+      file.path(tools::R_user_dir("gpttools", which = "data"), "index")
   }
   index_files <- list.files(index_dir, pattern = "*.parquet", full.names = TRUE)
   for (index_file in index_files) {
     index <- arrow::read_parquet(index_file)
     has_name <- "name" %in% names(index)
     if (has_name) {
-      cli::cli_inform("Index already has name column.")
+      cli_inform("Index already has name column.")
       next
     } else {
       domain <- basename(index_file) |> tools::file_path_sans_ext()
@@ -79,7 +81,7 @@ repair_index_names <- function(local = TRUE) {
         gptstudio:::gptstudio_request_perform() |>
         purrr::pluck("response")
       # nolint end
-      cli::cli_inform(glue::glue("Name for {domain} is {new_name}."))
+      cli_inform(glue::glue("Name for {domain} is {new_name}."))
       use_name <- ui_yeah("Should {new_name} be used as the name for {domain}?")
       if (use_name) {
         index <- index |> dplyr::mutate(name = new_name)
@@ -100,18 +102,20 @@ repair_index_names <- function(local = TRUE) {
 # Ask the user a yes/no question, expecting a positive response as default.
 #
 # This function is modified from the usethis package authored by Hadley Wickham,
-# Jennifer Bryan, Malcolm Barrett, and others. For details on the licensing,
-# see the MIT License included with this package, as per the original usethis package.
-ui_yeah <- function(x,
-                    yes = c("Yes", "Definitely", "For sure", "Yup", "Yeah", "I agree", "Absolutely"),
-                    no = c("No way", "Not now", "Negative", "No", "Nope", "Absolutely not"),
-                    n_yes = 1, n_no = 2, shuffle = TRUE,
-                    .envir = parent.frame()) {
+# Jennifer Bryan, Malcolm Barrett, and others. For details on the licensing, see
+# the MIT License included with this package, as per the original usethis
+# package.
+ui_yeah <- function(
+    x,
+    yes = c("Yes", "Definitely", "Yup", "Yeah", "I agree", "Absolutely"),
+    no = c("No way", "Not now", "Negative", "No", "Nope", "Absolutely not"),
+    n_yes = 1, n_no = 2, shuffle = TRUE,
+    .envir = parent.frame()) {
   x <- glue::glue_collapse(x, "\n")
   x <- glue::glue(x, .envir = .envir)
 
   if (!is_interactive()) {
-    cli::cli_abort(c(
+    cli_abort(c(
       "User input required, but session is not interactive.",
       "Query: {x}"
     ))
@@ -126,7 +130,7 @@ ui_yeah <- function(x,
     qs <- sample(qs)
   }
 
-  cli::cli_inform(x)
+  cli_inform(x)
   out <- utils::menu(qs)
   out != 0L && qs[[out]] %in% yes
 }

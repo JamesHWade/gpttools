@@ -62,10 +62,14 @@ api_services <-
 
 ui <- page_fillable(
   waiter::useWaiter(),
-  waiter::waiterOnBusy(html = waiter::spin_3circles(), color = waiter::transparent(0.5)),
+  waiter::waiterOnBusy(
+    html = waiter::spin_3circles(),
+    color = waiter::transparent(0.5)
+  ),
   window_height_ui("height"),
   theme = bs_theme(bootswatch = "litera", version = 5) |>
-    bs_add_rules(".scrollable-popover .popover-body { max-height: 400px; overflow-y: auto; }"),
+    bs_add_rules(".scrollable-popover .popover-body
+                 { max-height: 400px; overflow-y: auto; }"),
   tags$head(tags$script(HTML("
   $(document).on('keydown', '#chat_input', function(e) {
     if ((e.keyCode == 10 || e.keyCode == 13) && (!e.shiftKey)) {
@@ -226,7 +230,8 @@ server <- function(input, output, session) {
             local_embeddings = TRUE
           ) |>
             tibble::as_tibble()
-        }) |> dplyr::bind_rows()
+        }) |>
+          dplyr::bind_rows()
       }
     } else {
       purrr::map(input$source, \(x) {
@@ -234,7 +239,8 @@ server <- function(input, output, session) {
           local_embeddings = FALSE
         ) |>
           tibble::as_tibble()
-      }) |> dplyr::bind_rows()
+      }) |>
+        dplyr::bind_rows()
     }
   })
 

@@ -24,7 +24,7 @@ gpt_chat <- function(instructions,
                      service = getOption("gpttools.service", "openai"),
                      model = getOption("gpttools.model", "gpt-4")) {
   query <- get_selection()
-  cli::cli_inform("Selection: {query}")
+  cli_inform("Selection: {query}")
   prompt <-
     list(
       list(
@@ -36,9 +36,9 @@ gpt_chat <- function(instructions,
         content = glue("{query}")
       )
     )
-  cli::cli_inform("Service: {service}")
-  cli::cli_inform("Model: {model}")
-  cli::cli_inform("Sending query... this can take up to 3 minutes.")
+  cli_inform("Service: {service}")
+  cli_inform("Model: {model}")
+  cli_inform("Sending query... this can take up to 3 minutes.")
   simple_prompt <- prompt |>
     purrr::map_chr(.f = "content") |>
     paste(collapse = "\n\n")
@@ -52,7 +52,7 @@ gpt_chat <- function(instructions,
     ) |>
     gptstudio:::gptstudio_request_perform()
 
-  cli::cli_process_done(msg_done = "Received response from {service}")
+  cli_process_done(msg_done = "Received response from {service}")
   text_to_insert <- as.character(answer$response)
   insert_text(text_to_insert)
 }
