@@ -17,33 +17,24 @@ Depends:
     R (>= 4.1)
 Imports: 
     arrow,
-    callr,
     cli,
     dplyr,
     glue,
-    gptstudio (>= 0.2.0),
+    gptstudio (>= 0.3.1),
     httr2,
-    janitor,
-    jsonlite,
     lsa,
-    lubridate,
-    pdftools,
     purrr (>= 1.0.0),
-    R.utils,
     readr,
     rlang (>= 0.4.11),
     rstudioapi (>= 0.12),
     rvest,
     shiny,
-    skimr,
-    stats,
     stringr,
     tibble,
     tidyr,
     tokenizers,
     tools,
     urltools,
-    usethis,
     xml2,
     yaml
 Suggests: 
@@ -55,11 +46,13 @@ Suggests:
     knitr,
     later,
     mockr,
+    pdftools,
     reticulate,
     rmarkdown,
     roxygen2,
     shinyjs,
     shinytest2,
+    skimr,
     spelling,
     testthat (>= 3.0.0),
     tidymodels,
@@ -70,6 +63,7 @@ Suggests:
     withr,
     future,
     furrr
+Remotes: michelnivard/gptstudio
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
@@ -77,4 +71,4 @@ Config/testthat/parallel: true
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

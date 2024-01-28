@@ -7,15 +7,17 @@
 run_select_pkgs_app()
 }
 \value{
-None The function is used for its side effect of launching a Shiny app and doesn't return anything.
+None The function is used for its side effect of launching a Shiny
+app and doesn't return anything.
 }
 \description{
 This function launches a Shiny application that allows users to select from a
 list of installed packages and save their selections.
 }
 \details{
-The application provides a sidebar for package selection and an action button to
-save the selected packages. It displays the selected packages in a data table.
+The application provides a sidebar for package selection and an
+action button to save the selected packages. It displays the selected
+packages in a data table.
 }
 \examples{
 \dontshow{if (rlang::is_interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

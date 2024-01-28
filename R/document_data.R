@@ -13,10 +13,12 @@ collect_dataframes <- function() {
       if (is.data.frame(get(x))) x else NA
     }
   ) |>
-    stats::na.omit()
+    purrr::compact() |>
+    unlist()
 }
 
 skim_lite <- function(data) {
+  rlang::check_installed("skimr")
   my_skim <- skimr::skim_with(
     numeric = skimr::sfl(
       min = ~ min(.x),
@@ -57,7 +59,7 @@ summarize_data <- function(data,
                              "summary"
                            )) {
   rlang::arg_match(method)
-
+  rlang::check_installed("skimr")
   switch(method,
     "skimr" = skimr::skim_without_charts(data),
     "skimr_lite" = skim_lite(data),

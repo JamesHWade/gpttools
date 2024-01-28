@@ -122,7 +122,7 @@ install_sentence_transformers <-
       ...
     )
 
-    cli::cli_alert_success("\nInstallation complete.\n\n")
+    cli_alert_success("\nInstallation complete.\n\n")
 
     if (restart_session &&
       requireNamespace("rstudioapi", quietly = TRUE) &&
@@ -140,7 +140,7 @@ py_pkg_is_available <- function(pkg = "sentence-transformers") {
 
   if (nrow(found_pkg) == 0) {
     py_details <- reticulate::py_config()
-    cli::cli_abort(
+    cli_abort(
       c(
         "!" = "Python package `{pkg}` not found.",
         "i" = "Python envrionment: {py_details$prefix}",
@@ -149,6 +149,6 @@ py_pkg_is_available <- function(pkg = "sentence-transformers") {
       )
     )
   } else {
-    cli::cli_alert_success("`{pkg}` package found.")
+    cli_alert_success("`{pkg}` package found.")
   }
 }

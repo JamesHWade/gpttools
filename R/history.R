@@ -59,7 +59,7 @@ delete_history <- function(local = FALSE) {
   history_files <- get_history_path(local = local)
 
   purrr::map(history_files, \(x) {
-    delete_file <- usethis::ui_yeah("Do you want to delete {basename(x)}?")
+    delete_file <- ui_yeah("Do you want to delete {basename(x)}?")
     if (delete_file) {
       file.remove(x)
     } else {
@@ -83,7 +83,7 @@ create_history <- function(file_name = "chat_history",
   if (!file.exists(file_path) || overwrite) {
     query_history <- tibble::tibble(
       id = integer(),
-      timestamp = lubridate::now(),
+      timestamp = Sys.time(),
       role = character(),
       content = character(),
       hash = character()
@@ -104,7 +104,7 @@ save_user_history <- function(file_name = "chat_history",
 
   new_entry <- tibble::tibble(
     id        = max(0, history$id, na.rm = TRUE) + 1,
-    timestamp = lubridate::now(),
+    timestamp = Sys.time(),
     role      = role,
     content   = content,
     embedding = list(embedding),
@@ -209,7 +209,7 @@ chat_with_context <- function(query,
   )
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
-    cli::cli_inform("Creating embedding from query.")
+    cli_inform("Creating embedding from query.")
     query_embedding <- get_query_embedding(query,
       local = local,
       model = embedding_model
@@ -217,7 +217,7 @@ chat_with_context <- function(query,
   }
 
   if (rlang::is_true(add_context) && rlang::is_true(need_context)) {
-    cli::cli_inform("Attempting to add context to query.")
+    cli_inform("Attempting to add context to query.")
     full_context <-
       get_query_context(
         query_embedding,
@@ -232,9 +232,9 @@ chat_with_context <- function(query,
     context <- "No additional context provided."
   }
 
-  if (rlang::is_true(add_history) & rlang::is_true(need_context)) {
-    cli::cli_inform("Attempting to add chat history to query.")
-    cli::cli_inform("Chat history: {class(chat_history)}")
+  if (rlang::is_true(add_history) && rlang::is_true(need_context)) {
+    cli_inform("Attempting to add chat history to query.")
+    cli_inform("Chat history: {class(chat_history)}")
     if (rlang::is_null(chat_history)) {
       related_history <- "No related history found."
     } else {
@@ -249,7 +249,7 @@ chat_with_context <- function(query,
         paste(collapse = "\n\n")
     }
   } else {
-    cli::cli_inform("Not attempting to add chat history to query.")
+    cli_inform("Not attempting to add chat history to query.")
     related_history <- "No related history found."
   }
 
@@ -333,17 +333,15 @@ chat_with_context <- function(query,
 
   cat(simple_prompt, "\n\n")
 
-  cli::cli_inform("Service: {service}")
-  cli::cli_inform("Model: {model}")
+  cli_inform("Service: {service}")
+  cli_inform("Model: {model}")
 
-  answer <-
-    gptstudio:::gptstudio_create_skeleton(
-      service = service,
-      model = model,
-      prompt = simple_prompt,
-      stream = FALSE
-    ) |>
-    gptstudio:::gptstudio_request_perform()
+  answer <- gptstudio::chat(
+    prompt = simple_prompt,
+    service = service,
+    model = model,
+    stream = FALSE
+  )
 
   if (save_history) {
     purrr::map(prompt, \(x) {
@@ -359,7 +357,7 @@ chat_with_context <- function(query,
     save_user_history(
       file_name = history_name,
       role      = "assistant",
-      content   = answer$response,
+      content   = answer,
       local     = local,
       model     = embedding_model,
       overwrite = overwrite
@@ -369,7 +367,7 @@ chat_with_context <- function(query,
   prompt_without_context <-
     c(session_history, prompt_query)
 
-  list(prompt_without_context, full_context, answer$response)
+  list(prompt_without_context, full_context, answer)
 }
 
 
@@ -382,13 +380,11 @@ is_context_needed <- function(user_prompt,
                FALSE. ONLY answer TRUE or FALSE. It is crucial that you only
                answer TRUE or FALSE.\n\n{user_prompt}")
 
-  gptstudio:::gptstudio_create_skeleton(
+  gptstudio::chat(
+    prompt = prompt,
     service = service,
     model = model,
-    prompt = prompt,
     stream = FALSE
   ) |>
-    gptstudio:::gptstudio_request_perform() |>
-    purrr::pluck("response") |>
     as.logical()
 }

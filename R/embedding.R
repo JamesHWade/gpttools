@@ -13,24 +13,24 @@ prepare_scraped_files <- function(domain) {
       )
     )
     if (rlang::is_interactive()) {
-      dont_embed <- usethis::ui_nope(
+      embed_long_text <- ui_yeah(
         c(
           "Entry {max_index$link} of {domain} has at least 200,000 words.",
           "You probably do not want that. Please inspect scraped data.",
           "Do you want to continue?"
         )
       )
-      if (dont_embed) {
+      if (!embed_long_text) {
         cli_abort("Embedding aborted at your request.")
       }
-    }
-  } else {
-    cli_alert_warning(
-      c(
-        "!" = "Entries with more than 200,000 words detected.",
-        "i" = "Not an interactive session so not stopping here."
+    } else {
+      cli_alert_warning(
+        c(
+          "!" = "Entries with more than 200,000 words detected.",
+          "i" = "Not an interactive session so not stopping here."
+        )
       )
-    )
+    }
   }
 
   scraped |>
@@ -52,7 +52,7 @@ prepare_scraped_files <- function(domain) {
     dplyr::select(-text) |>
     dplyr::mutate(
       n_tokens = tokenizers::count_characters(chunks) %/% 4,
-      hash = cli::hash_md5(chunks)
+      hash = hash_md5(chunks)
     ) |>
     check_for_duplicate_text() |>
     dplyr::distinct(hash, .keep_all = TRUE)
@@ -60,7 +60,7 @@ prepare_scraped_files <- function(domain) {
 
 check_for_duplicate_text <- function(x) {
   if (sum(duplicated(x$hash)) > 0) {
-    cli::cli_inform(
+    cli_inform(
       c(
         "!" = "Duplicate text entries detected.",
         "i" = "These are removed by default."
@@ -103,7 +103,8 @@ add_embeddings <- function(index,
           .f = \(x) create_text_embeddings(x, model),
           .progress = "Creating Embeddings Locally"
         ),
-        embedding_method = glue::glue("local: {getOption(\"gpttools.local_embed_model\")}")
+        embedding_method =
+          glue::glue("local: {getOption(\"gpttools.local_embed_model\")}")
       )
   } else {
     index |>
@@ -149,10 +150,10 @@ create_index <- function(domain,
 
   index_file <- glue::glue("{index_dir}/{domain}.parquet")
 
-  cli::cli_alert_info("index_file: {index_file}")
+  cli_alert_info("index_file: {index_file}")
 
   if (file.exists(index_file) && rlang::is_false(overwrite)) {
-    cli::cli_alert_warning(
+    cli_alert_warning(
       c(
         "!" = "Index already exists for {domain}.",
         "i" = "Use {.code overwrite = TRUE} to overwrite index."
@@ -160,7 +161,7 @@ create_index <- function(domain,
     )
     return(invisible(FALSE))
   } else if (file.exists(index_file) && rlang::is_true(overwrite)) {
-    cli::cli_alert_info(
+    cli_alert_info(
       c(
         "!" = "Index already exists for this domain.",
         "i" = "Overwriting index."
@@ -171,7 +172,7 @@ create_index <- function(domain,
       dplyr::distinct(name, version) |>
       tibble::as_tibble()
     if (nrow(old) > 1) {
-      cli::cli_abort(
+      cli_abort(
         c(
           "!" = "Multiple packages found for this domain.",
           "i" = "Please specify the package name and version."
@@ -186,20 +187,20 @@ create_index <- function(domain,
   n_tokens <- sum(index$n_tokens) |> scales_scientific()
 
   if (dont_ask) {
-    cli::cli_inform(c(
+    cli_inform(c(
       "!" = "You are about to create embeddings for {domain}.",
       "i" = "This will use approx. {n_tokens} tokens."
     ))
     ask_user <- TRUE
   } else {
-    cli::cli_inform(c(
+    cli_inform(c(
       "!" = "You are about to create embeddings for {domain}.",
       "i" = "This will use approx. {n_tokens} tokens.",
       "i" = "Only proceed if you understand the cost.",
       "i" = "Read more about embeddings at {.url
       https://platform.openai.com/docs/guides/embeddings}."
     ))
-    ask_user <- usethis::ui_yeah(
+    ask_user <- ui_yeah(
       "Would you like to continue with creating embeddings?"
     )
   }
@@ -264,7 +265,7 @@ gpttools_index_all_scraped_data <- function(overwrite = FALSE,
 
   purrr::walk(text_files, function(file_path) {
     domain <- tools::file_path_sans_ext(basename(file_path))
-    cli::cli_alert_info(glue("Creating/updating index for domain {domain}..."))
+    cli_alert_info(glue("Creating/updating index for domain {domain}..."))
     create_index(
       domain = domain,
       overwrite = overwrite,
@@ -313,7 +314,7 @@ load_index <- function(domain, local_embeddings = FALSE) {
   }
 
   if (!dir.exists(data_dir)) {
-    cli::cli_inform("No index found. Using sample index for gpttools.")
+    cli_inform("No index found. Using sample index for gpttools.")
 
     if (local_embeddings) {
       sample_index <-
@@ -401,7 +402,7 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
 #' @export
 list_index <- function(dir = "index", full_path = FALSE) {
   loc <- file.path(tools::R_user_dir("gpttools", "data"), dir)
-  cli::cli_inform("Access your index files here: {.file {loc}}")
+  cli_inform("Access your index files here: {.file {loc}}")
   if (full_path) {
     list.files(loc, full.names = TRUE)
   } else {
@@ -423,10 +424,10 @@ delete_index <- function() {
     cli_alert_warning("No index files found.")
     return(invisible())
   }
-  cli::cli_alert("Select the index file you want to delete.")
+  cli_alert("Select the index file you want to delete.")
   to_delete <- utils::menu(files)
   confirm_delete <-
-    usethis::ui_yeah("Are you sure you want to delete {files[to_delete]}?")
+    ui_yeah("Are you sure you want to delete {files[to_delete]}?")
   if (confirm_delete) {
     file.remove(file.path(
       tools::R_user_dir("gpttools", "data"),

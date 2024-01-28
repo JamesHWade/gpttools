@@ -90,15 +90,15 @@ transcribe_audio <- function(file_path,
       source = source,
       text = transcribe_audio_chunk(audio_file = x, prompt = prompt),
       link = link,
-      scraped = lubridate::today()
+      scraped = Sys.Date()
     )
   }, .progress = "Transcribing Text") |>
     dplyr::bind_rows() |>
     tidyr::unnest(text) |>
-    dplyr::mutate(scraped = lubridate::today()) |>
+    dplyr::mutate(scraped = Sys.Date()) |>
     dplyr::group_by(link, scraped) |>
     dplyr::summarise(text = paste(text, collapse = " "), .groups = "drop") |>
-    write_index(glue("{janitor::make_clean_names(source)}.parquet"),
+    write_index(glue("{clean_filename(source)}.parquet"),
       type = "text"
     )
 }
@@ -120,7 +120,7 @@ create_index_from_audio <- function(file_path,
                                     source,
                                     link = NULL,
                                     overwrite = FALSE) {
-  index_name <- janitor::make_clean_names(source)
+  index_name <- clean_filename(source)
   transcribe_audio(file_path, source, link)
   create_index(index_name, overwrite = overwrite)
 }
