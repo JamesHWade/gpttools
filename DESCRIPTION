@@ -63,6 +63,7 @@ Suggests:
     withr,
     future,
     furrr
+Remotes: michelnivard/gptstudio
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
