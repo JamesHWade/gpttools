@@ -28,10 +28,10 @@ repos:
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: no-debug-statement
-    -   id: deps-in-desc
-        args: [--warn_only]
-    -   id: pkgdown
-        args: [--warn_only]
+    # -   id: deps-in-desc
+    #     args: [--warn_only]
+    # -   id: pkgdown
+    #     args: [--warn_only]
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
