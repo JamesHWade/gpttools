@@ -59,7 +59,7 @@ delete_history <- function(local = FALSE) {
   history_files <- get_history_path(local = local)
 
   purrr::map(history_files, \(x) {
-    delete_file <- usethis::ui_yeah("Do you want to delete {basename(x)}?")
+    delete_file <- ui_yeah("Do you want to delete {basename(x)}?")
     if (delete_file) {
       file.remove(x)
     } else {
@@ -83,7 +83,7 @@ create_history <- function(file_name = "chat_history",
   if (!file.exists(file_path) || overwrite) {
     query_history <- tibble::tibble(
       id = integer(),
-      timestamp = lubridate::now(),
+      timestamp = Sys.time(),
       role = character(),
       content = character(),
       hash = character()
@@ -104,7 +104,7 @@ save_user_history <- function(file_name = "chat_history",
 
   new_entry <- tibble::tibble(
     id        = max(0, history$id, na.rm = TRUE) + 1,
-    timestamp = lubridate::now(),
+    timestamp = Sys.time(),
     role      = role,
     content   = content,
     embedding = list(embedding),

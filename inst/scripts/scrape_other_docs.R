@@ -39,7 +39,7 @@ scrape_resources <- function(resources) {
 
   if (rlang::is_interactive()) {
     cli::cli_text("You are about to scrape {nrow(sites)} package site page{?s}")
-    continue <- usethis::ui_yeah("Do you want to continue?")
+    continue <- ui_yeah("Do you want to continue?")
   } else {
     continue <- TRUE
   }

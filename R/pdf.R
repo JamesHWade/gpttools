@@ -9,6 +9,7 @@
 #' @return The function writes an index in Parquet format to disk.
 #' @export
 ingest_pdf <- function(file_path, source, link = NULL) {
+  rlang::check_installed("pdftools")
   text <- pdftools::pdf_text(file_path) |>
     readr::read_lines() |>
     stringr::str_c(collapse = " ") |>
@@ -20,7 +21,7 @@ ingest_pdf <- function(file_path, source, link = NULL) {
     link = link
   ) |>
     write_index(
-      name = glue("{janitor::make_clean_names(source)}.parquet"),
+      name = glue("{clean_filename(source)}.parquet"),
       type = "text"
     )
 }
@@ -41,7 +42,7 @@ create_index_from_pdf <- function(file_path,
                                   source,
                                   link = NULL,
                                   overwrite = FALSE) {
-  index_name <- janitor::make_clean_names(source)
+  index_name <- clean_filename(source)
   ingest_pdf(file_path, source, link)
   create_index(index_name, overwrite = overwrite)
 }

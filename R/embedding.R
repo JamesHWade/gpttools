@@ -13,24 +13,24 @@ prepare_scraped_files <- function(domain) {
       )
     )
     if (rlang::is_interactive()) {
-      dont_embed <- usethis::ui_nope(
+      embed_long_text <- ui_yeah(
         c(
           "Entry {max_index$link} of {domain} has at least 200,000 words.",
           "You probably do not want that. Please inspect scraped data.",
           "Do you want to continue?"
         )
       )
-      if (dont_embed) {
+      if (!embed_long_text) {
         cli_abort("Embedding aborted at your request.")
       }
-    }
-  } else {
-    cli_alert_warning(
-      c(
-        "!" = "Entries with more than 200,000 words detected.",
-        "i" = "Not an interactive session so not stopping here."
+    } else {
+      cli_alert_warning(
+        c(
+          "!" = "Entries with more than 200,000 words detected.",
+          "i" = "Not an interactive session so not stopping here."
+        )
       )
-    )
+    }
   }
 
   scraped |>
@@ -199,7 +199,7 @@ create_index <- function(domain,
       "i" = "Read more about embeddings at {.url
       https://platform.openai.com/docs/guides/embeddings}."
     ))
-    ask_user <- usethis::ui_yeah(
+    ask_user <- ui_yeah(
       "Would you like to continue with creating embeddings?"
     )
   }
@@ -426,7 +426,7 @@ delete_index <- function() {
   cli::cli_alert("Select the index file you want to delete.")
   to_delete <- utils::menu(files)
   confirm_delete <-
-    usethis::ui_yeah("Are you sure you want to delete {files[to_delete]}?")
+    ui_yeah("Are you sure you want to delete {files[to_delete]}?")
   if (confirm_delete) {
     file.remove(file.path(
       tools::R_user_dir("gpttools", "data"),
