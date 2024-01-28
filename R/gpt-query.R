@@ -43,14 +43,12 @@ gpt_chat <- function(instructions,
     purrr::map_chr(.f = "content") |>
     paste(collapse = "\n\n")
 
-  answer <-
-    gptstudio:::gptstudio_create_skeleton(
-      service = service,
-      model = model,
-      prompt = simple_prompt,
-      stream = FALSE
-    ) |>
-    gptstudio:::gptstudio_request_perform()
+  answer <- gptstudio::chat(
+    prompt = simple_prompt,
+    service = service,
+    model = model,
+    stream = FALSE
+  )
 
   cli_process_done(msg_done = "Received response from {service}")
   text_to_insert <- as.character(answer$response)

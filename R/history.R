@@ -336,14 +336,12 @@ chat_with_context <- function(query,
   cli_inform("Service: {service}")
   cli_inform("Model: {model}")
 
-  answer <-
-    gptstudio:::gptstudio_create_skeleton(
-      service = service,
-      model = model,
-      prompt = simple_prompt,
-      stream = FALSE
-    ) |>
-    gptstudio:::gptstudio_request_perform()
+  answer <- gptstudio::chat(
+    prompt = simple_prompt,
+    service = service,
+    model = model,
+    stream = FALSE
+  )
 
   if (save_history) {
     purrr::map(prompt, \(x) {
@@ -382,13 +380,11 @@ is_context_needed <- function(user_prompt,
                FALSE. ONLY answer TRUE or FALSE. It is crucial that you only
                answer TRUE or FALSE.\n\n{user_prompt}")
 
-  gptstudio:::gptstudio_create_skeleton(
+  gptstudio::chat(
+    prompt = prompt,
     service = service,
     model = model,
-    prompt = prompt,
     stream = FALSE
   ) |>
-    gptstudio:::gptstudio_request_perform() |>
-    purrr::pluck("response") |>
     as.logical()
 }

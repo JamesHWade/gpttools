@@ -74,12 +74,10 @@ repair_index_names <- function(local = TRUE) {
       domain <- basename(index_file) |> tools::file_path_sans_ext()
       # nolint start
       new_name <-
-        gptstudio:::gptstudio_create_skeleton(
+        gptstudio::chat(
           prompt = glue::glue("Based on the domain, return the name of the package. If it is not a package, make your best guess at the name of the resource. Do not output any text other than the name. This output will be used to create the index column. For example, you should return \"usethis\" for \"usethis-r-lib-org\" and \"tune\" for \"tune-tidymodels-org\", ''\n\nDomain: {domain}\nName: "),
           stream = FALSE
-        ) |>
-        gptstudio:::gptstudio_request_perform() |>
-        purrr::pluck("response")
+        )
       # nolint end
       cli_inform(glue::glue("Name for {domain} is {new_name}."))
       use_name <- ui_yeah("Should {new_name} be used as the name for {domain}?")
