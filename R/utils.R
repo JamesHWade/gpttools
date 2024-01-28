@@ -17,7 +17,7 @@ scales_scientific <- function(x,
   ret <- paste0(
     prefix,
     format(x,
-      decimal.mark = decimal.mark,
+      decimal_mark = decimal_mark,
       trim = trim,
       scientific = TRUE, ...
     ),
