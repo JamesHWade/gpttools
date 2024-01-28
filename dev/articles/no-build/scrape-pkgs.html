@@ -158,7 +158,7 @@ print the ‘repos’ options to the console.
 information from the defined CRAN repository.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/JamesHWade/gpttools" class="external-link">gpttools</a></span><span class="op">)</span></span>
-<span><span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli_inform</a></span><span class="op">(</span><span class="st">"Scraping package sites and creating an index for each."</span><span class="op">)</span></span>
+<span><span class="fu">cli_inform</span><span class="op">(</span><span class="st">"Scraping package sites and creating an index for each."</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>CRAN <span class="op">=</span> <span class="st">"https://packagemanager.posit.co/all/latest"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"repos"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../../reference/scrape_pkg_sites.html">scrape_pkg_sites</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
