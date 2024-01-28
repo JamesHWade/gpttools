@@ -357,7 +357,7 @@ chat_with_context <- function(query,
     save_user_history(
       file_name = history_name,
       role      = "assistant",
-      content   = answer$response,
+      content   = answer,
       local     = local,
       model     = embedding_model,
       overwrite = overwrite
@@ -367,7 +367,7 @@ chat_with_context <- function(query,
   prompt_without_context <-
     c(session_history, prompt_query)
 
-  list(prompt_without_context, full_context, answer$response)
+  list(prompt_without_context, full_context, answer)
 }
 
 

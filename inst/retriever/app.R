@@ -226,9 +226,7 @@ server <- function(input, output, session) {
         load_index(domain = "All", local_embeddings = TRUE)
       } else {
         purrr::map(input$source, \(x) {
-          load_index(glue::glue("local/{input$source}"),
-            local_embeddings = TRUE
-          ) |>
+          load_index(input$source, local_embeddings = TRUE) |>
             tibble::as_tibble()
         }) |>
           dplyr::bind_rows()
