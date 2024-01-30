@@ -65,7 +65,7 @@ attempting to install in a Python virtual environment.}
 \code{install_sentence_transformers()} installs the sentence-transformers python
 package and its direct dependencies. This code is taken and only slightly
 modified from the tensorflow and reticulate packages. See the original code
-here: \code{\link[tensorflow:install_tensorflow]{tensorflow::install_tensorflow()}}.
+from tensorflow::install_tensorflow().
 }
 \details{
 You may be prompted to download and install

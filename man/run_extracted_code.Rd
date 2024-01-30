@@ -8,8 +8,7 @@ run_extracted_code(code)
 }
 \arguments{
 \item{code}{A character vector of code to be executed and presented. The code
-is first copied to the clipboard using \code{clipr::write_clip()} and then run
-with \code{reprex::reprex()}, capturing the outcome for presentation.}
+is run with \code{reprex::reprex()}, capturing the outcome for presentation.}
 }
 \value{
 An HTML-formatted string that includes the collapsible section for
@@ -19,7 +18,7 @@ seamlessly in interactive environments, hence it might return the output
 invisibly.
 }
 \description{
-This function takes extracted code chunks and utilizes the \code{clipr} and
+This function takes extracted code chunks and utilizes the
 \code{reprex} packages to run them. It then formats the output into a collapsible
 HTML section for easy sharing and viewing. Images within the output are
 converted to clickable links to enhance accessibility and compactness of the

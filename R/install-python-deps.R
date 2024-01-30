@@ -24,7 +24,7 @@ parse_sentence_transformers_version <- function(version) {
 #' `install_sentence_transformers()` installs the sentence-transformers python
 #' package and its direct dependencies. This code is taken and only slightly
 #' modified from the tensorflow and reticulate packages. See the original code
-#' here: [tensorflow::install_tensorflow()].
+#' from tensorflow::install_tensorflow().
 #'
 #' @details You may be prompted to download and install
 #'   miniconda if reticulate did not find a non-system installation of python.

@@ -77,10 +77,9 @@ set_user_config <- function(path = NULL) {
       gpttools.openai_embed_model = ops$openai_embed_model,
       gpttools.local_embed_model = ops$local_embed_model
     )
-    return(TRUE)
+    invisible(TRUE)
   } else {
-    cli_alert("No config file found. Using default config.")
-    return(FALSE)
+    invisible(FALSE)
   }
 }
 
