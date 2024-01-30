@@ -62,7 +62,9 @@ Suggests:
     waiter,
     withr,
     future,
-    furrr
+    furrr,
+    clipr,
+    reprex
 Remotes: michelnivard/gptstudio
 VignetteBuilder: 
     knitr

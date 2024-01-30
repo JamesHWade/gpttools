@@ -1,7 +1,7 @@
 rlang::check_installed(
   c(
     "shiny", "bslib", "bsicons", "cli", "glue",
-    "gptstudio", "gpttools", "waiter"
+    "gptstudio", "gpttools", "waiter", "reprex", "clipr"
   )
 )
 
@@ -11,12 +11,13 @@ library(shiny)
 library(bslib)
 library(bsicons)
 library(waiter)
+library(reprex)
 
 window_height_ui <- function(id) {
-  ns <- shiny::NS(id)
+  ns <- NS(id)
   namespaced_id <- ns("window_height")
 
-  shiny::tags$head(shiny::tags$script(HTML(
+  tags$head(tags$script(HTML(
     sprintf("
       function send_window_height() {
         var height = $(window).height();
@@ -35,22 +36,25 @@ window_height_ui <- function(id) {
 }
 
 window_height_server <- function(id) {
-  shiny::moduleServer(id, function(input, output, session) {
-    shiny::reactive({
+  moduleServer(id, function(input, output, session) {
+    reactive({
       input$window_height
     })
   })
 }
 
 make_chat_history <- function(chats) {
-  purrr::discard(chats, \(x) x$role == "system") |>
+  history <-
+    purrr::discard(chats, \(x) x$role == "system") |>
     purrr::map(\(x) {
       list(
-        shiny::strong(stringr::str_to_title(x$role)),
-        shiny::markdown(x$content)
+        strong(stringr::str_to_title(x$role)),
+        markdown(x$content)
       )
     }) |>
     purrr::list_flatten()
+  print(history)
+  history
 }
 
 api_services <-
@@ -61,10 +65,10 @@ api_services <-
   purrr::discard(~ .x == "gptstudio_request_perform.default")
 
 ui <- page_fillable(
-  waiter::useWaiter(),
-  waiter::waiterOnBusy(
-    html = waiter::spin_3circles(),
-    color = waiter::transparent(0.5)
+  useWaiter(),
+  waiterOnBusy(
+    html = spin_3circles(),
+    color = transparent(0.5)
   ),
   window_height_ui("height"),
   theme = bs_theme(bootswatch = "litera", version = 5) |>
@@ -112,7 +116,7 @@ ui <- page_fillable(
             selected = getOption("gpttools.service", "openai")
           ),
           selectInput("model", "Model",
-            choices = NULL
+                      choices = NULL
           ),
           selectInput(
             "embed_model", "OpenAI Embedding Model",
@@ -125,6 +129,13 @@ ui <- page_fillable(
               "gpttools.openai_embed_model",
               "text-embedding-3-small"
             )
+          ),
+          radioButtons(
+            "test_code", "Test Code",
+            choiceNames = c("Yes", "No"),
+            choiceValues = c(TRUE, FALSE),
+            inline = TRUE,
+            selected = getOption("gpttools.test_code", FALSE)
           ),
           radioButtons(
             "local", "Local Embeddings",
@@ -234,7 +245,7 @@ server <- function(input, output, session) {
     } else {
       purrr::map(input$source, \(x) {
         load_index(input$source,
-          local_embeddings = FALSE
+                   local_embeddings = FALSE
         ) |>
           tibble::as_tibble()
       }) |>
@@ -258,8 +269,8 @@ server <- function(input, output, session) {
     )
   )
   observe(updateSelectInput(session, "source",
-    choices = c("All", indices()),
-    selected = getOption("gpttools.sources")
+                            choices = c("All", indices()),
+                            selected = getOption("gpttools.sources")
   ))
   observe({
     toggle_popover("settings", show = FALSE)
@@ -320,6 +331,28 @@ server <- function(input, output, session) {
           )
         )
       )
+
+    if (input$test_code) {
+      code_from_response <- extract_code_chunks(new_response)
+    } else {
+      code_from_response <- NULL
+    }
+
+    if (!is.null(code_from_response)) {
+      new_reprex <- run_extracted_code(code_from_response)
+      cat(new_reprex)
+      r$all_chats <-
+        c(
+          r$all_chats,
+          list(
+            list(
+              role    = "reprex",
+              content = new_reprex
+            )
+          )
+        )
+    }
+
     r$all_chats_formatted <- make_chat_history(r$all_chats)
     updateTextAreaInput(session, "chat_input", value = "")
   }) |>
