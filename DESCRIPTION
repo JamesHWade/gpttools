@@ -63,7 +63,6 @@ Suggests:
     withr,
     future,
     furrr,
-    clipr,
     reprex
 Remotes: michelnivard/gptstudio
 VignetteBuilder: 

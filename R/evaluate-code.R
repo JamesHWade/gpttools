@@ -28,15 +28,14 @@ extract_code_chunks <- function(text) {
 
 #' Execute and Present Extracted Code Chunks
 #'
-#' This function takes extracted code chunks and utilizes the `clipr` and
+#' This function takes extracted code chunks and utilizes the
 #' `reprex` packages to run them. It then formats the output into a collapsible
 #' HTML section for easy sharing and viewing. Images within the output are
 #' converted to clickable links to enhance accessibility and compactness of the
 #' presentation.
 #'
 #' @param code A character vector of code to be executed and presented. The code
-#'   is first copied to the clipboard using `clipr::write_clip()` and then run
-#'   with `reprex::reprex()`, capturing the outcome for presentation.
+#'   is run with `reprex::reprex()`, capturing the outcome for presentation.
 #'
 #' @return An HTML-formatted string that includes the collapsible section for
 #'   the code's output. This HTML string can be embedded in web pages, markdown
@@ -52,9 +51,8 @@ extract_code_chunks <- function(text) {
 #'
 #' @export
 run_extracted_code <- function(code) {
-  rlang::check_installed(c("clipr", "reprex"))
-  clipr::write_clip(code, allow_non_interactive = TRUE)
-  reprex::reprex(venue = "html") |>
+  rlang::check_installed("reprex")
+  reprex::reprex(x = paste0(code, "\n"), venue = "html") |>
     paste0(collapse = "\n") |>
     insert_collapsible_section() |>
     replace_image_with_link() |>
