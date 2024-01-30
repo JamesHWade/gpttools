@@ -224,8 +224,17 @@ chat_with_context <- function(query,
         index,
         k_context
       )
-    context <- full_context |>
-      dplyr::pull("chunks") |>
+
+    context <-
+      full_context |>
+      dplyr::glimpse() |>
+      dplyr::select(source, link, chunks) |>
+      purrr::pmap(\(source, link, chunks) {
+        glue::glue("Source: {source}
+                   Link: {link}
+                   Text: {chunks}")
+      }) |>
+      unlist() |>
       paste(collapse = "\n\n")
   } else {
     full_context <- "No context provided."
@@ -375,10 +384,23 @@ is_context_needed <- function(user_prompt,
                               service = getOption("gpttools.service"),
                               model = getOption("gpttools.model")) {
   prompt <-
-    glue::glue("Would additional context or history be helpful to respond to
-               this prompt from the user. If yes, answer TRUE. If no, answer
-               FALSE. ONLY answer TRUE or FALSE. It is crucial that you only
-               answer TRUE or FALSE.\n\n{user_prompt}")
+    glue::glue("Consider if additional context or history is necessary to
+               ccurately respond to this user prompt. Useful context may include
+               recent information, package documentation, textbook excerpts, or
+               other relevant details.
+
+               Respond with TRUE if such context is likely to enhance the
+               response, especially for queries involving recent developments,
+               technical subjects, or complex topics. Respond with FALSE if the
+               query seems straightforward or well within the AI's existing
+               knowledge base.
+
+               Remember, the AI's training includes data only up to a few
+               months ago. If the query might relate to developments after this
+               period, lean towards TRUE.
+
+               Respond ONLY with TRUE or FALSE.
+               \n\n{user_prompt}")
 
   gptstudio::chat(
     prompt = prompt,

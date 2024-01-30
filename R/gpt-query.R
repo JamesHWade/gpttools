@@ -86,28 +86,3 @@ query_openai <- function(task = "chat/completions",
 
   resp |> httr2::resp_body_json(simplifyVector = TRUE)
 }
-
-check_to_add_context <- function(
-    query,
-    model = getOption("gpttools.model", "gpt-4-turbo-preview")) {
-  # nolint start
-  body <- list(
-    list(
-      role = "system",
-      content = "Determine if the user provided prompt needs additional context to provide a useful response. Provide your response as either TRUE or FALSE. Do not provide any additional details or response. No other text aside from TRUE or FALSE."
-    ),
-    list(
-      role = "user",
-      content = query
-    )
-  )
-  # nolint end
-
-  response <- query_openai(
-    task = "chat/completions",
-    body = body,
-    model = model
-  )
-
-  response$choices$message$content
-}
