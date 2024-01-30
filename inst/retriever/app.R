@@ -116,7 +116,7 @@ ui <- page_fillable(
             selected = getOption("gpttools.service", "openai")
           ),
           selectInput("model", "Model",
-                      choices = NULL
+            choices = NULL
           ),
           selectInput(
             "embed_model", "OpenAI Embedding Model",
@@ -245,7 +245,7 @@ server <- function(input, output, session) {
     } else {
       purrr::map(input$source, \(x) {
         load_index(input$source,
-                   local_embeddings = FALSE
+          local_embeddings = FALSE
         ) |>
           tibble::as_tibble()
       }) |>
@@ -269,8 +269,8 @@ server <- function(input, output, session) {
     )
   )
   observe(updateSelectInput(session, "source",
-                            choices = c("All", indices()),
-                            selected = getOption("gpttools.sources")
+    choices = c("All", indices()),
+    selected = getOption("gpttools.sources")
   ))
   observe({
     toggle_popover("settings", show = FALSE)

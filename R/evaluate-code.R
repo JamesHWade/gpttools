@@ -22,7 +22,7 @@ extract_code_chunks <- function(text) {
   # Pattern to match code chunks enclosed in triple backticks
   pattern <- "```[a-z]*\\n([\\s\\S]*?)\\n```"
   # Extract code chunks
-  code_chunks <- stringr::str_match_all(text, pattern)[[1]][,2]
+  code_chunks <- stringr::str_match_all(text, pattern)[[1]][, 2]
   return(code_chunks)
 }
 
@@ -40,9 +40,9 @@ ggplot(mpg, aes(x=displ, y=hwy)) +
 run_extracted_code <- function(code) {
   clipr::write_clip(code)
   invisible(reprex::reprex(venue = "html") |>
-              paste0(collapse = "\n") |>
-              insert_collapsible_section() |>
-              replace_image_with_link())
+    paste0(collapse = "\n") |>
+    insert_collapsible_section() |>
+    replace_image_with_link())
 }
 
 insert_collapsible_section <- function(html, summary_text = "Show/Hide Content") {
