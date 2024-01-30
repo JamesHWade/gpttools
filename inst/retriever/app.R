@@ -340,7 +340,6 @@ server <- function(input, output, session) {
 
     if (!is.null(code_from_response)) {
       new_reprex <- run_extracted_code(code_from_response)
-      cat(new_reprex)
       r$all_chats <-
         c(
           r$all_chats,
