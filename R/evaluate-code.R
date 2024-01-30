@@ -26,23 +26,39 @@ extract_code_chunks <- function(text) {
   return(code_chunks)
 }
 
-code <- 'library(ggplot2)
-
-ggplot(mpg, aes(x=displ, y=hwy)) +
-  geom_point(aes(color=class)) +
-  geom_smooth(method="lm", se=FALSE, color="black") +
-  labs(title="Engine Displacement vs. Highway MPG",
-       x="Engine Displacement (liters)",
-       y="Highway Miles per Gallon",
-       color="Vehicle Class") +
-  theme_minimal()'
-
+#' Execute and Present Extracted Code Chunks
+#'
+#' This function takes extracted code chunks and utilizes the `clipr` and
+#' `reprex` packages to run them. It then formats the output into a collapsible
+#' HTML section for easy sharing and viewing. Images within the output are
+#' converted to clickable links to enhance accessibility and compactness of the
+#' presentation.
+#'
+#' @param code A character vector of code to be executed and presented. The code
+#'   is first copied to the clipboard using `clipr::write_clip()` and then run
+#'   with `reprex::reprex()`, capturing the outcome for presentation.
+#'
+#' @return An HTML-formatted string that includes the collapsible section for
+#'   the code's output. This HTML string can be embedded in web pages, markdown
+#'   documents, or viewed directly in browsers. The function is designed to work
+#'   seamlessly in interactive environments, hence it might return the output
+#'   invisibly.
+#'
+#' @examplesIf rlang::is_interactive()
+#' code <- "plot(1:10)"
+#' html_output <- run_extracted_code(code)
+#' # The returned value is an HTML string with the plotted output presented within a
+#' # collapsible section and any images replaced by links.
+#'
+#' @export
 run_extracted_code <- function(code) {
+  rlang::check_installed(c("clipr", "reprex"))
   clipr::write_clip(code)
-  invisible(reprex::reprex(venue = "html") |>
+  reprex::reprex(venue = "html") |>
     paste0(collapse = "\n") |>
     insert_collapsible_section() |>
-    replace_image_with_link())
+    replace_image_with_link() |>
+    invisible()
 }
 
 insert_collapsible_section <- function(html, summary_text = "Show/Hide Content") {
