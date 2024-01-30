@@ -11,6 +11,7 @@
 * Enhanced the package documentation index updating functions for smoother maintenance (in #2139bfb, #4aa2344, #0304daf).
 * Provided package options for easy switching between different AI models (in #2027dbb).
 * Added save options to the chat with retrieval app for better user experience (in #51cc6a3, #4202256).
+* Optionally execute code in the chat with retrieval app (in #7546037).
 
 ## Bug fixes and other changes
 
