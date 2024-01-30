@@ -53,7 +53,7 @@ extract_code_chunks <- function(text) {
 #' @export
 run_extracted_code <- function(code) {
   rlang::check_installed(c("clipr", "reprex"))
-  clipr::write_clip(code)
+  clipr::write_clip(code, allow_non_interactive = TRUE)
   reprex::reprex(venue = "html") |>
     paste0(collapse = "\n") |>
     insert_collapsible_section() |>
