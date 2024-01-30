@@ -52,7 +52,10 @@ extract_code_chunks <- function(text) {
 #' @export
 run_extracted_code <- function(code) {
   rlang::check_installed("reprex")
-  reprex::reprex(x = paste0(code, "\n"), venue = "html") |>
+  tmp_file <- tempfile(fileext = ".R")
+  readr::write_lines(code, tmp_file)
+
+  reprex::reprex(input = paste0(code, "\n"), venue = "html") |>
     paste0(collapse = "\n") |>
     insert_collapsible_section() |>
     replace_image_with_link() |>
