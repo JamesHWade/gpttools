@@ -29,9 +29,9 @@
 #'
 get_transformer_model <-
   function(model_name = getOption(
-    "gpttools.local_embed_model",
-    "BAAI/bge-small-en-v1.5"
-  )) {
+             "gpttools.local_embed_model",
+             "BAAI/bge-small-en-v1.5"
+           )) {
     py_pkg_is_available()
     transformer <- reticulate::import("sentence_transformers")
     cli_process_start("Downloading model. This may take a few minutes.")
@@ -70,8 +70,9 @@ colbert_rerank <- function(documents, model_name = "colbert-ir/colbertv2.0") {
     expanded_doc <- document_embedding$unsqueeze(1)
 
     sim_matrix <- torch$nn$functional$cosine_similarity(expanded_query,
-                                                        expanded_doc,
-                                                        dim = -1L)
+      expanded_doc,
+      dim = -1L
+    )
 
     max_sim_scores <- torch$max(sim_matrix, dim = 2L)$values
     avg_max_sim <- torch$mean(max_sim_scores, dim = 1L)
@@ -85,14 +86,17 @@ colbert_rerank <- function(documents, model_name = "colbert-ir/colbertv2.0") {
 
   for (document in docs) {
     document_encoding <- tokenizer$encode(document$page_content,
-                                          return_tensors = "pt",
-                                          truncation = TRUE,
-                                          max_length = 512L)
+      return_tensors = "pt",
+      truncation = TRUE,
+      max_length = 512L
+    )
     document_embedding <- model(document_encoding)$last_hidden_state
 
     score <- maxsim(query_embedding$unsqueeze(0), document_embedding)
-    scores[[length(scores) + 1]] <- list(score = score$item(),
-                                         document = document$page_content)
+    scores[[length(scores) + 1]] <- list(
+      score = score$item(),
+      document = document$page_content
+    )
   }
 
   print(paste0("Took ", time$time() - start, " seconds to re-rank documents with ColBERT."))
