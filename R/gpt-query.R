@@ -51,7 +51,7 @@ gpt_chat <- function(instructions,
   )
 
   cli_process_done(msg_done = "Received response from {service}")
-  text_to_insert <- as.character(answer$response)
+  text_to_insert <- as.character(answer)
   insert_text(text_to_insert)
 }
 
