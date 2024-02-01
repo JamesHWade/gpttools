@@ -336,7 +336,8 @@ load_index <- function(domain, local_embeddings = FALSE) {
   if (domain == "All") {
     arrow::open_dataset(
       data_dir,
-      factory_options = list(selector_ignore_prefixes = "local")) |>
+      factory_options = list(selector_ignore_prefixes = "local")
+    ) |>
       tibble::as_tibble()
   } else {
     arrow::read_parquet(glue("{data_dir}/{domain}.parquet"))
