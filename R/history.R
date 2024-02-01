@@ -63,7 +63,7 @@ delete_history <- function(local = FALSE) {
     if (delete_file) {
       file.remove(x)
     } else {
-      cli_inform("{x} was **not** deleted.")
+      cli_alert_info("{x} was **not** deleted.")
     }
   })
   invisible()
@@ -137,11 +137,11 @@ get_query_context <- function(query_embedding, full_context, k) {
 
 check_context <- function(context) {
   if (rlang::is_null(context)) {
-    cli_warn(
+    cli_alert_warning(
       "You specified that context should be added but none was provided."
     )
   } else if (!is.data.frame(context)) {
-    cli_warn(
+    cli_alert_warning(
       "You passed a {class(context)} to but a data.frame was expected."
     )
   }
@@ -209,7 +209,7 @@ chat_with_context <- function(query,
   )
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
-    cli_inform("Creating embedding from query.")
+    cli_alert_info("Creating embedding from query.")
     query_embedding <- get_query_embedding(query,
       local = local,
       model = embedding_model
@@ -217,7 +217,7 @@ chat_with_context <- function(query,
   }
 
   if (rlang::is_true(add_context) && rlang::is_true(need_context)) {
-    cli_inform("Attempting to add context to query.")
+    cli_alert_info("Attempting to add context to query.")
     full_context <-
       get_query_context(
         query_embedding,
@@ -242,8 +242,8 @@ chat_with_context <- function(query,
   }
 
   if (rlang::is_true(add_history) && rlang::is_true(need_context)) {
-    cli_inform("Attempting to add chat history to query.")
-    cli_inform("Chat history: {class(chat_history)}")
+    cli_alert_info("Attempting to add chat history to query.")
+    cli_alert_info("Chat history: {class(chat_history)}")
     if (rlang::is_null(chat_history)) {
       related_history <- "No related history found."
     } else {
@@ -258,7 +258,7 @@ chat_with_context <- function(query,
         paste(collapse = "\n\n")
     }
   } else {
-    cli_inform("Not attempting to add chat history to query.")
+    cli_alert_info("Not attempting to add chat history to query.")
     related_history <- "No related history found."
   }
 
@@ -296,6 +296,10 @@ chat_with_context <- function(query,
     )
 
   prompt_context <- list(
+    list(
+      role = "system",
+      content = "You provide succinct, concise, and accurate responses."
+    ),
     list(
       role = "user",
       content = glue("---\nContext:\n{context}\n---")
@@ -340,8 +344,8 @@ chat_with_context <- function(query,
     purrr::map_chr(.f = "content") |>
     paste(collapse = "\n\n")
 
-  cli_inform("Service: {service}")
-  cli_inform("Model: {model}")
+  cli_alert_info("Service: {service}")
+  cli_alert_info("Model: {model}")
 
   answer <- gptstudio::chat(
     prompt = simple_prompt,
