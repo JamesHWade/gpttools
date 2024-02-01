@@ -99,7 +99,6 @@ colbert_rerank <- function(documents, model_name = "colbert-ir/colbertv2.0") {
     )
   }
 
-  print(paste0("Took ", time$time() - start, " seconds to re-rank documents with ColBERT."))
   sorted_data <- scores[order(sapply(scores, function(x) x$score), decreasing = TRUE)]
 }
 

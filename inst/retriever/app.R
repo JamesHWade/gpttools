@@ -53,7 +53,6 @@ make_chat_history <- function(chats) {
       )
     }) |>
     purrr::list_flatten()
-  print(history)
   history
 }
 

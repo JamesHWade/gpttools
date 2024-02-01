@@ -88,5 +88,5 @@ summarize_data <- function(data,
 prep_data_prompt <- function(data, method, prompt) {
   summarized_data <- summarize_data(data = data, method = method)
 
-  paste(testthat::capture_output(print(summarized_data)), prompt, sep = "\n")
+  paste(testthat::capture_output(cat_print(summarized_data)), prompt, sep = "\n")
 }
