@@ -10,6 +10,7 @@ chat_with_context(
   model = "gpt-4-turbo-preview",
   index = NULL,
   add_context = TRUE,
+  check_context = FASLE,
   chat_history = NULL,
   history_name = "chat_history",
   session_history = NULL,
@@ -34,6 +35,8 @@ chat_with_context(
 
 \item{add_context}{Whether to add context to the query or not. Default is
 TRUE.}
+
+\item{check_context}{Whether to check if context is needed. Default is FALSE.}
 
 \item{chat_history}{Chat history dataframe for reference.}
 

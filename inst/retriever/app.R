@@ -115,7 +115,7 @@ ui <- page_fillable(
             selected = getOption("gpttools.service", "openai")
           ),
           selectInput("model", "Model",
-            choices = NULL
+                      choices = NULL
           ),
           selectInput(
             "embed_model", "OpenAI Embedding Model",
@@ -141,7 +141,7 @@ ui <- page_fillable(
             choiceNames = c("Yes", "No"),
             choiceValues = c(TRUE, FALSE),
             selected = getOption("gpttools.local_embed", FALSE),
-            inline = TRUE,
+            inline = TRUE
           ),
           selectInput(
             "local_embed_model", "Local Embedding Model",
@@ -154,6 +154,13 @@ ui <- page_fillable(
               "gpttools.local_embed_model",
               "BAAI/bge-small-en-v1.5"
             )
+          ),
+          radioButtons(
+            "always_add_context", "Always Add Context",
+            choiceNames = c("Yes", "No"),
+            choiceValues = c(TRUE, FALSE),
+            selected = getOption("gpttools.always_add_context", TRUE),
+            inline = TRUE
           )
         ),
         br(),
@@ -232,7 +239,7 @@ server <- function(input, output, session) {
   })
   index <- reactive({
     if (input$local == TRUE) {
-      if (input$source == "All") {
+      if ("All" %in% input$source) {
         load_index(domain = "All", local_embeddings = TRUE)
       } else {
         purrr::map(input$source, \(x) {
@@ -241,7 +248,7 @@ server <- function(input, output, session) {
         }) |>
           dplyr::bind_rows()
       }
-    } else if (input$source == "All") {
+    } else if ("All" %in% input$source) {
       load_index(domain = "All", local_embeddings = FALSE)
     } else {
       purrr::map(input$source, \(x) {
@@ -269,8 +276,8 @@ server <- function(input, output, session) {
     )
   )
   observe(updateSelectInput(session, "source",
-    choices = c("All", indices()),
-    selected = getOption("gpttools.sources", "All")
+                            choices = c("All", indices()),
+                            selected = getOption("gpttools.sources", "All")
   ))
   observe({
     toggle_popover("settings", show = FALSE)
@@ -296,6 +303,7 @@ server <- function(input, output, session) {
       model = input$model,
       index = index(),
       add_context = TRUE,
+      check_context = input$always_add_context,
       chat_history = read_history(local = input$local),
       session_history = r$all_chats,
       add_history = input$save_history,
