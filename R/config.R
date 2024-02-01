@@ -5,7 +5,7 @@
 #' @param service The name of the service to use, default is "openai".
 #' @param model The model to use, default is "gpt-4-1106-preview".
 #' @param task The task to perform, default is "Permissive Chat".
-#' @param local_embed Whether to use local embedding model. Default is "yes".
+#' @param local_embed Whether to use local embedding model. Default is FALSE.
 #' @param openai_embed_model The OpenAI embeddings model to use, default is
 #'  "text-embedding-3-small".
 #' @param local_embed_model The local embeddings model to use, default is
@@ -15,7 +15,8 @@
 #' @param save_history Logical indicating whether history should be saved,
 #' default is TRUE.
 #' @param sources The sources to use, default is "All".
-#' @param run_code Whether to execute generated code with `reprex::reprex()`
+#' @param run_code Whether to execute generated code with `reprex::reprex()`,
+#' default is FALSE.
 #' @param persist Logical indicating whether to persist the settings, default
 #' is TRUE.
 #' @return Invisible NULL.
@@ -23,17 +24,17 @@
 save_user_config <- function(service = "openai",
                              model = "gpt-4-turbo-preview",
                              task = "Permissive Chat",
-                             local_embed = "Yes",
+                             local_embed = FALSE,
                              openai_embed_model = "text-embedding-3-small",
                              local_embed_model = "BAAI/bge-small-en-v1.5",
                              k_context = 4,
                              k_history = 4,
-                             save_history = "Yes",
+                             save_history = TRUE,
                              sources = "All",
-                             run_code = "No",
+                             run_code = FALSE,
                              persist = TRUE) {
   ops <- tibble::tibble(
-    service, model, task, embeddings, openai_embed_model, local_embed_model,
+    service, model, task, local_embed, openai_embed_model, local_embed_model,
     k_context, k_history, sources, run_code, save_history
   )
 

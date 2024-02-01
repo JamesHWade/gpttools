@@ -6,15 +6,15 @@
     op_gpttools <- list(
       gpttools.service            = "openai",
       gpttools.model              = "gpt-4-turbo-preview",
-      gpttools.local_embed        = "No",
+      gpttools.local_embed        = FALSE,
       gpttools.local_embed_model  = "BAAI/bge-large-en-v1.5",
       gpttools.task               = "Permissive Chat",
       gpttools.k_context          = 4,
       gpttools.k_history          = 4,
-      gpttools.save_history       = "No",
+      gpttools.save_history       = FALSE,
       gpttools.sources            = "All",
       gpttools.openai_embed_model = "text-embedding-3-small",
-      gpttools.run_code           = "No"
+      gpttools.run_code           = FALSE
     )
 
     toset <- !(names(op_gpttools) %in% names(op))
