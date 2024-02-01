@@ -3,9 +3,8 @@ prepare_scraped_files <- function(domain) {
   scraped <-
     arrow::read_parquet(glue("{scraped_dir}/text/{domain}.parquet"))
 
-  if (max(scraped$n_words) > 2e5) {
+  if (max(scraped$n_words) > 1e6) {
     max_index <- scraped[which.max(scraped$n_words), ]
-    print(max_index |> dplyr::select(-text))
     cli_alert_warning(
       c(
         "!" = "Entry {max_index$link} of {domain} has at least 200,000 words.",

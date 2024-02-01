@@ -54,8 +54,6 @@ transcribe_audio_chunk <-
 
     result <- httr::content(response, "parsed", "application/json")
 
-    print(result)
-
     file.remove(tmp_file)
 
     return(result)

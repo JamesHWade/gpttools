@@ -53,7 +53,6 @@ make_chat_history <- function(chats) {
       )
     }) |>
     purrr::list_flatten()
-  print(history)
   history
 }
 
@@ -116,7 +115,7 @@ ui <- page_fillable(
             selected = getOption("gpttools.service", "openai")
           ),
           selectInput("model", "Model",
-                      choices = NULL
+            choices = NULL
           ),
           selectInput(
             "embed_model", "OpenAI Embedding Model",
@@ -269,8 +268,8 @@ server <- function(input, output, session) {
     )
   )
   observe(updateSelectInput(session, "source",
-                            choices = c("All", indices()),
-                            selected = getOption("gpttools.sources")
+    choices = c("All", indices()),
+    selected = getOption("gpttools.sources")
   ))
   observe({
     toggle_popover("settings", show = FALSE)
