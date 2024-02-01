@@ -160,6 +160,7 @@ check_context <- function(context) {
 #' @param index Index to look for context.
 #' @param add_context Whether to add context to the query or not. Default is
 #'   TRUE.
+#' @param check_context Whether to check if context is needed. Default is FALSE.
 #' @param chat_history Chat history dataframe for reference.
 #' @param history_name Name of the file where chat history is stored.
 #' @param session_history Session history data for reference.
@@ -189,6 +190,7 @@ chat_with_context <- function(query,
                               model = "gpt-4-turbo-preview",
                               index = NULL,
                               add_context = TRUE,
+                              check_context = FASLE,
                               chat_history = NULL,
                               history_name = "chat_history",
                               session_history = NULL,
@@ -202,11 +204,15 @@ chat_with_context <- function(query,
                               embedding_model = NULL) {
   arg_match(task, c("Context Only", "Permissive Chat"))
 
-  need_context <- is_context_needed(
-    user_prompt = query,
-    service = service,
-    model = model
-  )
+  if (rlang::is_true(check_context)) {
+    need_context <- is_context_needed(
+      user_prompt = query,
+      service = service,
+      model = model
+    )
+  } else {
+    need_context <- TRUE
+  }
 
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
     cli_alert_info("Creating embedding from query.")
@@ -227,7 +233,6 @@ chat_with_context <- function(query,
 
     context <-
       full_context |>
-      dplyr::glimpse() |>
       dplyr::select(source, link, chunks) |>
       purrr::pmap(\(source, link, chunks) {
         glue::glue("Source: {source}
