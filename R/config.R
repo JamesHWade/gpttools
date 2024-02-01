@@ -5,7 +5,7 @@
 #' @param service The name of the service to use, default is "openai".
 #' @param model The model to use, default is "gpt-4-1106-preview".
 #' @param task The task to perform, default is "Permissive Chat".
-#' @param embeddings The location of embeddings, default is "local".
+#' @param local_embed Whether to use local embedding model. Default is "yes".
 #' @param openai_embed_model The OpenAI embeddings model to use, default is
 #'  "text-embedding-3-small".
 #' @param local_embed_model The local embeddings model to use, default is
@@ -15,6 +15,7 @@
 #' @param save_history Logical indicating whether history should be saved,
 #' default is TRUE.
 #' @param sources The sources to use, default is "All".
+#' @param run_code Whether to execute generated code with `reprex::reprex()`
 #' @param persist Logical indicating whether to persist the settings, default
 #' is TRUE.
 #' @return Invisible NULL.
@@ -22,17 +23,18 @@
 save_user_config <- function(service = "openai",
                              model = "gpt-4-turbo-preview",
                              task = "Permissive Chat",
-                             embeddings = TRUE,
+                             local_embed = "Yes",
                              openai_embed_model = "text-embedding-3-small",
                              local_embed_model = "BAAI/bge-small-en-v1.5",
                              k_context = 4,
                              k_history = 4,
-                             save_history = TRUE,
+                             save_history = "Yes",
                              sources = "All",
+                             run_code = "No",
                              persist = TRUE) {
   ops <- tibble::tibble(
     service, model, task, embeddings, openai_embed_model, local_embed_model,
-    k_context, k_history, sources, save_history
+    k_context, k_history, sources, run_code, save_history
   )
 
   if (persist == TRUE) {
@@ -69,13 +71,14 @@ set_user_config <- function(path = NULL) {
       gpttools.service = ops$service,
       gpttools.model = ops$model,
       gpttools.task = ops$task,
-      gpttools.local_embed = ops$embeddings,
+      gpttools.local_embed = ops$local_embed,
       gpttools.k_context = ops$k_context,
       gpttools.k_history = ops$k_history,
       gpttools.save_history = ops$save_history,
       gpttools.sources = ops$sources,
       gpttools.openai_embed_model = ops$openai_embed_model,
-      gpttools.local_embed_model = ops$local_embed_model
+      gpttools.local_embed_model = ops$local_embed_model,
+      gpttools.run_code = ops$run_code
     )
     invisible(TRUE)
   } else {
