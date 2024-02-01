@@ -140,7 +140,7 @@ ui <- page_fillable(
             "local", "Local Embeddings",
             choiceNames = c("Yes", "No"),
             choiceValues = c(TRUE, FALSE),
-            selected = getOption("gpttools.local_embed"),
+            selected = getOption("gpttools.local_embed", FALSE),
             inline = TRUE,
           ),
           selectInput(
@@ -242,7 +242,7 @@ server <- function(input, output, session) {
           dplyr::bind_rows()
       }
     } else if (input$source == "All") {
-      load_index(domain = "All", local_embeddings = TRUE)
+      load_index(domain = "All", local_embeddings = FALSE)
     } else {
       purrr::map(input$source, \(x) {
         load_index(x, local_embeddings = FALSE) |>
@@ -253,6 +253,7 @@ server <- function(input, output, session) {
   })
 
   indices <- reactive({
+    req(input$local)
     if (input$local == TRUE) {
       list_index(dir = "index/local") |> tools::file_path_sans_ext()
     } else {
@@ -269,7 +270,7 @@ server <- function(input, output, session) {
   )
   observe(updateSelectInput(session, "source",
     choices = c("All", indices()),
-    selected = getOption("gpttools.sources")
+    selected = getOption("gpttools.sources", "All")
   ))
   observe({
     toggle_popover("settings", show = FALSE)
@@ -277,13 +278,14 @@ server <- function(input, output, session) {
       service = input$service,
       model = input$model,
       task = input$task,
-      embeddings = input$local,
+      local_embed = input$local,
       openai_embed_model = input$openai_embed_model,
       local_embed_model = input$local_embed_model,
       k_context = input$n_docs,
       k_history = input$n_history,
       save_history = input$save_history,
       sources = input$source,
+      run_code = input$test_code,
       persist = TRUE
     )
   }) |> bindEvent(input$save_settings)

@@ -278,8 +278,11 @@ gpttools_index_all_scraped_data <- function(overwrite = FALSE,
 get_top_matches <- function(index, query_embedding, k = 5) {
   k <- min(k, nrow(index))
   index |>
+    dplyr::glimpse() |>
     dplyr::mutate(
       similarity = purrr::map_dbl(embedding, \(x) {
+        cli_alert_info("query embedding: {length(query_embedding)}")
+        cli_alert_info("text embedding: {length(unlist(x))}")
         lsa::cosine(query_embedding, unlist(x))
       })
     ) |>
@@ -331,7 +334,11 @@ load_index <- function(domain, local_embeddings = FALSE) {
   }
 
   if (domain == "All") {
-    arrow::open_dataset(data_dir) |> tibble::as_tibble()
+    arrow::open_dataset(
+      data_dir,
+      factory_options = list(selector_ignore_prefixes = "local")
+    ) |>
+      tibble::as_tibble()
   } else {
     arrow::read_parquet(glue("{data_dir}/{domain}.parquet"))
   }
