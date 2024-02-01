@@ -76,7 +76,7 @@ create_history <- function(file_name = "chat_history",
 
   if (!dir.exists(tools::file_path_sans_ext(file_path))) {
     dir.create(tools::file_path_sans_ext(file_path),
-               recursive = TRUE, showWarnings = FALSE
+      recursive = TRUE, showWarnings = FALSE
     )
   }
 
@@ -119,7 +119,7 @@ save_user_history <- function(file_name = "chat_history",
 get_query_embedding <- function(query, local = FALSE, model = NULL) {
   if (local) {
     create_text_embeddings(query,
-                           model = model
+      model = model
     ) |>
       dplyr::pull(embedding) |>
       unlist()
@@ -217,8 +217,8 @@ chat_with_context <- function(query,
   if (rlang::is_true(add_context) || rlang::is_true(add_history)) {
     cli_alert_info("Creating embedding from query.")
     query_embedding <- get_query_embedding(query,
-                                           local = local,
-                                           model = embedding_model
+      local = local,
+      model = embedding_model
     )
   }
 
@@ -269,35 +269,35 @@ chat_with_context <- function(query,
 
   prompt_instructions <-
     switch(task,
-           "Context Only" =
-             list(
-               list(
-                 role = "system",
-                 content =
-                   glue(
-                     "You are a helpful chat bot that answers questions based on
+      "Context Only" =
+        list(
+          list(
+            role = "system",
+            content =
+              glue(
+                "You are a helpful chat bot that answers questions based on
                      the context provided by the user. If the user does not
                      provide related context and you need context to respond
                      accurately, say \"I am not able to answer that question.
                      Maybe try rephrasing your question in a different way.\""
-                   )
-               )
-             ),
-           "Permissive Chat" =
-             list(
-               list(
-                 role = "system",
-                 content =
-                   glue(
-                     "You are a helpful chat bot that answers questions based on
+              )
+          )
+        ),
+      "Permissive Chat" =
+        list(
+          list(
+            role = "system",
+            content =
+              glue(
+                "You are a helpful chat bot that answers questions based on
                      on the context provided by the user. If the user does not
                      provide context and you need context to respond correctly,
                      answer the quest but first say \"I am not able to answer
                      that question with the context you gave me, but here is my
                      best but here is my best answer."
-                   )
-               )
-             )
+              )
+          )
+        )
     )
 
   prompt_context <- list(

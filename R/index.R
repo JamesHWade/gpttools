@@ -80,12 +80,12 @@ load_index <- function(domain, local_embeddings = FALSE) {
     if (local_embeddings) {
       sample_index <-
         system.file("sample-index/local/jameshwade-github-io-gpttools.parquet",
-                    package = "gpttools"
+          package = "gpttools"
         )
     } else {
       sample_index <-
         system.file("sample-index/jameshwade-github-io-gpttools.parquet",
-                    package = "gpttools"
+          package = "gpttools"
         )
     }
     index <- arrow::read_parquet(sample_index)
