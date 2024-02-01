@@ -78,13 +78,14 @@ to a YAML file.</p>
 <span>  service <span class="op">=</span> <span class="st">"openai"</span>,</span>
 <span>  model <span class="op">=</span> <span class="st">"gpt-4-turbo-preview"</span>,</span>
 <span>  task <span class="op">=</span> <span class="st">"Permissive Chat"</span>,</span>
-<span>  embeddings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  local_embed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  openai_embed_model <span class="op">=</span> <span class="st">"text-embedding-3-small"</span>,</span>
 <span>  local_embed_model <span class="op">=</span> <span class="st">"BAAI/bge-small-en-v1.5"</span>,</span>
 <span>  k_context <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  k_history <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  save_history <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  sources <span class="op">=</span> <span class="st">"All"</span>,</span>
+<span>  run_code <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  persist <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -103,8 +104,8 @@ to a YAML file.</p>
 <dd><p>The task to perform, default is "Permissive Chat".</p></dd>
 
 
-<dt>embeddings</dt>
-<dd><p>The location of embeddings, default is "local".</p></dd>
+<dt>local_embed</dt>
+<dd><p>Whether to use local embedding model. Default is FALSE.</p></dd>
 
 
 <dt>openai_embed_model</dt>
@@ -132,6 +133,11 @@ default is TRUE.</p></dd>
 
 <dt>sources</dt>
 <dd><p>The sources to use, default is "All".</p></dd>
+
+
+<dt>run_code</dt>
+<dd><p>Whether to execute generated code with <code><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex::reprex()</a></code>,
+default is FALSE.</p></dd>
 
 
 <dt>persist</dt>
