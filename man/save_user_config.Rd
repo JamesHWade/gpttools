@@ -8,14 +8,14 @@ save_user_config(
   service = "openai",
   model = "gpt-4-turbo-preview",
   task = "Permissive Chat",
-  local_embed = "Yes",
+  local_embed = FALSE,
   openai_embed_model = "text-embedding-3-small",
   local_embed_model = "BAAI/bge-small-en-v1.5",
   k_context = 4,
   k_history = 4,
-  save_history = "Yes",
+  save_history = TRUE,
   sources = "All",
-  run_code = "No",
+  run_code = FALSE,
   persist = TRUE
 )
 }
@@ -26,7 +26,7 @@ save_user_config(
 
 \item{task}{The task to perform, default is "Permissive Chat".}
 
-\item{local_embed}{Whether to use local embedding model. Default is "yes".}
+\item{local_embed}{Whether to use local embedding model. Default is FALSE.}
 
 \item{openai_embed_model}{The OpenAI embeddings model to use, default is
 "text-embedding-3-small".}
@@ -43,7 +43,8 @@ default is TRUE.}
 
 \item{sources}{The sources to use, default is "All".}
 
-\item{run_code}{Whether to execute generated code with \code{reprex::reprex()}}
+\item{run_code}{Whether to execute generated code with \code{reprex::reprex()},
+default is FALSE.}
 
 \item{persist}{Logical indicating whether to persist the settings, default
 is TRUE.}
