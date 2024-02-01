@@ -340,8 +340,6 @@ chat_with_context <- function(query,
     purrr::map_chr(.f = "content") |>
     paste(collapse = "\n\n")
 
-  cat(simple_prompt, "\n\n")
-
   cli_inform("Service: {service}")
   cli_inform("Model: {model}")
 
@@ -384,20 +382,17 @@ is_context_needed <- function(user_prompt,
                               service = getOption("gpttools.service"),
                               model = getOption("gpttools.model")) {
   prompt <-
-    glue::glue("Consider if additional context or history is necessary to
-               ccurately respond to this user prompt. Useful context may include
-               recent information, package documentation, textbook excerpts, or
+    glue::glue("Consider if additional context or history would be useful to
+               accurately respond to this user prompt. Useful context may include
+               information like package documentation, textbook excerpts, or
                other relevant details.
 
                Respond with TRUE if such context is likely to enhance the
-               response, especially for queries involving recent developments,
-               technical subjects, or complex topics. Respond with FALSE if the
-               query seems straightforward or well within the AI's existing
+               response. Respond with FALSE only if the
+               query seems straightforward and well within your existing
                knowledge base.
 
-               Remember, the AI's training includes data only up to a few
-               months ago. If the query might relate to developments after this
-               period, lean towards TRUE.
+               Most queries benefit from additional context.
 
                Respond ONLY with TRUE or FALSE.
                \n\n{user_prompt}")
