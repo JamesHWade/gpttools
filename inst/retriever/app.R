@@ -10,7 +10,7 @@ library(gptstudio)
 library(shiny)
 library(bslib)
 library(bsicons)
-library(waiter)
+# library(waiter)
 library(reprex)
 
 window_height_ui <- function(id) {
@@ -64,11 +64,12 @@ api_services <-
   purrr::discard(~ .x == "gptstudio_request_perform.default")
 
 ui <- page_fillable(
-  useWaiter(),
-  waiterOnBusy(
-    html = spin_3circles(),
-    color = transparent(0.5)
-  ),
+  # useWaiter(),
+  # waiterOnBusy(
+  # html = spin_3circles(),
+  # color = transparent(0.5)
+  # ),
+  shinyjs::useShinyjs(),
   window_height_ui("height"),
   theme = bs_theme(bootswatch = "litera", version = 5) |>
     bs_add_rules(".scrollable-popover .popover-body
@@ -87,112 +88,128 @@ ui <- page_fillable(
     card_header(
       "Chat with Retrieval",
       class = "bg-primary d-flex align-items-center",
-      popover(
-        id = "settings",
-        options = list(customClass = "scrollable-popover"),
-        bs_icon("gear", class = "ms-auto"),
-        accordion_panel(
-          "Data & Task",
-          icon = bs_icon("robot", class = "ms-auto"),
-          selectInput(
-            "source", "Data Source",
-            choices = NULL,
-            multiple = TRUE
-          ),
-          selectInput(
-            "task", "Task",
-            choices = c("Context Only", "Permissive Chat"),
-            selected = getOption("gpttools.task", "Permissive Chat")
-          )
-        ),
-        br(),
-        accordion_panel(
-          "Service & Model",
-          icon = bs_icon("sliders", class = "ms-auto"),
-          selectInput(
-            "service", "AI Service",
-            choices = api_services,
-            selected = getOption("gpttools.service", "openai")
-          ),
-          selectInput("model", "Model",
-            choices = NULL
-          ),
-          selectInput(
-            "embed_model", "OpenAI Embedding Model",
-            choices = c(
-              "text-embedding-3-small",
-              "text-embedding-3-large",
-              "text-embedding-ada-002"
-            ),
-            selected = getOption(
-              "gpttools.openai_embed_model",
-              "text-embedding-3-small"
-            )
-          ),
-          radioButtons(
-            "test_code", "Test Code",
-            choiceNames = c("Yes", "No"),
-            choiceValues = c(TRUE, FALSE),
-            inline = TRUE,
-            selected = getOption("gpttools.test_code", FALSE)
-          ),
-          radioButtons(
-            "local", "Local Embeddings",
-            choiceNames = c("Yes", "No"),
-            choiceValues = c(TRUE, FALSE),
-            selected = getOption("gpttools.local_embed", FALSE),
-            inline = TRUE
-          ),
-          selectInput(
-            "local_embed_model", "Local Embedding Model",
-            choices = c(
-              "BAAI/bge-large-en-v1.5",
-              "jinaai/jina-embeddings-v2-base-en",
-              "BAAI/bge-small-en-v1.5"
-            ),
-            selected = getOption(
-              "gpttools.local_embed_model",
-              "BAAI/bge-small-en-v1.5"
-            )
-          ),
-          radioButtons(
-            "always_add_context", "Always Add Context",
-            choiceNames = c("Yes", "No"),
-            choiceValues = c(TRUE, FALSE),
-            selected = getOption("gpttools.always_add_context", TRUE),
-            inline = TRUE
-          )
-        ),
-        br(),
-        accordion_panel(
-          "History & Context",
-          icon = bs_icon("book", class = "ms-auto"),
-          radioButtons(
-            "save_history", "Save & Use History",
-            choiceNames = c("Yes", "No"),
-            choiceValues = c(TRUE, FALSE),
-            selected = getOption("gpttools.save_history", FALSE),
-            inline = TRUE,
-          ),
-          sliderInput(
-            "n_docs", "Docs to Include (#)",
-            min = 0,
-            max = 20,
-            value = getOption("gpttools.k_context", 4)
-          ),
-          sliderInput(
-            "n_history", "Chat History to Include (#)",
-            min = 0, max = 20,
-            value = getOption("gpttools.k_history", 4)
-          )
-        ),
-        br(),
+      div(
+        class = "d-flex align-items-center ms-auto",
         actionButton(
-          "save_settings", "Save Settings",
-          icon = icon("save", class = "ms-auto"),
-          class = "btn-primary"
+          "clear_history",
+          "",
+          class = "btn btn-primary",
+          icon = icon("eraser")
         ),
-        title = "App Settings"
+        popover(
+          id = "settings",
+          options = list(customClass = "scrollable-popover"),
+          bs_icon("gear", class = "ms-auto"),
+          accordion_panel(
+            "Data & Task",
+            icon = bs_icon("robot", class = "ms-auto"),
+            selectInput(
+              "source", "Data Source",
+              choices = NULL,
+              multiple = TRUE
+            ),
+            selectInput(
+              "task", "Task",
+              choices = c("Context Only", "Permissive Chat"),
+              selected = getOption("gpttools.task", "Permissive Chat")
+            )
+          ),
+          br(),
+          accordion_panel(
+            "Service & Model",
+            icon = bs_icon("sliders", class = "ms-auto"),
+            selectInput(
+              "service", "AI Service",
+              choices = api_services,
+              selected = getOption("gpttools.service", "openai")
+            ),
+            selectInput("model", "Model",
+              choices = NULL
+            ),
+            selectInput(
+              "embed_model", "OpenAI Embedding Model",
+              choices = c(
+                "text-embedding-3-small",
+                "text-embedding-3-large",
+                "text-embedding-ada-002"
+              ),
+              selected = getOption(
+                "gpttools.openai_embed_model",
+                "text-embedding-3-small"
+              )
+            ),
+            radioButtons(
+              "stream", "Stream",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              selected = TRUE,
+              inline = TRUE
+            ),
+            radioButtons(
+              "test_code", "Test Code",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              inline = TRUE,
+              selected = getOption("gpttools.test_code", FALSE)
+            ),
+            radioButtons(
+              "local", "Local Embeddings",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              selected = getOption("gpttools.local_embed", FALSE),
+              inline = TRUE
+            ),
+            selectInput(
+              "local_embed_model", "Local Embedding Model",
+              choices = c(
+                "BAAI/bge-large-en-v1.5",
+                "jinaai/jina-embeddings-v2-base-en",
+                "BAAI/bge-small-en-v1.5"
+              ),
+              selected = getOption(
+                "gpttools.local_embed_model",
+                "BAAI/bge-small-en-v1.5"
+              )
+            ),
+            radioButtons(
+              "always_add_context", "Always Add Context",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              selected = getOption("gpttools.always_add_context", TRUE),
+              inline = TRUE
+            )
+          ),
+          br(),
+          accordion_panel(
+            "History & Context",
+            icon = bs_icon("book", class = "ms-auto"),
+            radioButtons(
+              "save_history", "Save & Use History",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              selected = getOption("gpttools.save_history", FALSE),
+              inline = TRUE,
+            ),
+            sliderInput(
+              "n_docs", "Docs to Include (#)",
+              min = 0,
+              max = 20,
+              value = getOption("gpttools.k_context", 4)
+            ),
+            sliderInput(
+              "n_history", "Chat History to Include (#)",
+              min = 0, max = 20,
+              value = getOption("gpttools.k_history", 4)
+            )
+          ),
+          br(),
+          actionButton(
+            "save_settings", "Save Settings",
+            icon = icon("save", class = "ms-auto"),
+            class = "btn-primary"
+          ),
+          title = "App Settings"
+        )
       )
     ),
     uiOutput("all_chats_box"),
@@ -229,6 +246,7 @@ server <- function(input, output, session) {
   r <- reactiveValues()
   r$all_chats_formatted <- NULL
   r$all_chats <- NULL
+  r$context_links <- NULL
   height <- window_height_server("height")
   transformer_model <- reactive({
     if (input$local) {
@@ -258,6 +276,25 @@ server <- function(input, output, session) {
         dplyr::bind_rows()
     }
   })
+
+  observe(
+    if (input$service %in% c("google", "huggingface", "azure_openai")) {
+      updateRadioButtons(
+        session,
+        "stream",
+        selected = FALSE
+      )
+      shinyjs::disable("stream")
+    } else {
+      shinyjs::enable("stream")
+    }
+  )
+
+  observe({
+    r$all_chats <- NULL
+    r$all_chats_formatted <- NULL
+    r$context_links <- NULL
+  }) |> bindEvent(input$clear_history)
 
   indices <- reactive({
     req(input$local)
@@ -313,7 +350,9 @@ server <- function(input, output, session) {
       save_history = input$save_history,
       overwrite = FALSE,
       local = input$local,
-      embedding_model = transformer_model()
+      embedding_model = transformer_model(),
+      stream = input$stream |> as.logical(),
+      rv = r
     )
     new_response <- interim[[3]]
 
@@ -366,15 +405,24 @@ server <- function(input, output, session) {
   }) |>
     bindEvent(input$chat)
 
-  output$all_chats_box <- renderUI({
-    req(length(r$context_links) > 0)
-    card(
-      height = height() - 200,
-      card_body(
-        r$all_chats_formatted,
+  output$sources <- renderUI({
+    if (is.null(r$context_links)) {
+      return(NULL)
+    } else {
+      list(
         markdown("**Sources**"),
         markdown(paste0("* ", unique(r$context_links), collapse = "\n"))
       )
+    }
+  })
+
+  output$all_chats_box <- renderUI({
+    req(height())
+    card(
+      height = height() - 200,
+      r$all_chats_formatted,
+      textOutput(outputId = "streaming"),
+      uiOutput(outputId = "sources")
     )
   })
 }
