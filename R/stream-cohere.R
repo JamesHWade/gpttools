@@ -9,16 +9,16 @@ stream_chat_cohere <- function(prompt,
   )
 
   response <-
-    httr2::request("https://api.cohere.ai/v1/chat") %>%
+    httr2::request("https://api.cohere.ai/v1/chat") |>
     httr2::req_headers(
       `accept` = "application/json",
       `Authorization` = paste("Bearer", key),
       `content-type` = "application/json"
-    ) %>%
-    httr2::req_method("POST") %>%
-    httr2::req_body_json(data = request_body) %>%
-    httr2::req_retry(max_tries = 3) %>%
-    httr2::req_error(is_error = function(resp) FALSE) %>%
+    ) |>
+    httr2::req_method("POST") |>
+    httr2::req_body_json(data = request_body) |>
+    httr2::req_retry(max_tries = 3) |>
+    httr2::req_error(is_error = function(resp) FALSE) |>
     httr2::req_perform_stream(callback = element_callback, buffer_kb = 0.01)
 
   if (httr2::resp_is_error(response)) {
@@ -48,8 +48,8 @@ create_stream_handler_cohere <- function() {
       env$resp <- paste0(env$resp, x)
     }
     if (stringr::str_detect(env$resp, pattern)) {
-      parsed <- stringr::str_extract(env$resp, pattern) %>%
-        jsonlite::fromJSON() %>%
+      parsed <- stringr::str_extract(env$resp, pattern) |>
+        jsonlite::fromJSON() |>
         purrr::pluck("text")
 
       env$full_resp <- paste0(env$full_resp, parsed)

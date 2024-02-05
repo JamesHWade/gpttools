@@ -12,8 +12,8 @@ create_stream_handler_anthropic <- function() {
       env$resp <- paste0(env$resp, x)
     }
     if (stringr::str_detect(env$resp, pattern)) {
-      parsed <- stringr::str_extract(env$resp, pattern) %>%
-        jsonlite::fromJSON() %>%
+      parsed <- stringr::str_extract(env$resp, pattern) |>
+        jsonlite::fromJSON() |>
         purrr::pluck("completion")
 
       env$full_resp <- paste0(env$full_resp, parsed)
@@ -47,8 +47,8 @@ create_stream_handler_anthropic_for_shiny <- function(r, output_id) {
       env$resp <- paste0(env$resp, x)
     }
     if (stringr::str_detect(env$resp, pattern)) {
-      parsed <- stringr::str_extract(env$resp, pattern) %>%
-        jsonlite::fromJSON() %>%
+      parsed <- stringr::str_extract(env$resp, pattern) |>
+        jsonlite::fromJSON() |>
         purrr::pluck("completion")
 
       env$full_resp <- paste0(env$full_resp, parsed)
@@ -76,17 +76,17 @@ stream_chat_anthropic <- function(prompt,
   )
 
   response <-
-    httr2::request("https://api.anthropic.com/v1/complete") %>%
+    httr2::request("https://api.anthropic.com/v1/complete") |>
     httr2::req_headers(
       `accept` = "application/json",
       `anthropic-version` = "2023-06-01",
       `content-type` = "application/json",
       `x-api-key` = key
-    ) %>%
-    httr2::req_method("POST") %>%
-    httr2::req_body_json(data = request_body) %>%
-    httr2::req_retry(max_tries = 3) %>%
-    httr2::req_error(is_error = function(resp) FALSE) %>%
+    ) |>
+    httr2::req_method("POST") |>
+    httr2::req_body_json(data = request_body) |>
+    httr2::req_retry(max_tries = 3) |>
+    httr2::req_error(is_error = function(resp) FALSE) |>
     httr2::req_perform_stream(callback = element_callback, buffer_kb = 0.01)
 
   # error handling

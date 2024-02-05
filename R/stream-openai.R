@@ -80,8 +80,8 @@ create_stream_handler_openai <- function() {
 #     }
 #
 #     if (stringr::str_detect(env$resp, pattern)) {
-#       parsed <- stringr::str_extract(env$resp, pattern) %>%
-#         jsonlite::fromJSON() %>%
+#       parsed <- stringr::str_extract(env$resp, pattern) |>
+#         jsonlite::fromJSON() |>
 #         purrr::pluck("choices", "delta", "content")
 #
 #       env$full_resp <- paste0(env$full_resp, parsed)

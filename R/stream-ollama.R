@@ -68,8 +68,8 @@ create_stream_handler_ollama <- function() {
       env$resp <- paste0(env$resp, x)
     }
     if (stringr::str_detect(env$resp, pattern)) {
-      parsed <- stringr::str_extract(env$resp, pattern) %>%
-        jsonlite::fromJSON() %>%
+      parsed <- stringr::str_extract(env$resp, pattern) |>
+        jsonlite::fromJSON() |>
         purrr::pluck("response")
 
       env$full_resp <- paste0(env$full_resp, parsed)

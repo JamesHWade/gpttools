@@ -96,16 +96,16 @@ chat <- function(prompt,
         stream = stream,
         model = model,
         ...
-      ) %>%
+      ) |>
       gptstudio::gptstudio_skeleton_build(
         skill = skill,
         style = style,
         task = task,
         custom_prompt = custom_prompt
-      ) %>%
+      ) |>
       gptstudio::gptstudio_request_perform()
     if (process_response) {
-      response %>% gptstudio::gptstudio_response_process()
+      response |> gptstudio::gptstudio_response_process()
     } else {
       response$response
     }

@@ -1,7 +1,7 @@
 request_base_perplexity <- function(api_key = Sys.getenv("PERPLEXITY_API_KEY")) {
   url <- "https://api.perplexity.ai/chat/completions"
-  httr2::request(url) %>%
-    httr2::req_method("POST") %>%
+  httr2::request(url) |>
+    httr2::req_method("POST") |>
     httr2::req_headers(
       accept = "application/json",
       "Content-Type" = "application/json",
@@ -10,9 +10,9 @@ request_base_perplexity <- function(api_key = Sys.getenv("PERPLEXITY_API_KEY")) 
 }
 
 query_api_perplexity <- function(request_body, api_key = Sys.getenv("PERPLEXITY_API_KEY")) {
-  response <- request_base_perplexity(api_key) %>%
-    httr2::req_body_json(data = request_body) %>%
-    httr2::req_retry(max_tries = 3) %>%
+  response <- request_base_perplexity(api_key) |>
+    httr2::req_body_json(data = request_body) |>
+    httr2::req_retry(max_tries = 3) |>
     httr2::req_perform()
 
   if (httr2::resp_is_error(response)) {
@@ -38,11 +38,11 @@ create_stream_handler_perplexity <- function(output_id = NULL, r = NULL) {
     }
 
     if (stringr::str_detect(env$resp, pattern)) {
-      parsed_no_pluck <<- stringr::str_extract(env$resp, pattern) %>%
+      parsed_no_pluck <<- stringr::str_extract(env$resp, pattern) |>
         jsonlite::fromJSON()
 
       parsed <-
-        parsed_no_pluck %>%
+        parsed_no_pluck |>
         purrr::pluck("choices", "delta", "content")
 
       env$full_resp <- paste0(env$full_resp, parsed)
@@ -72,9 +72,9 @@ stream_chat_perplexity <- function(prompt,
     stream = TRUE
   )
 
-  response <- request_base_perplexity(api_key) %>%
-    httr2::req_body_json(data = request_body) %>%
-    httr2::req_retry(max_tries = 3) %>%
+  response <- request_base_perplexity(api_key) |>
+    httr2::req_body_json(data = request_body) |>
+    httr2::req_retry(max_tries = 3) |>
     httr2::req_perform_stream(callback = element_callback, buffer_kb = 0.01)
 
   if (httr2::resp_is_error(response)) {

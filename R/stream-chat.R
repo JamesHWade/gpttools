@@ -58,8 +58,8 @@ create_handler_for_shiny <- function(service = "openai", r, output_id = "streami
     }
 
     if (stringr::str_detect(env$resp, pattern)) {
-      parsed <- stringr::str_extract(env$resp, pattern) %>%
-        jsonlite::fromJSON() %>%
+      parsed <- stringr::str_extract(env$resp, pattern) |>
+        jsonlite::fromJSON() |>
         purrr::pluck(!!!new_pluck)
       env$full_resp <- paste0(env$full_resp, parsed)
       shinyjs::html(
