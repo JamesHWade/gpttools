@@ -161,10 +161,17 @@ delete_index <- function() {
 
 combine_index <- function(dir_name) {
   dir <- glue('{tools::R_user_dir("gpttools", which = "data")}/{dir_name}')
-  arrow::open_dataset(
-    sources = dir,
-    factory_options = list(selector_ignore_prefixes = "local")
-  ) |>
+  indices <- list_index(dir_name, full_path = FALSE)
+  if ("All" %in% indices) {
+    cli_abort(
+      c(
+        "!" = "All.parquet already exists in the directory.",
+        "-" = "Please remove it with `delete_index` before combining indexes."
+      )
+    )
+  }
+  list_index(dir_name, full_path = TRUE) |>
+    arrow::open_dataset() |>
     tibble::as_tibble() |>
     arrow::write_parquet(sink = glue::glue("{dir}/All.parquet"))
 }

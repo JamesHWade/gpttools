@@ -3,6 +3,7 @@
 export(add_roxygen_addin)
 export(addin_run_scrape_pkgs)
 export(addin_run_select_pkgs)
+export(chat)
 export(chat_with_context)
 export(chat_with_retrieval)
 export(collect_dataframes)

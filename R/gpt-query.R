@@ -43,7 +43,7 @@ gpt_chat <- function(instructions,
     purrr::map_chr(.f = "content") |>
     paste(collapse = "\n\n")
 
-  answer <- gptstudio::chat(
+  answer <- chat(
     prompt = simple_prompt,
     service = service,
     model = model,

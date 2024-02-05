@@ -37,3 +37,4 @@ Name: Scrape Packages
 Description: Scrape packages for use in Chat with Retrieval app
 Binding: addin_run_scrape_pkgs
 Interactive: true
+

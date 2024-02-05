@@ -10,7 +10,7 @@ chat_with_context(
   model = "gpt-4-turbo-preview",
   index = NULL,
   add_context = TRUE,
-  check_context = FASLE,
+  check_context = FALSE,
   chat_history = NULL,
   history_name = "chat_history",
   session_history = NULL,
@@ -21,7 +21,9 @@ chat_with_context(
   save_history = TRUE,
   overwrite = FALSE,
   local = FALSE,
-  embedding_model = NULL
+  embedding_model = NULL,
+  stream = FALSE,
+  rv = NULL
 )
 }
 \arguments{
@@ -64,6 +66,10 @@ FALSE.}
 
 \item{embedding_model}{A model object to use for embedding. Only needed if
 local is TRUE. Default is NULL.}
+
+\item{stream}{Whether to stream the response or not. Default is FALSE.}
+
+\item{rv}{A reactive value to store the response. Default is NULL.}
 }
 \value{
 A list containing the prompt, context, and answer.

@@ -177,6 +177,8 @@ check_context <- function(context) {
 #' @param local Whether to use the local model or not. Default is FALSE.
 #' @param embedding_model A model object to use for embedding. Only needed if
 #' local is TRUE. Default is NULL.
+#' @param stream Whether to stream the response or not. Default is FALSE.
+#' @param rv A reactive value to store the response. Default is NULL.
 #'
 #' @return A list containing the prompt, context, and answer.
 #' @export
@@ -190,7 +192,7 @@ chat_with_context <- function(query,
                               model = "gpt-4-turbo-preview",
                               index = NULL,
                               add_context = TRUE,
-                              check_context = FASLE,
+                              check_context = FALSE,
                               chat_history = NULL,
                               history_name = "chat_history",
                               session_history = NULL,
@@ -201,7 +203,9 @@ chat_with_context <- function(query,
                               save_history = TRUE,
                               overwrite = FALSE,
                               local = FALSE,
-                              embedding_model = NULL) {
+                              embedding_model = NULL,
+                              stream = FALSE,
+                              rv = NULL) {
   arg_match(task, c("Context Only", "Permissive Chat"))
 
   if (rlang::is_true(check_context)) {
@@ -352,12 +356,33 @@ chat_with_context <- function(query,
   cli_alert_info("Service: {service}")
   cli_alert_info("Model: {model}")
 
-  answer <- gptstudio::chat(
-    prompt = simple_prompt,
-    service = service,
-    model = model,
-    stream = FALSE
-  )
+  cli_alert_info("Stream: {stream}")
+
+  if (rlang::is_true(stream)) {
+    cli_alert_info("Attempting to stream chat.")
+    if (rlang::is_null(rv)) {
+      answer <-
+        stream_chat_openai(
+          prompt = simple_prompt,
+          element_callback = create_stream_handler()
+        )
+    } else {
+      stream_chat_shiny(
+        prompt = simple_prompt,
+        service = service,
+        r = rv,
+        output_id = "streaming"
+      )
+      answer <- rv$response
+    }
+  } else {
+    answer <- chat(
+      prompt = simple_prompt,
+      service = service,
+      model = model,
+      stream = FALSE
+    )
+  }
 
   if (save_history) {
     purrr::map(prompt, \(x) {
@@ -406,7 +431,7 @@ is_context_needed <- function(user_prompt,
                Respond ONLY with TRUE or FALSE.
                \n\n{user_prompt}")
 
-  gptstudio::chat(
+  chat(
     prompt = prompt,
     service = service,
     model = model,

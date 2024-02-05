@@ -225,6 +225,7 @@ create_index <- function(domain,
 get_top_matches <- function(index, query_embedding, k = 5) {
   k <- min(k, nrow(index))
   index |>
+    tibble::as_tibble() |>
     dplyr::mutate(
       similarity = purrr::map_dbl(embedding, \(x) {
         lsa::cosine(query_embedding, unlist(x))
