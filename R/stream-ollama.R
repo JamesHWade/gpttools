@@ -1,6 +1,6 @@
 stream_chat_ollama <- function(prompt,
                                model = getOption("gpttools.model"),
-                               element_callback = create_stream_handler_ollama()) {
+                               element_callback = create_handler("ollama")) {
   body <- list(
     model = model,
     prompt = prompt,
@@ -52,37 +52,4 @@ ollama_is_available <- function(verbose = FALSE) {
   )
 
   invisible(check_value)
-}
-
-create_stream_handler_ollama <- function() {
-  env <- rlang::env()
-
-  function(x) {
-    x <- rawToChar(x)
-
-    pattern <- '\\{"model":.*"done":false\\}'
-
-    if (rlang::is_null(env$resp)) {
-      env$resp <- x
-    } else {
-      env$resp <- paste0(env$resp, x)
-    }
-    if (stringr::str_detect(env$resp, pattern)) {
-      parsed <- stringr::str_extract(env$resp, pattern) |>
-        jsonlite::fromJSON() |>
-        purrr::pluck("response")
-
-      env$full_resp <- paste0(env$full_resp, parsed)
-
-      cat(parsed)
-
-      # # Uncomment and customize if you need to update UI components in a Shiny app:
-      # shinyjs::html(output_id, env$full_resp)
-      # r$response <- env$full_resp
-
-      env$resp <- stringr::str_split(env$resp, pattern)
-      env$resp <- env$resp[[1]][[length(env$resp[[1]])]]
-    }
-    TRUE
-  }
 }

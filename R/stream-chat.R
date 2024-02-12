@@ -1,6 +1,6 @@
 stream_chat <- function(prompt,
                         service = getOption("gpttools.service"),
-                        r,
+                        r = NULL,
                         output_id = "streaming",
                         where = "console") {
   switch(service,

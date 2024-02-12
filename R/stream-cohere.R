@@ -1,6 +1,6 @@
 stream_chat_cohere <- function(prompt,
                                model = getOption("gpttools.model", "command"),
-                               element_callback = create_stream_handler_cohere(),
+                               element_callback = create_handler("cohere"),
                                key = Sys.getenv("COHERE_API_KEY")) {
   request_body <- list(
     message = prompt,
@@ -29,41 +29,5 @@ stream_chat_cohere <- function(prompt,
       "x" = glue::glue("Cohere API request failed. Error {status} - {description}"),
       "i" = "Visit the Cohere API documentation for more details"
     ))
-  }
-}
-
-create_stream_handler_cohere <- function() {
-  env <- rlang::env()
-
-  function(x) {
-    x <- rawToChar(x)
-    # cat(x)
-
-    pattern <-
-      '\\{"is_finished":false,"event_type":"text-generation","text":".*"\\}'
-
-    if (rlang::is_null(env$resp)) {
-      env$resp <- x
-    } else {
-      env$resp <- paste0(env$resp, x)
-    }
-    if (stringr::str_detect(env$resp, pattern)) {
-      parsed <- stringr::str_extract(env$resp, pattern) |>
-        jsonlite::fromJSON() |>
-        purrr::pluck("text")
-
-      env$full_resp <- paste0(env$full_resp, parsed)
-
-      rstudioapi::setGhostText(env$full_resp)
-      # cat(parsed)
-
-      # # Uncomment and customize if you need to update UI components in a Shiny app:
-      # shinyjs::html(output_id, env$full_resp)
-      # r$response <- env$full_resp
-
-      env$resp <- stringr::str_split(env$resp, pattern)
-      env$resp <- env$resp[[1]][[length(env$resp[[1]])]]
-    }
-    TRUE
   }
 }
