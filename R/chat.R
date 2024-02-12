@@ -127,7 +127,6 @@ chat <- function(prompt,
 ghost_chat <- function(service = getOption("gpttools.service", "openai"),
                        stream = TRUE,
                        where = "source") {
-
   context <- get_cursor_context()
 
   instructions <- glue::glue(

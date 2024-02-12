@@ -15,9 +15,11 @@ api_services <-
 ui <- page_fillable(
   theme = bs_theme(bootswatch = "litera"),
   card(
-    card_header(bs_icon("gear", class = "ms-auto"),
-                "`gpttools` Settings",
-                bs_icon("gear", class = "ms-auto")),
+    card_header(
+      bs_icon("gear", class = "ms-auto"),
+      "`gpttools` Settings",
+      bs_icon("gear", class = "ms-auto")
+    ),
     layout_column_wrap(
       card(
         card_header("Data & Task", bs_icon("robot", class = "ms-auto")),
@@ -47,7 +49,7 @@ ui <- page_fillable(
           selected = getOption("gpttools.service", "openai")
         ),
         selectInput("model", "Model",
-                    choices = NULL
+          choices = NULL
         ),
         radioButtons(
           "stream", "Stream",
@@ -114,7 +116,8 @@ ui <- page_fillable(
           min = 0, max = 20,
           value = getOption("gpttools.k_history", 4)
         )
-      )),
+      )
+    ),
     actionButton("save_settings", "Save Settings", icon = icon("save"), class = "btn-primary")
   )
 )
@@ -145,8 +148,8 @@ server <- function(input, output, session) {
 
   observe(
     updateSelectInput(session, "source",
-                      choices = c("All", indices()),
-                      selected = getOption("gpttools.sources", "All")
+      choices = c("All", indices()),
+      selected = getOption("gpttools.sources", "All")
     )
   )
 
