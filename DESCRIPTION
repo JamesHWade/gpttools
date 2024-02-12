@@ -39,15 +39,20 @@ Imports:
     xml2,
     yaml
 Suggests: 
-    bslib,
     bsicons,
+    bslib,
     covr,
+    furrr,
+    future,
     htmltools,
     httr,
     knitr,
     later,
     mockr,
+    pak,
     pdftools,
+    precommit,
+    reprex,
     reticulate,
     rmarkdown,
     roxygen2,
@@ -61,14 +66,12 @@ Suggests:
     tuneR,
     uuid,
     waiter,
-    withr,
-    future,
-    furrr,
-    reprex,
-    pak
-Remotes: michelnivard/gptstudio
+    withr
 VignetteBuilder: 
     knitr
+Remotes: 
+    michelnivard/gptstudio,
+    rstudio/rstudioapi
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8
