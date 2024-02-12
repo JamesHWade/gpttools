@@ -14,7 +14,8 @@
       gpttools.save_history       = FALSE,
       gpttools.sources            = "All",
       gpttools.openai_embed_model = "text-embedding-3-small",
-      gpttools.run_code           = FALSE
+      gpttools.run_code           = FALSE,
+      gpttools.add_context        = "sometimes"
     )
 
     toset <- !(names(op_gpttools) %in% names(op))

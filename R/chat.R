@@ -127,14 +127,7 @@ chat <- function(prompt,
 ghost_chat <- function(service = getOption("gpttools.service", "openai"),
                        stream = TRUE,
                        where = "source") {
-
-  cli::cli_alert_info("Getting context")
-
   context <- get_cursor_context()
-
-  cli::cli_alert_info("Got context")
-
-  cli::cat_print(context)
 
   instructions <- glue::glue(
     "You are an expert coding assistant that provides brief code suggestions
@@ -163,10 +156,6 @@ ghost_chat <- function(service = getOption("gpttools.service", "openai"),
     {context$above}
     {context$below}"
   )
-
-  cli::cli_alert_info("Here are the instructions")
-  cli::cat_print(instructions)
-
   stream_chat(
     prompt    = instructions,
     service   = service,

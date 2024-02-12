@@ -66,8 +66,8 @@ api_services <-
 ui <- page_fillable(
   useWaiter(),
   waiterOnBusy(
-  html = spin_3circles(),
-  color = transparent(0.5)
+    html = spin_3circles(),
+    color = transparent(0.5)
   ),
   shinyjs::useShinyjs(),
   window_height_ui("height"),
@@ -112,7 +112,14 @@ ui <- page_fillable(
               "task", "Task",
               choices = c("Context Only", "Permissive Chat"),
               selected = getOption("gpttools.task", "Permissive Chat")
-            )
+            ),
+            radioButtons(
+              "test_code", "Test Code",
+              choiceNames = c("Yes", "No"),
+              choiceValues = c(TRUE, FALSE),
+              inline = TRUE,
+              selected = getOption("gpttools.test_code", FALSE)
+            ),
           ),
           br(),
           accordion_panel(
@@ -146,13 +153,6 @@ ui <- page_fillable(
               inline = TRUE
             ),
             radioButtons(
-              "test_code", "Test Code",
-              choiceNames = c("Yes", "No"),
-              choiceValues = c(TRUE, FALSE),
-              inline = TRUE,
-              selected = getOption("gpttools.test_code", FALSE)
-            ),
-            radioButtons(
               "local", "Local Embeddings",
               choiceNames = c("Yes", "No"),
               choiceValues = c(TRUE, FALSE),
@@ -170,19 +170,18 @@ ui <- page_fillable(
                 "gpttools.local_embed_model",
                 "BAAI/bge-small-en-v1.5"
               )
-            ),
-            radioButtons(
-              "always_add_context", "Always Add Context",
-              choiceNames = c("Yes", "No"),
-              choiceValues = c(TRUE, FALSE),
-              selected = getOption("gpttools.always_add_context", TRUE),
-              inline = TRUE
             )
           ),
           br(),
           accordion_panel(
             "History & Context",
             icon = bs_icon("book", class = "ms-auto"),
+            radioButtons(
+              "add_context", "Always Add Context",
+              choices = c("sometimes", "always", "never"),
+              selected = getOption("gpttools.add_context", "sometimes"),
+              inline = FALSE
+            ),
             radioButtons(
               "save_history", "Save & Use History",
               choiceNames = c("Yes", "No"),
@@ -330,6 +329,7 @@ server <- function(input, output, session) {
       save_history = input$save_history,
       sources = input$source,
       run_code = input$test_code,
+      add_context = input$add_context,
       persist = TRUE
     )
   }) |> bindEvent(input$save_settings)
@@ -339,8 +339,7 @@ server <- function(input, output, session) {
       service = input$service,
       model = input$model,
       index = index(),
-      add_context = TRUE,
-      check_context = input$always_add_context,
+      add_context = input$add_context,
       chat_history = read_history(local = input$local),
       session_history = r$all_chats,
       add_history = input$save_history,

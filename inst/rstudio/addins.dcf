@@ -8,6 +8,11 @@ Description: Generate code suggestions in source docs like .R, .Rmd, and .qmd
 Binding: copilot_addin
 Interactive: true
 
+Name: Settings for gpttools
+Description: Customize gpttools settings
+Binding: launch_settings
+Interactive: true
+
 Name: Convert script to function
 Description: Generate comments for your code
 Binding: script_to_function_addin

@@ -17,6 +17,8 @@
 #' @param sources The sources to use, default is "All".
 #' @param run_code Whether to execute generated code with `reprex::reprex()`,
 #' default is FALSE.
+#' @param add_context Whether to add context to the query. Options are
+#' `"always"`, `"sometimes"`, and `"never"`. The default is `"sometimes"`.
 #' @param persist Logical indicating whether to persist the settings, default
 #' is TRUE.
 #' @return Invisible NULL.
@@ -30,12 +32,13 @@ save_user_config <- function(service = "openai",
                              k_context = 4,
                              k_history = 4,
                              save_history = TRUE,
+                             add_context = "sometimes",
                              sources = "All",
                              run_code = FALSE,
                              persist = TRUE) {
   ops <- tibble::tibble(
     service, model, task, local_embed, openai_embed_model, local_embed_model,
-    k_context, k_history, sources, run_code, save_history
+    k_context, k_history, sources, run_code, save_history, add_context
   )
 
   if (persist == TRUE) {
@@ -79,7 +82,8 @@ set_user_config <- function(path = NULL) {
       gpttools.sources = ops$sources,
       gpttools.openai_embed_model = ops$openai_embed_model,
       gpttools.local_embed_model = ops$local_embed_model,
-      gpttools.run_code = ops$run_code
+      gpttools.run_code = ops$run_code,
+      gpttools.add_context = ops$add_context
     )
     invisible(TRUE)
   } else {
