@@ -123,11 +123,18 @@ chat <- function(prompt,
 #' Ghost Chat
 #'
 #' @inheritParams chat
-#'
+#' @export
 ghost_chat <- function(service = getOption("gpttools.service", "openai"),
                        stream = TRUE,
                        where = "source") {
+
+  cli::cli_alert_info("Getting context")
+
   context <- get_cursor_context()
+
+  cli::cli_alert_info("Got context")
+
+  cli::cat_print(context)
 
   instructions <- glue::glue(
     "You are an expert coding assistant that provides brief code suggestions
@@ -157,6 +164,9 @@ ghost_chat <- function(service = getOption("gpttools.service", "openai"),
     {context$below}"
   )
 
+  cli::cli_alert_info("Here are the instructions")
+  cli::cat_print(instructions)
+
   stream_chat(
     prompt    = instructions,
     service   = service,
@@ -168,7 +178,7 @@ ghost_chat <- function(service = getOption("gpttools.service", "openai"),
 
 get_cursor_context <- function(context_lines = 20,
                                placeholder = "[[start_here]]") {
-  doc <- rstudioapi::getActiveDocumentContext()
+  doc <- rstudioapi::getSourceEditorContext()
   cursor_line <- doc$selection[[1]]$range$start[1]
   cursor_pos <- doc$selection[[1]]$range$end
   start_line <- max(1, cursor_line - context_lines)
@@ -193,7 +203,7 @@ get_cursor_context <- function(context_lines = 20,
     doc$content[(cursor_line + 1):end_line] |>
       paste0(collapse = "\n")
   } else {
-    character(0)
+    ""
   }
 
   if (doc$path == "") {

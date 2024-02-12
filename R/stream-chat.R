@@ -38,7 +38,7 @@ stream_chat <- function(prompt,
 }
 
 create_handler <- function(service = "openai",
-                           r,
+                           r = NULL,
                            output_id = "streaming",
                            where = "console") {
   env <- rlang::env()
@@ -121,3 +121,4 @@ get_stream_pattern <- function(service) {
   )
   list(pattern = pattern, pluck = pluck)
 }
+

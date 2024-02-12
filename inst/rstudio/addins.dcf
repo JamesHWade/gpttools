@@ -5,7 +5,7 @@ Interactive: true
 
 Name: Copilot
 Description: Generate code suggestions in source docs like .R, .Rmd, and .qmd
-Binding: ghost_chat
+Binding: copilot_addin
 Interactive: true
 
 Name: Convert script to function

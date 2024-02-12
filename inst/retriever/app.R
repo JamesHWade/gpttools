@@ -10,7 +10,7 @@ library(gptstudio)
 library(shiny)
 library(bslib)
 library(bsicons)
-# library(waiter)
+library(waiter)
 library(reprex)
 
 window_height_ui <- function(id) {
@@ -64,14 +64,14 @@ api_services <-
   purrr::discard(~ .x == "gptstudio_request_perform.default")
 
 ui <- page_fillable(
-  # useWaiter(),
-  # waiterOnBusy(
-  # html = spin_3circles(),
-  # color = transparent(0.5)
-  # ),
+  useWaiter(),
+  waiterOnBusy(
+  html = spin_3circles(),
+  color = transparent(0.5)
+  ),
   shinyjs::useShinyjs(),
   window_height_ui("height"),
-  theme = bs_theme(bootswatch = "litera", version = 5) |>
+  theme = bs_theme(bootswatch = "litera") |>
     bs_add_rules(".scrollable-popover .popover-body
                  { max-height: 400px; overflow-y: auto; }"),
   tags$head(tags$script(HTML("
