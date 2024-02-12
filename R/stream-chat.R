@@ -80,6 +80,7 @@ create_handler <- function(service = "openai",
       } else if (where == "console") {
         cat(parsed)
       } else if (where == "source") {
+        rlang::check_installed("pak")
         rlang::check_installed("rstudioapi",
           version = "0.15.0.9",
           action = \(pkg, ...) pak::pak("rstudio/rstudioapi")

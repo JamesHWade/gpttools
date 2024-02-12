@@ -64,7 +64,8 @@ Suggests:
     withr,
     future,
     furrr,
-    reprex
+    reprex,
+    pak
 Remotes: michelnivard/gptstudio
 VignetteBuilder: 
     knitr
