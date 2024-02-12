@@ -364,7 +364,7 @@ chat_with_context <- function(query,
       answer <-
         stream_chat_openai(
           prompt = simple_prompt,
-          element_callback = create_stream_handler()
+          element_callback = create_handler(service)
         )
     } else {
       stream_chat(
