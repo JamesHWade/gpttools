@@ -14,6 +14,7 @@ save_user_config(
   k_context = 4,
   k_history = 4,
   save_history = TRUE,
+  add_context = "sometimes",
   sources = "All",
   run_code = FALSE,
   persist = TRUE
@@ -40,6 +41,9 @@ save_user_config(
 
 \item{save_history}{Logical indicating whether history should be saved,
 default is TRUE.}
+
+\item{add_context}{Whether to add context to the query. Options are
+\code{"always"}, \code{"sometimes"}, and \code{"never"}. The default is \code{"sometimes"}.}
 
 \item{sources}{The sources to use, default is "All".}
 

@@ -158,8 +158,8 @@ check_context <- function(context) {
 #' @param service Name of the AI service to use, defaults to openai.
 #' @param model Name of the openai model to use, defaults to gpt-3.5-turbo
 #' @param index Index to look for context.
-#' @param add_context Whether to add context to the query or not. Default is
-#'   TRUE.
+#' @param add_context Whether to add context to the query. Options are
+#' `"always"`, `"sometimes"`, and `"never"`. The default is `"sometimes"`.
 #' @param check_context Whether to check if context is needed. Default is FALSE.
 #' @param chat_history Chat history dataframe for reference.
 #' @param history_name Name of the file where chat history is stored.
@@ -192,7 +192,6 @@ chat_with_context <- function(query,
                               model = "gpt-4-turbo-preview",
                               index = NULL,
                               add_context = TRUE,
-                              check_context = FALSE,
                               chat_history = NULL,
                               history_name = "chat_history",
                               session_history = NULL,
@@ -207,6 +206,16 @@ chat_with_context <- function(query,
                               stream = FALSE,
                               rv = NULL) {
   arg_match(task, c("Context Only", "Permissive Chat"))
+
+  if (add_context == "sometimes") {
+    check_context <- TRUE
+  } else if (add_context == "never") {
+    check_context <- FALSE
+    add_context <- FALSE
+  } else if (add_context == "always") {
+    check_context <- FALSE
+    add_context <- TRUE
+  }
 
   if (rlang::is_true(check_context)) {
     need_context <- is_context_needed(
