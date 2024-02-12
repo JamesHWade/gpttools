@@ -13,7 +13,7 @@ articles:
   openai: openai.html
   perplexity: perplexity.html
   retriever: retriever.html
-last_built: 2024-02-06T23:23Z
+last_built: 2024-02-12T14:58Z
 urls:
   reference: https://jameshwade.github.io/gpttools/reference
   article: https://jameshwade.github.io/gpttools/articles
