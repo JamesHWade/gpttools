@@ -1,5 +1,3 @@
-library(tidyverse)
-library(tidymodels)
-tidymodels_prefer()
+library(ggplot2)
 
-# create a glm workflow using mtcars
+# make a fun ggplot with cool colors and penguins

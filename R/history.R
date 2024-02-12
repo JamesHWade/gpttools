@@ -160,7 +160,6 @@ check_context <- function(context) {
 #' @param index Index to look for context.
 #' @param add_context Whether to add context to the query. Options are
 #' `"always"`, `"sometimes"`, and `"never"`. The default is `"sometimes"`.
-#' @param check_context Whether to check if context is needed. Default is FALSE.
 #' @param chat_history Chat history dataframe for reference.
 #' @param history_name Name of the file where chat history is stored.
 #' @param session_history Session history data for reference.

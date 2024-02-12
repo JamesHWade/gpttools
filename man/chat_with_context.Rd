@@ -67,8 +67,6 @@ local is TRUE. Default is NULL.}
 \item{stream}{Whether to stream the response or not. Default is FALSE.}
 
 \item{rv}{A reactive value to store the response. Default is NULL.}
-
-\item{check_context}{Whether to check if context is needed. Default is FALSE.}
 }
 \value{
 A list containing the prompt, context, and answer.
