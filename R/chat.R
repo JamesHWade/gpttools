@@ -157,7 +157,8 @@ ghost_chat <- function(service = getOption("gpttools.service", "openai"),
     Here is the context:
 
     {context$above}
-    {context$below}")
+    {context$below}"
+  )
 
   stream_chat(
     prompt    = instructions,

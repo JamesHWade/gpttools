@@ -4,36 +4,36 @@ stream_chat <- function(prompt,
                         output_id = "streaming",
                         where = "console") {
   switch(service,
-         "openai" = {
-           response <- stream_chat_openai(
-             prompt = prompt,
-             element_callback = create_handler("openai", r, output_id, where)
-           )
-         },
-         "anthropic" = {
-           response <- stream_chat_anthropic(
-             prompt = prompt,
-             element_callback = create_handler("anthropic", r, output_id, where)
-           )
-         },
-         "perplexity" = {
-           response <- stream_chat_perplexity(
-             prompt = prompt,
-             element_callback = create_handler("perplexity", r, output_id, where)
-           )
-         },
-         "cohere" = {
-           response <- stream_chat_cohere(
-             prompt = prompt,
-             element_callback = create_handler("cohere", r, output_id, where)
-           )
-         },
-         "ollama" = {
-           response <- stream_chat_ollama(
-             prompt = prompt,
-             element_callback = create_handler("ollama", r, output_id, where)
-           )
-         }
+    "openai" = {
+      response <- stream_chat_openai(
+        prompt = prompt,
+        element_callback = create_handler("openai", r, output_id, where)
+      )
+    },
+    "anthropic" = {
+      response <- stream_chat_anthropic(
+        prompt = prompt,
+        element_callback = create_handler("anthropic", r, output_id, where)
+      )
+    },
+    "perplexity" = {
+      response <- stream_chat_perplexity(
+        prompt = prompt,
+        element_callback = create_handler("perplexity", r, output_id, where)
+      )
+    },
+    "cohere" = {
+      response <- stream_chat_cohere(
+        prompt = prompt,
+        element_callback = create_handler("cohere", r, output_id, where)
+      )
+    },
+    "ollama" = {
+      response <- stream_chat_ollama(
+        prompt = prompt,
+        element_callback = create_handler("ollama", r, output_id, where)
+      )
+    }
   )
 }
 
@@ -81,8 +81,9 @@ create_handler <- function(service = "openai",
         cat(parsed)
       } else if (where == "source") {
         rlang::check_installed("rstudioapi",
-                               version = "0.15.0.9",
-                               action = \(pkg, ...) pak::pak("rstudio/rstudioapi"))
+          version = "0.15.0.9",
+          action = \(pkg, ...) pak::pak("rstudio/rstudioapi")
+        )
         rstudioapi::setGhostText(env$full_resp)
       }
 
@@ -95,27 +96,27 @@ create_handler <- function(service = "openai",
 
 get_stream_pattern <- function(service) {
   switch(service,
-         "openai" = {
-           pattern <- '\\{"id":.*?\\}\\]\\}'
-           pluck <- c("choices", "delta", "content")
-         },
-         "anthropic" = {
-           pattern <- "\\{\"type\":\"completion\",.*\"log_id\":\"compl_[^\"]*\"\\}"
-           pluck <- "completion"
-         },
-         "perplexity" = {
-           pattern <- '\\{"id".*?\\}\\}\\]\\}'
-           pluck <- c("choices", "delta", "content")
-         },
-         "cohere" = {
-           pattern <-
-             '\\{"is_finished":false,"event_type":"text-generation","text":".*"\\}'
-           pluck <- "text"
-         },
-         "ollama" = {
-           pattern <- '\\{"model":.*"done":false\\}'
-           pluck <- "response"
-         }
+    "openai" = {
+      pattern <- '\\{"id":.*?\\}\\]\\}'
+      pluck <- c("choices", "delta", "content")
+    },
+    "anthropic" = {
+      pattern <- "\\{\"type\":\"completion\",.*\"log_id\":\"compl_[^\"]*\"\\}"
+      pluck <- "completion"
+    },
+    "perplexity" = {
+      pattern <- '\\{"id".*?\\}\\}\\]\\}'
+      pluck <- c("choices", "delta", "content")
+    },
+    "cohere" = {
+      pattern <-
+        '\\{"is_finished":false,"event_type":"text-generation","text":".*"\\}'
+      pluck <- "text"
+    },
+    "ollama" = {
+      pattern <- '\\{"model":.*"done":false\\}'
+      pluck <- "response"
+    }
   )
   list(pattern = pattern, pluck = pluck)
 }
