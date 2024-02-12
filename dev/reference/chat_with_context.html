@@ -14,7 +14,7 @@ generate responses."><meta property="og:image" content="https://jameshwade.githu
     
     <a class="navbar-brand me-2" href="../index.html">gpttools</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9011</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9012</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,6 @@ generate responses.</p>
 <span>  model <span class="op">=</span> <span class="st">"gpt-4-turbo-preview"</span>,</span>
 <span>  index <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  add_context <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  check_context <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  chat_history <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  history_name <span class="op">=</span> <span class="st">"chat_history"</span>,</span>
 <span>  session_history <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -119,12 +118,8 @@ generate responses.</p>
 
 
 <dt>add_context</dt>
-<dd><p>Whether to add context to the query or not. Default is
-TRUE.</p></dd>
-
-
-<dt>check_context</dt>
-<dd><p>Whether to check if context is needed. Default is FALSE.</p></dd>
+<dd><p>Whether to add context to the query. Options are
+<code>"always"</code>, <code>"sometimes"</code>, and <code>"never"</code>. The default is <code>"sometimes"</code>.</p></dd>
 
 
 <dt>chat_history</dt>

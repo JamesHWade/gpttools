@@ -12,7 +12,7 @@ to a YAML file."><meta property="og:image" content="https://jameshwade.github.io
     
     <a class="navbar-brand me-2" href="../index.html">gpttools</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9011</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9012</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@ to a YAML file.</p>
 <span>  k_context <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  k_history <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  save_history <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  add_context <span class="op">=</span> <span class="st">"sometimes"</span>,</span>
 <span>  sources <span class="op">=</span> <span class="st">"All"</span>,</span>
 <span>  run_code <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  persist <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -129,6 +130,11 @@ to a YAML file.</p>
 <dt>save_history</dt>
 <dd><p>Logical indicating whether history should be saved,
 default is TRUE.</p></dd>
+
+
+<dt>add_context</dt>
+<dd><p>Whether to add context to the query. Options are
+<code>"always"</code>, <code>"sometimes"</code>, and <code>"never"</code>. The default is <code>"sometimes"</code>.</p></dd>
 
 
 <dt>sources</dt>
