@@ -23,7 +23,11 @@ server <- function(input, output, session) {
     shinyjs::show("response")
     stream_chat_openai(
       prompt = input$message,
-      element_callback = create_stream_handler_for_shiny(rv, "response")
+      element_callback = create_handler("openai",
+        r = rv,
+        output_id = "response",
+        where = "shiny"
+      )
     )
     shinyjs::hide("response")
   })

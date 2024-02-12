@@ -4,6 +4,7 @@
 
 ## Major features and improvements
 
+* Added a GitHub Copilot-like code suggestion adding called "Copilot."
 * Added support for more AI services: anthropic, huggingface, google ai studio, and ollama (local models) (in #0042b93, #f3c64c2).
 * Implemented a fully local option for AI models (in #231f2c8, #482157f).
 * Users can now use local embeddings as an option within the package (in #0042b93).
