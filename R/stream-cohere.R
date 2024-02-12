@@ -1,6 +1,6 @@
 stream_chat_cohere <- function(prompt,
+                               model = getOption("gpttools.model", "command"),
                                element_callback = create_stream_handler_cohere(),
-                               model = "command",
                                key = Sys.getenv("COHERE_API_KEY")) {
   request_body <- list(
     message = prompt,
@@ -54,7 +54,8 @@ create_stream_handler_cohere <- function() {
 
       env$full_resp <- paste0(env$full_resp, parsed)
 
-      cat(parsed)
+      rstudioapi::setGhostText(env$full_resp)
+      # cat(parsed)
 
       # # Uncomment and customize if you need to update UI components in a Shiny app:
       # shinyjs::html(output_id, env$full_resp)

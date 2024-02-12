@@ -15,7 +15,7 @@ chat(
   task = NULL,
   custom_prompt = NULL,
   process_response = FALSE,
-  where = "",
+  where = "console",
   ...
 )
 }
@@ -64,7 +64,7 @@ response. If \code{TRUE}, the response will be passed to
 Refer to \code{gptstudio_response_process()} for more details.,}
 
 \item{where}{A character string indicating the location or environment where
-the chat is taking place. Options are \verb{c("", "source", and "shiny")}. The
+the chat is taking place. Options are \verb{c("console", "source", and "shiny")}. The
 default is \code{""}, which means the chat is taking place in the R console.}
 
 \item{...}{Reserved for future use.}

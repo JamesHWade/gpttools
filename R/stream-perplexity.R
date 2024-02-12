@@ -62,7 +62,7 @@ create_stream_handler_perplexity <- function(output_id = NULL, r = NULL) {
 
 stream_chat_perplexity <- function(prompt,
                                    element_callback = create_stream_handler_perplexity(),
-                                   model = "pplx-7b-chat",
+                                   model = getOption("gpttools.model", "pplx-7b-chat"),
                                    api_key = Sys.getenv("PERPLEXITY_API_KEY")) {
   request_body <- list(
     model = model,

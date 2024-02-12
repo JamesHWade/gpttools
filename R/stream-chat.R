@@ -1,39 +1,46 @@
-stream_chat_shiny <- function(prompt, service, r, output_id) {
+stream_chat <- function(prompt,
+                        service = getOption("gpttools.service"),
+                        r,
+                        output_id = "streaming",
+                        where = "console") {
   switch(service,
-    "openai" = {
-      response <- stream_chat_openai(
-        prompt = prompt,
-        element_callback = create_handler_for_shiny("openai", r, output_id)
-      )
-    },
-    "anthropic" = {
-      response <- stream_chat_anthropic(
-        prompt = prompt,
-        element_callback = create_handler_for_shiny("anthropic", r, output_id)
-      )
-    },
-    "perplexity" = {
-      response <- stream_chat_perplexity(
-        prompt = prompt,
-        element_callback = create_handler_for_shiny("perplexity", r, output_id)
-      )
-    },
-    "cohere" = {
-      response <- stream_chat_cohere(
-        prompt = prompt,
-        element_callback = create_handler_for_shiny("cohere", r, output_id)
-      )
-    },
-    "ollama" = {
-      response <- stream_chat_ollama(
-        prompt = prompt,
-        element_callback = create_handler_for_shiny("ollama", r, output_id)
-      )
-    }
+         "openai" = {
+           response <- stream_chat_openai(
+             prompt = prompt,
+             element_callback = create_handler("openai", r, output_id, where)
+           )
+         },
+         "anthropic" = {
+           response <- stream_chat_anthropic(
+             prompt = prompt,
+             element_callback = create_handler("anthropic", r, output_id, where)
+           )
+         },
+         "perplexity" = {
+           response <- stream_chat_perplexity(
+             prompt = prompt,
+             element_callback = create_handler("perplexity", r, output_id, where)
+           )
+         },
+         "cohere" = {
+           response <- stream_chat_cohere(
+             prompt = prompt,
+             element_callback = create_handler("cohere", r, output_id, where)
+           )
+         },
+         "ollama" = {
+           response <- stream_chat_ollama(
+             prompt = prompt,
+             element_callback = create_handler("ollama", r, output_id, where)
+           )
+         }
   )
 }
 
-create_handler_for_shiny <- function(service = "openai", r, output_id = "streaming") {
+create_handler <- function(service = "openai",
+                           r,
+                           output_id = "streaming",
+                           where = "console") {
   env <- rlang::env()
   env$resp <- NULL
   env$full_resp <- NULL
@@ -62,11 +69,23 @@ create_handler_for_shiny <- function(service = "openai", r, output_id = "streami
         jsonlite::fromJSON() |>
         purrr::pluck(!!!new_pluck)
       env$full_resp <- paste0(env$full_resp, parsed)
-      shinyjs::html(
-        output_id,
-        shiny::markdown(paste("**Assistant**", env$full_resp, sep = "\n\n"))
-      )
-      r$response <- env$full_resp
+
+      if (where == "shiny") {
+        shinyjs::html(
+          output_id,
+          shiny::markdown(paste("**Assistant**", env$full_resp, sep = "\n\n"))
+        )
+
+        r$response <- env$full_resp
+      } else if (where == "console") {
+        cat(parsed)
+      } else if (where == "source") {
+        rlang::check_installed("rstudioapi",
+                               version = "0.15.0.9",
+                               action = \(pkg, ...) pak::pak("rstudio/rstudioapi"))
+        rstudioapi::setGhostText(env$full_resp)
+      }
+
       env$resp <- stringr::str_split(env$resp, pattern)
       env$resp <- env$resp[[1]][[length(env$resp[[1]])]]
     }
@@ -76,27 +95,27 @@ create_handler_for_shiny <- function(service = "openai", r, output_id = "streami
 
 get_stream_pattern <- function(service) {
   switch(service,
-    "openai" = {
-      pattern <- '\\{"id":.*?\\}\\]\\}'
-      pluck <- c("choices", "delta", "content")
-    },
-    "anthropic" = {
-      pattern <- "\\{\"type\":\"completion\",.*\"log_id\":\"compl_[^\"]*\"\\}"
-      pluck <- "completion"
-    },
-    "perplexity" = {
-      pattern <- '\\{"id".*?\\}\\}\\]\\}'
-      pluck <- c("choices", "delta", "content")
-    },
-    "cohere" = {
-      pattern <-
-        '\\{"is_finished":false,"event_type":"text-generation","text":".*"\\}'
-      pluck <- "text"
-    },
-    "ollama" = {
-      pattern <- '\\{"model":.*"done":false\\}'
-      pluck <- "response"
-    }
+         "openai" = {
+           pattern <- '\\{"id":.*?\\}\\]\\}'
+           pluck <- c("choices", "delta", "content")
+         },
+         "anthropic" = {
+           pattern <- "\\{\"type\":\"completion\",.*\"log_id\":\"compl_[^\"]*\"\\}"
+           pluck <- "completion"
+         },
+         "perplexity" = {
+           pattern <- '\\{"id".*?\\}\\}\\]\\}'
+           pluck <- c("choices", "delta", "content")
+         },
+         "cohere" = {
+           pattern <-
+             '\\{"is_finished":false,"event_type":"text-generation","text":".*"\\}'
+           pluck <- "text"
+         },
+         "ollama" = {
+           pattern <- '\\{"model":.*"done":false\\}'
+           pluck <- "response"
+         }
   )
   list(pattern = pattern, pluck = pluck)
 }

@@ -1,6 +1,6 @@
 stream_chat_openai <- function(prompt = NULL,
                                element_callback = create_stream_handler_openai(),
-                               model = "gpt-4-turbo-preview",
+                               model = getOption("gpttools.model", "gpt-4-turbo-preview"),
                                openai_api_key = Sys.getenv("OPENAI_API_KEY"),
                                shiny = FALSE) {
   messages <- list(

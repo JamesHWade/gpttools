@@ -3,6 +3,11 @@ Description: Chat app with Retrieval for use with various AI services
 Binding: chat_with_retrieval
 Interactive: true
 
+Name: Copilot
+Description: Generate code suggestions in source docs like .R, .Rmd, and .qmd
+Binding: ghost_chat
+Interactive: true
+
 Name: Convert script to function
 Description: Generate comments for your code
 Binding: script_to_function_addin

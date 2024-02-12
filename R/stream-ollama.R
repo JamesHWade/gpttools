@@ -1,5 +1,5 @@
 stream_chat_ollama <- function(prompt,
-                               model = "phi",
+                               model = getOption("gpttools.model"),
                                element_callback = create_stream_handler_ollama()) {
   body <- list(
     model = model,
