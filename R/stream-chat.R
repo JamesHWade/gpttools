@@ -121,4 +121,3 @@ get_stream_pattern <- function(service) {
   )
   list(pattern = pattern, pluck = pluck)
 }
-

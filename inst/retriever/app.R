@@ -131,7 +131,7 @@ ui <- page_fillable(
               selected = getOption("gpttools.service", "openai")
             ),
             selectInput("model", "Model",
-                        choices = NULL
+              choices = NULL
             ),
             selectInput(
               "embed_model", "OpenAI Embedding Model",
@@ -312,8 +312,8 @@ server <- function(input, output, session) {
     )
   )
   observe(updateSelectInput(session, "source",
-                            choices = c("All", indices()),
-                            selected = getOption("gpttools.sources", "All")
+    choices = c("All", indices()),
+    selected = getOption("gpttools.sources", "All")
   ))
   observe({
     toggle_popover("settings", show = FALSE)
