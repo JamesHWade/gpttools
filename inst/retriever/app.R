@@ -65,10 +65,6 @@ api_services <-
 
 ui <- page_fillable(
   useWaiter(),
-  waiterOnBusy(
-    html = spin_3circles(),
-    color = transparent(0.5)
-  ),
   shinyjs::useShinyjs(),
   window_height_ui("height"),
   theme = bs_theme(bootswatch = "litera") |>
@@ -131,7 +127,7 @@ ui <- page_fillable(
               selected = getOption("gpttools.service", "openai")
             ),
             selectInput("model", "Model",
-              choices = NULL
+                        choices = NULL
             ),
             selectInput(
               "embed_model", "OpenAI Embedding Model",
@@ -312,11 +308,25 @@ server <- function(input, output, session) {
     )
   )
   observe(updateSelectInput(session, "source",
-    choices = c("All", indices()),
-    selected = getOption("gpttools.sources", "All")
+                            choices = c("All", indices()),
+                            selected = getOption("gpttools.sources", "All")
   ))
   observe({
     toggle_popover("settings", show = FALSE)
+    modalDialog(
+      "Would you like to save your settings and close the app?",
+      title = "Save Settings",
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ok", "OK")
+      ),
+      size = "m",
+      easyClose = FALSE,
+      fade = TRUE
+    ) |> showModal()
+  }) |> bindEvent(input$save_settings)
+
+  observe({
     save_user_config(
       service = input$service,
       model = input$model,
@@ -332,8 +342,17 @@ server <- function(input, output, session) {
       add_context = input$add_context,
       persist = TRUE
     )
-  }) |> bindEvent(input$save_settings)
+    removeModal()
+  }) |> bindEvent(input$ok)
+
   observe({
+    if (rlang::is_false(input$stream) ||
+        input$service %in% c("google", "azure_openai", "huggingface")) {
+      waiter_show(
+        html = spin_3circles(),
+        color = transparent(0.5)
+      )
+    }
     interim <- chat_with_context(
       query = input$chat_input,
       service = input$service,
@@ -354,6 +373,8 @@ server <- function(input, output, session) {
       rv = r
     )
     new_response <- interim[[3]]
+
+    waiter_hide()
 
     if (is.character(interim[[2]])) {
       if (length(r$context_links) == 0) {
