@@ -302,11 +302,7 @@ chat_with_context <- function(query,
             content =
               glue(
                 "You are a helpful chat bot that answers questions based on
-                     on the context provided by the user. If the user does not
-                     provide context and you need context to respond correctly,
-                     answer the quest but first say \"I am not able to answer
-                     that question with the context you gave me, but here is my
-                     best but here is my best answer."
+                 the context provided by the user."
               )
           )
         )

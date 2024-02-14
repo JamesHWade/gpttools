@@ -163,7 +163,20 @@ server <- function(input, output, session) {
   )
 
   observe({
-    toggle_popover("settings", show = FALSE)
+    modalDialog(
+      "Would you like to save your settings and close the app?",
+      title = "Save Settings",
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton("ok", "OK")
+      ),
+      size = "m",
+      easyClose = FALSE,
+      fade = TRUE
+    ) |> showModal()
+  }) |> bindEvent(input$save_settings)
+
+  observe({
     save_user_config(
       service = input$service,
       model = input$model,
@@ -179,7 +192,9 @@ server <- function(input, output, session) {
       add_context = input$add_context,
       persist = TRUE
     )
-  }) |> bindEvent(input$save_settings)
+    removeModal()
+    shiny::stopApp()
+  }) |> bindEvent(input$ok)
 }
 
 # Run the app
