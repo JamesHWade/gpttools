@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../../index.html">gpttools</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9013</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9014</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ interface and an API. By wrapping the later, we can use it within our
 chat app.</p>
 <p>You can run ollama in any platform as a docker container. The
 following code runs the CPU-only version:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-v</span> ollama:/root/.ollama <span class="at">-p</span> 11434:11434 <span class="at">--name</span> ollama ollama/ollama</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-v</span> ollama:/root/.ollama <span class="at">-p</span> 11434:11434 <span class="at">--name</span> ollama ollama/ollama</span></code></pre></div>
 <p>This code:</p>
 <ol style="list-style-type: decimal">
 <li>pulls the latest ollama image from the ollama hub
@@ -128,14 +128,14 @@ without losing your already downloaded models.
 blog post</a>.</p>
 <p>Before using the service, you need to pull a model. Run the following
 code inside your container to pull llama2:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull llama2</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">ollama</span> pull llama2</span></code></pre></div>
 <p>Check the <a href="https://ollama.ai/library" class="external-link">ollama library</a> to
 see more models. For more advanced install options, check the <a href="https://github.com/jmorganca/ollama" class="external-link">official
 documentation</a>.</p>
 <p>By default, the chat addin will use
 <code>http://localhost:11434</code> to locate the ollama API. You can
 customize this by setting up the <code>OLLAMA_HOST</code> environmental
-variable with <code><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">usethis::edit_r_environ()</a></code>.</p>
+variable with <code>usethis::edit_r_environ()</code>.</p>
 <div class="section level2">
 <h2 id="an-example-with-ollama">An Example with Ollama<a class="anchor" aria-label="anchor" href="#an-example-with-ollama"></a>
 </h2>

@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gpttools</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9013</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.8.9014</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,11 +128,11 @@ documentation</a>.</li>
 <p>To modify the <code>.Renviron</code> file:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://usethis.r-lib.org" class="external-link">usethis</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_environ</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>For a persistent setting, add the following line to
 <code>.Renviron</code>, replacing <code>"&lt;APIKEY&gt;"</code> with
 your actual API key:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span><span class="st">"&lt;APIKEY&gt;"</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span><span class="st">"&lt;APIKEY&gt;"</span></span></code></pre></div>
 <p>Save the file and restart your R session for the changes to take
 effect.</p>
 <p><strong>Caution:</strong> Ensure <code>.Renviron</code> is included
