@@ -24,6 +24,7 @@
 * Added a new vignette for package scraping, making the scraping process clearer for other developers.
 * Added a vignette for chat with retrieval, offering a tutorial on how to leverage this new feature within the package.
 * Removed dedicated azure functions and azure embedding option due to the new focus on fully local options (in #ea30c57, #4259474).
+* Azure OpenAI streaming added along with option to use api key and Azure token for auth
 
 ## Developmental changes
 
