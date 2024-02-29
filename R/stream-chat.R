@@ -33,6 +33,12 @@ stream_chat <- function(prompt,
         prompt = prompt,
         element_callback = create_handler("ollama", r, output_id, where)
       )
+    },
+    "azure_openai" = {
+      response <- stream_chat_azure_openai(
+        prompt = prompt,
+        element_callback = create_handler("azure_openai", r, output_id, where)
+      )
     }
   )
 }
@@ -117,7 +123,11 @@ get_stream_pattern <- function(service) {
     "ollama" = {
       pattern <- '\\{"model":.*"done":false\\}'
       pluck <- "response"
-    }
+    },
+    "azure_openai" = {
+      pattern <- '\\{"id":.*?\\}\\]\\}'
+      pluck <- c("choices", "delta", "content")
+    },
   )
   list(pattern = pattern, pluck = pluck)
 }

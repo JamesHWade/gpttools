@@ -273,7 +273,7 @@ server <- function(input, output, session) {
   })
 
   observe(
-    if (input$service %in% c("google", "huggingface", "azure_openai")) {
+    if (input$service %in% c("google", "huggingface")) {
       updateRadioButtons(
         session,
         "stream",
