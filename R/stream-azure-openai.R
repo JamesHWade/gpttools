@@ -46,6 +46,7 @@ stream_chat_azure_openai <- function(prompt = NULL,
 
 
 retrieve_azure_token <- function() {
+  rlang::check_installed("AzureRMR")
   token <- AzureRMR::create_azure_login(
     tenant = Sys.getenv("AZURE_OPENAI_TENANT_ID"),
     app = Sys.getenv("AZURE_OPENAI_CLIENT_ID"),

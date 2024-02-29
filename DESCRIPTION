@@ -39,6 +39,7 @@ Imports:
     xml2,
     yaml
 Suggests: 
+    AzureRMR,
     bsicons,
     bslib,
     covr,
