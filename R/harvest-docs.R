@@ -21,12 +21,14 @@ check_url <- function(url) {
     try(
       {
         httr2::request(url) |>
-          httr2::req_error(is_error = function(resp) FALSE) |>
+          httr2::req_error(is_error = \(resp) FALSE) |>
           httr2::req_perform() |>
           httr2::resp_status()
       },
       TRUE
     )
+
+  if (inherits(status, "try-error")) return(invisible(FALSE))
   status
 }
 
