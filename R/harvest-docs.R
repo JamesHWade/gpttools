@@ -18,10 +18,11 @@ get_hyperlinks <- function(url) {
 
 check_url <- function(url) {
   status <-
-    httr2::request(url) |>
+    try({httr2::request(url) |>
     httr2::req_error(is_error = function(resp) FALSE) |>
     httr2::req_perform() |>
     httr2::resp_status()
+  }, TRUE)
   status
 }
 
