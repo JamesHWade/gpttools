@@ -14,7 +14,6 @@ stream_chat_azure_openai <- function(prompt = NULL,
     messages = messages
   )
 
-  token <- retrieve_azure_token()
 
   response <-
     httr2::request(Sys.getenv("AZURE_OPENAI_ENDPOINT")) |>
@@ -28,6 +27,7 @@ stream_chat_azure_openai <- function(prompt = NULL,
     )
 
   if (use_token) {
+    token <- retrieve_azure_token()
     response <- response |> httr2::req_auth_bearer_token(token = token)
   }
 
