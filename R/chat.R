@@ -87,7 +87,7 @@ chat <- function(prompt,
                  process_response = FALSE,
                  where = "console",
                  ...) {
-  if (rlang::is_false(stream) || service %in% c("google", "azure_openai", "huggingface")) {
+  if (rlang::is_false(stream) || service %in% c("google", "huggingface")) {
     response <-
       gptstudio::gptstudio_create_skeleton(
         service = service,
