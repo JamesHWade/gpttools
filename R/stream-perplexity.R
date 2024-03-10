@@ -20,11 +20,17 @@ stream_chat_perplexity <- function(prompt,
     ) |>
     httr2::req_body_json(data = request_body) |>
     httr2::req_retry(max_tries = 3) |>
-    httr2::req_perform_stream(callback = element_callback, buffer_kb = 0.01)
+    httr2::req_perform_stream(callback = element_callback,
+                              buffer_kb = 0.01,
+                              round = "line")
 
   if (httr2::resp_is_error(response)) {
     status <- httr2::resp_status(response)
     description <- httr2::resp_status_desc(response)
-    stop("Perplexity API request failed with error ", status, ": ", description, call. = FALSE)
+
+    cli::cli_abort(message = c(
+      "x" = glue::glue("Perplexity API request failed. Error {status} - {description}"),
+      "i" = "Visit the Perplexity API documentation for more details"
+    ))
   }
 }

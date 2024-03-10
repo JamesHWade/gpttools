@@ -25,8 +25,19 @@ stream_chat_openai <- function(prompt = NULL,
     httr2::req_error(is_error = function(resp) FALSE) |>
     httr2::req_perform_stream(
       callback = element_callback,
-      buffer_kb = 0.01
+      buffer_kb = 0.01,
+      round = "line"
     )
+
+  if (httr2::resp_is_error(response)) {
+    status <- httr2::resp_status(response)
+    description <- httr2::resp_status_desc(response)
+
+    cli::cli_abort(message = c(
+      "x" = glue::glue("OpenAI API request failed. Error {status} - {description}"),
+      "i" = "Visit the OpenAI API documentation for more details"
+    ))
+  }
 
   invisible(response)
 }

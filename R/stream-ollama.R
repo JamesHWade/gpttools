@@ -11,10 +11,13 @@ stream_chat_ollama <- function(prompt,
   url <- Sys.getenv("OLLAMA_HOST", "http://localhost:11434")
   response <-
     httr2::request(url) |>
+    req_url_path_append("v1") |>
     httr2::req_url_path_append("api") |>
     httr2::req_url_path_append("generate") |>
     httr2::req_body_json(data = body) |>
-    httr2::req_perform_stream(callback = element_callback, buffer_kb = 0.01)
+    httr2::req_perform_stream(callback = element_callback,
+                              buffer_kb = 0.01,
+                              round = "line")
 
   if (httr2::resp_is_error(response)) {
     status <- httr2::resp_status(response)
@@ -25,6 +28,7 @@ stream_chat_ollama <- function(prompt,
       "i" = "Visit the Ollama API documentation for more details"
     ))
   }
+  invisible(response)
 }
 
 ollama_is_available <- function(verbose = FALSE) {

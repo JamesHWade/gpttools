@@ -19,7 +19,9 @@ stream_chat_cohere <- function(prompt,
     httr2::req_body_json(data = request_body) |>
     httr2::req_retry(max_tries = 3) |>
     httr2::req_error(is_error = function(resp) FALSE) |>
-    httr2::req_perform_stream(callback = element_callback, buffer_kb = 0.01)
+    httr2::req_perform_stream(callback = element_callback,
+                              buffer_kb = 0.01,
+                              round = "line")
 
   if (httr2::resp_is_error(response)) {
     status <- httr2::resp_status(response)
@@ -30,4 +32,5 @@ stream_chat_cohere <- function(prompt,
       "i" = "Visit the Cohere API documentation for more details"
     ))
   }
+  invisible(response)
 }
