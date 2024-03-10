@@ -11,24 +11,24 @@ stream_chat_perplexity <- function(prompt,
   )
 
   response <-
-    httr2::request("https://api.perplexity.ai/chat/completions") |>
-    httr2::req_method("POST") |>
-    httr2::req_headers(
+    request("https://api.perplexity.ai/chat/completions") |>
+    req_method("POST") |>
+    req_headers(
       accept = "application/json",
       "Content-Type" = "application/json",
       Authorization = paste("Bearer", api_key)
     ) |>
-    httr2::req_body_json(data = request_body) |>
-    httr2::req_retry(max_tries = 3) |>
-    httr2::req_perform_stream(callback = element_callback,
+    req_body_json(data = request_body) |>
+    req_retry(max_tries = 3) |>
+    req_perform_stream(callback = element_callback,
                               buffer_kb = 0.01,
                               round = "line")
 
-  if (httr2::resp_is_error(response)) {
-    status <- httr2::resp_status(response)
-    description <- httr2::resp_status_desc(response)
+  if (resp_is_error(response)) {
+    status <- resp_status(response)
+    description <- resp_status_desc(response)
 
-    cli::cli_abort(message = c(
+    cli_abort(message = c(
       "x" = glue::glue("Perplexity API request failed. Error {status} - {description}"),
       "i" = "Visit the Perplexity API documentation for more details"
     ))
