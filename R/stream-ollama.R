@@ -23,7 +23,7 @@ stream_chat_ollama <- function(prompt,
     status <- resp_status(response)
     description <- resp_status_desc(response)
 
-    cli::cli_abort(message = c(
+    cli_abort(message = c(
       "x" = glue::glue("Ollama API request failed. Error {status} - {description}"),
       "i" = "Visit the Ollama API documentation for more details"
     ))
@@ -42,14 +42,14 @@ ollama_is_available <- function(verbose = FALSE) {
       response <- req_perform(request) |>
         resp_body_string()
 
-      if (verbose) cli::cli_alert_success(response)
+      if (verbose) cli_alert_success(response)
       check_value <- TRUE
     },
     error = function(cnd) {
       if (inherits(cnd, "httr2_failure")) {
-        if (verbose) cli::cli_alert_danger("Couldn't connect to Ollama in {.url {ollama_api_url()}}. Is it running there?")
+        if (verbose) cli_alert_danger("Couldn't connect to Ollama in {.url {ollama_api_url()}}. Is it running there?")
       } else {
-        if (verbose) cli::cli_alert_danger(cnd)
+        if (verbose) cli_alert_danger(cnd)
       }
       check_value <- FALSE
     }
