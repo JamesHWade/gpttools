@@ -41,6 +41,7 @@ stream_chat <- function(prompt,
       )
     }
   )
+  invisible(response)
 }
 
 create_handler <- function(service = "openai",
