@@ -75,12 +75,12 @@ recursive_hyperlinks <- function(local_domain,
 
   expanded_urls <- c(expanded_urls, links)
   cli_inform(c("i" = "Total urls: {length(expanded_urls)}"))
-  links_df <- purrr::map(links, get_hyperlinks,
+  links_df <- map(links, get_hyperlinks,
     .progress = "Getting more links"
   ) |>
     dplyr::bind_rows() |>
     dplyr::filter(!stringr::str_detect(link, "^\\.$|mailto:|\\#|^\\_$")) |>
-    dplyr::mutate(link = purrr::map2_chr(
+    dplyr::mutate(link = map2_chr(
       .x = parent,
       .y = link,
       .f = \(x, y) xml2::url_absolute(y, x)
@@ -89,7 +89,7 @@ recursive_hyperlinks <- function(local_domain,
   cli_inform("Going to check {length(unique(links_df$link))} links")
 
   new_links <-
-    purrr::map(unique(links_df$link), \(x) {
+    map(unique(links_df$link), \(x) {
       if (rlang::is_true(stringr::str_detect(x, domain_pattern))) {
         validate_link(x)
       } else {
@@ -237,7 +237,7 @@ scrape_and_process <- function(url,
     unique()
   cli_inform(c("i" = "Scraping validated links"))
   scraped_data <-
-    purrr::map(links, \(x) {
+    map(links, \(x) {
       if (identical(check_url(x), 200L)) {
         tibble::tibble(
           source  = local_domain,
@@ -320,11 +320,11 @@ extract_text <- function(url, use_html_text2 = TRUE) {
   )
 
   xpath_tags <- exclude_tags |>
-    purrr::map_chr(.f = \(x) glue::glue("self::{x}")) |>
+    map_chr(.f = \(x) glue::glue("self::{x}")) |>
     stringr::str_c(collapse = " or ")
 
   xpath_attributes <- exclude_attributes |>
-    purrr::map_chr(.f = \(x) {
+    map_chr(.f = \(x) {
       glue::glue(
         "contains(concat(' ', normalize-space(@class), ' '), ' {x}')"
       )
@@ -334,7 +334,7 @@ extract_text <- function(url, use_html_text2 = TRUE) {
   # Handling general attribute selectors
   general_attributes <- c("role", "aria-", "data-", "id", "class", "style")
   xpath_general_attributes <- general_attributes |>
-    purrr::map_chr(.f = \(x) glue::glue("@{x}")) |>
+    map_chr(.f = \(x) glue::glue("@{x}")) |>
     stringr::str_c(collapse = " or ")
 
   xpath_combined <- xpath_combined <- glue::glue(

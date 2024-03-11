@@ -37,7 +37,7 @@ gpttools_index_all_scraped_data <- function(overwrite = FALSE,
                                             dont_ask = TRUE) {
   text_files <- list_index("text", full_path = TRUE)
 
-  purrr::walk(text_files, function(file_path) {
+  walk(text_files, function(file_path) {
     domain <- tools::file_path_sans_ext(basename(file_path))
     cli_alert_info(glue("Creating/updating index for domain {domain}..."))
     create_index(

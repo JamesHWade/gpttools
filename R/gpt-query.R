@@ -40,7 +40,7 @@ gpt_chat <- function(instructions,
   cli_inform("Model: {model}")
   cli_inform("Sending query... this can take up to 3 minutes.")
   simple_prompt <- prompt |>
-    purrr::map_chr(.f = "content") |>
+    map_chr(.f = "content") |>
     paste(collapse = "\n\n")
 
   answer <- chat(

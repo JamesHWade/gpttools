@@ -74,7 +74,7 @@ create_handler <- function(service = "openai",
     if (stringr::str_detect(env$resp, pattern)) {
       parsed <- stringr::str_extract(env$resp, pattern) |>
         jsonlite::fromJSON() |>
-        purrr::pluck(!!!new_pluck)
+        pluck(!!!new_pluck)
       env$full_resp <- paste0(env$full_resp, parsed)
 
       if (where == "shiny") {
@@ -122,8 +122,8 @@ get_stream_pattern <- function(service) {
       pluck <- "text"
     },
     "ollama" = {
-      pattern <- '\\{"model":.*"done":false\\}'
-      pluck <- "response"
+      pattern <- '\\{"id":.*?\\}\\]\\}'
+      pluck <- c("choices", "delta", "content")
     },
     "azure_openai" = {
       pattern <- '\\{"id":.*?\\}\\]\\}'
@@ -132,3 +132,4 @@ get_stream_pattern <- function(service) {
   )
   list(pattern = pattern, pluck = pluck)
 }
+
