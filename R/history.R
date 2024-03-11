@@ -58,7 +58,7 @@ delete_history <- function(local = FALSE) {
   }
   history_files <- get_history_path(local = local)
 
-  purrr::map(history_files, \(x) {
+  map(history_files, \(x) {
     delete_file <- ui_yeah("Do you want to delete {basename(x)}?")
     if (delete_file) {
       file.remove(x)
@@ -246,7 +246,7 @@ chat_with_context <- function(query,
     context <-
       full_context |>
       dplyr::select(source, link, chunks) |>
-      purrr::pmap(\(source, link, chunks) {
+      pmap(\(source, link, chunks) {
         glue::glue("Source: {source}
                    Link: {link}
                    Text: {chunks}")
@@ -331,7 +331,7 @@ chat_with_context <- function(query,
   )
 
   session_history <-
-    purrr::map(session_history, \(x) {
+    map(session_history, \(x) {
       if (x$role == "system") {
         NULL
       } else if (stringr::str_detect(
@@ -344,7 +344,7 @@ chat_with_context <- function(query,
         x
       }
     }) |>
-    purrr::compact()
+    compact()
 
   prompt <- c(
     session_history,
@@ -354,7 +354,7 @@ chat_with_context <- function(query,
   )
 
   simple_prompt <- prompt |>
-    purrr::map_chr(.f = "content") |>
+    map_chr(.f = "content") |>
     paste(collapse = "\n\n")
 
   cli_alert_info("Service: {service}")
@@ -390,7 +390,7 @@ chat_with_context <- function(query,
   }
 
   if (save_history) {
-    purrr::map(prompt, \(x) {
+    map(prompt, \(x) {
       save_user_history(
         file_name = history_name,
         role      = "system",

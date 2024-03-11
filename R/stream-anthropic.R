@@ -51,4 +51,5 @@ stream_chat_anthropic <- function(prompt,
       "i" = "Visit the Anthropic API documentation for more details"
     ))
   }
+  invisible(response)
 }
