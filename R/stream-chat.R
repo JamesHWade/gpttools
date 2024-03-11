@@ -50,7 +50,7 @@ create_handler <- function(service = "openai",
                            where = "console") {
   env <- rlang::env()
   env$resp <- NULL
-  env$full_resp <- NULL
+  env$full_resp <- ""
 
   stream_details <- get_stream_pattern(service)
   new_pattern <- stream_details$pattern
