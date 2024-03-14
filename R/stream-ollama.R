@@ -15,9 +15,11 @@ stream_chat_ollama <- function(prompt,
     req_url_path_append("api") |>
     req_url_path_append("generate") |>
     req_body_json(data = body) |>
-    req_perform_stream(callback = element_callback,
-                              buffer_kb = 0.01,
-                              round = "line")
+    req_perform_stream(
+      callback = element_callback,
+      buffer_kb = 0.01,
+      round = "line"
+    )
 
   if (resp_is_error(response)) {
     status <- resp_status(response)

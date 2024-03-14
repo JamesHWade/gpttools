@@ -22,9 +22,11 @@ stream_chat_cohere <- function(prompt,
     req_body_json(data = request_body) |>
     req_retry(max_tries = 3) |>
     req_error(is_error = function(resp) FALSE) |>
-    req_perform_stream(callback = element_callback,
-                              buffer_kb = 0.01,
-                              round = "line")
+    req_perform_stream(
+      callback = element_callback,
+      buffer_kb = 0.01,
+      round = "line"
+    )
 
   if (resp_is_error(response)) {
     status <- resp_status(response)

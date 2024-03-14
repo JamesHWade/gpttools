@@ -1,9 +1,9 @@
 new_gpttools_message <- function(role = character(),
-                               content = character(),
-                               datetime = character(),
-                               model = character(),
-                               service = character(),
-                               temperature = double()) {
+                                 content = character(),
+                                 datetime = character(),
+                                 model = character(),
+                                 service = character(),
+                                 temperature = double()) {
   if (!is_character(role)) cli_abort("`role` must be a character vector.")
   if (!is_character(content)) cli_abort("`content` must be a character vector.")
   if (!is_character(datetime, n = 1)) {
@@ -22,9 +22,9 @@ new_gpttools_message <- function(role = character(),
   new_rcrd(
     fields =
       tibble::tibble(
-      role = role,
-      content = content,
-    ),
+        role = role,
+        content = content,
+      ),
     datetime = datetime,
     model = model,
     service = service,
@@ -34,16 +34,16 @@ new_gpttools_message <- function(role = character(),
 }
 
 gpttools_message <- function(role = character(),
-                           content = character(),
-                           datetime = character(),
-                           model = character(),
-                           service = character(),
-                           temperature = double()) {
-  role        <- vec_cast(role, character())
-  content     <- vec_cast(content, character())
-  datetime    <- vec_cast(datetime, character())
-  model       <- vec_cast(model, character())
-  service     <- vec_cast(service, character())
+                             content = character(),
+                             datetime = character(),
+                             model = character(),
+                             service = character(),
+                             temperature = double()) {
+  role <- vec_cast(role, character())
+  content <- vec_cast(content, character())
+  datetime <- vec_cast(datetime, character())
+  model <- vec_cast(model, character())
+  service <- vec_cast(service, character())
   temperature <- vec_cast(temperature, double())
 
   new_gpttools_message(role, content, datetime, model, service, temperature)
@@ -53,11 +53,11 @@ gpttools_message <- function(role = character(),
 print.gpttools_message <- function(x, ...) {
   x_valid <- which(!is.na(x))
 
-  role        <- field(x, "role")[x_valid]
-  content     <- field(x, "content")[x_valid]
-  datetime    <- attr(x, "datetime")
-  model       <- attr(x, "model")
-  service     <- attr(x, "service")
+  role <- field(x, "role")[x_valid]
+  content <- field(x, "content")[x_valid]
+  datetime <- attr(x, "datetime")
+  model <- attr(x, "model")
+  service <- attr(x, "service")
   temperature <- attr(x, "temperature")
 
   n <- length(field(x, "role"))
