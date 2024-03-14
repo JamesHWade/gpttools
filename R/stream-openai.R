@@ -4,11 +4,13 @@ chat_openai <- function(prompt = "Tell me a joke about R.",
                         temperature = NULL,
                         stream = FALSE) {
   response <-
-    req_chat(prompt = prompt,
-             model = model,
-             history = history,
-             temperature = temperature,
-             stream = is_true(stream)) |>
+    req_chat(
+      prompt = prompt,
+      model = model,
+      history = history,
+      temperature = temperature,
+      stream = is_true(stream)
+    ) |>
     resp_chat()
 
   class(response) <- c("chat_tibble", class(response))
@@ -24,9 +26,10 @@ print.chat_tibble <- function(x, ...) {
     print_role <- rule(stringr::str_to_title(x$role[i]))
     print_role <-
       switch(x$role[i],
-           "assistant" = col_green(print_role),
-           "system"    = col_silver(print_role),
-           "user"      = col_blue(print_role))
+        "assistant" = col_green(print_role),
+        "system"    = col_silver(print_role),
+        "user"      = col_blue(print_role)
+      )
     writeLines(print_role)
     writeLines(x$content[i])
   }
@@ -37,8 +40,7 @@ print.chat_tibble <- function(x, ...) {
 # Make API Request --------------------------------------------------------
 
 req_base_openai <- function(
-    url = getOption("gpttools.url", "https://api.openai.com/")
-) {
+    url = getOption("gpttools.url", "https://api.openai.com/")) {
   request(url) |>
     req_url_path_append("v1", "chat", "completions")
 }
@@ -79,9 +81,12 @@ add_history <- function(prompt, history) {
         content = history$content
       )
     })
-  list(history,
-       list(role = "user",
-            content = prompt)
+  list(
+    history,
+    list(
+      role = "user",
+      content = prompt
+    )
   )
 }
 
@@ -89,11 +94,13 @@ req_chat <- function(prompt, model, history, temperature, stream = FALSE) {
   req <-
     req_base_openai() |>
     req_auth_openai() |>
-    req_body_openai(prompt = prompt,
-                    model  = model,
-                    history = history,
-                    temperature = temperature,
-                    stream = is_true(stream)) |>
+    req_body_openai(
+      prompt = prompt,
+      model = model,
+      history = history,
+      temperature = temperature,
+      stream = is_true(stream)
+    ) |>
     req_retry(max_tries = 3) |>
     req_error(is_error = function(resp) FALSE)
 

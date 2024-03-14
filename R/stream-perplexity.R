@@ -20,9 +20,11 @@ stream_chat_perplexity <- function(prompt,
     ) |>
     req_body_json(data = request_body) |>
     req_retry(max_tries = 3) |>
-    req_perform_stream(callback = element_callback,
-                              buffer_kb = 0.01,
-                              round = "line")
+    req_perform_stream(
+      callback = element_callback,
+      buffer_kb = 0.01,
+      round = "line"
+    )
 
   if (resp_is_error(response)) {
     status <- resp_status(response)
