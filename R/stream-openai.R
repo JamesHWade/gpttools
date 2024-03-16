@@ -15,7 +15,7 @@ chat_openai <- function(prompt = "Tell me a joke about R.",
 
   class(response) <- c("chat_tibble", class(response))
 
-  invisible(response)
+  response
 }
 
 #' @export
@@ -105,6 +105,7 @@ req_chat <- function(prompt, model, history, temperature, stream = FALSE) {
     req_error(is_error = function(resp) FALSE)
 
   if (is_true(stream)) {
+    env <- caller_env()
     req |>
       req_perform_stream(
         callback = create_handler("openai"),
@@ -119,12 +120,21 @@ req_chat <- function(prompt, model, history, temperature, stream = FALSE) {
 
 # Process API Response ----------------------------------------------------
 
-resp_chat <- function(response) {
-  response |>
+resp_chat <- function(response, stream) {
+  resp <- response |>
     resp_chat_error() |>
-    resp_body_json(simplifyVector = TRUE) |>
-    pluck("choices", "message") |>
-    tibble::as_tibble()
+    resp_body_json(simplifyVector = TRUE)
+
+  if (is_true(stream)) {
+    resp |>
+      pluck("delta", "message") |>
+      tibble::as_tibble()
+  } else {
+    resp |>
+      pluck("choices", "message") |>
+      tibble::as_tibble()
+    resp_chat_normal(response)
+  }
 }
 
 resp_chat_error <- function(response) {
