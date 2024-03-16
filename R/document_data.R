@@ -7,13 +7,13 @@
 #' @export
 collect_dataframes <- function() {
   objects <- names(rlang::global_env())
-  purrr::map_chr(
+  map_chr(
     .x = objects,
     .f = \(x) {
       if (is.data.frame(get(x))) x else NA
     }
   ) |>
-    purrr::compact() |>
+    compact() |>
     unlist()
 }
 
@@ -32,7 +32,7 @@ skim_lite <- function(data) {
 }
 
 collect_column_types <- function(data) {
-  purrr::map_dfr(
+  map_dfr(
     names(data),
     ~ data.frame(
       column = .x,

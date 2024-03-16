@@ -9,7 +9,7 @@ api_services <-
   stringr::str_remove(
     pattern = "gptstudio_request_perform.gptstudio_request_"
   ) |>
-  purrr::discard(~ .x == "gptstudio_request_perform.default")
+  discard(~ .x == "gptstudio_request_perform.default")
 
 # Define UI
 ui <- page_fillable(

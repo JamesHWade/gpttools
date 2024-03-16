@@ -51,7 +51,7 @@ scrape_resources <- function(resources) {
 
   sites |>
     dplyr::select(url, name) |>
-    purrr::pmap(.f = \(url, name) {
+    pmap(.f = \(url, name) {
       crawl(
         url = url,
         index_create = TRUE,

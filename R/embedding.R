@@ -34,7 +34,7 @@ prepare_scraped_files <- function(domain) {
 
   scraped |>
     dplyr::mutate(
-      chunks = purrr::map(text, \(x) {
+      chunks = map(text, \(x) {
         chunk_with_overlap(x,
           chunk_size = 500,
           overlap_size = 50,
@@ -97,7 +97,7 @@ add_embeddings <- function(index,
     model <- get_transformer_model()
     index |>
       dplyr::mutate(
-        embeddings = purrr::map(
+        embeddings = map(
           .x = chunks,
           .f = \(x) create_text_embeddings(x, model),
           .progress = "Creating Embeddings Locally"
@@ -108,7 +108,7 @@ add_embeddings <- function(index,
   } else {
     index |>
       dplyr::mutate(
-        embeddings = purrr::map(
+        embeddings = map(
           .x = chunks,
           .f = create_openai_embedding,
           .progress = "Create Embeddings"
@@ -227,7 +227,7 @@ get_top_matches <- function(index, query_embedding, k = 5) {
   index |>
     tibble::as_tibble() |>
     dplyr::mutate(
-      similarity = purrr::map_dbl(embedding, \(x) {
+      similarity = map_dbl(embedding, \(x) {
         lsa::cosine(query_embedding, unlist(x))
       })
     ) |>
@@ -262,6 +262,6 @@ chunk_with_overlap <- function(x, chunk_size, overlap_size, doc_id, ...) {
   } else {
     names(chunks) <- NULL
   }
-  chunks <- purrr::compact(chunks)
-  purrr::map(chunks, \(x) stringr::str_c(x, collapse = " "))
+  chunks <- compact(chunks)
+  map(chunks, \(x) stringr::str_c(x, collapse = " "))
 }
