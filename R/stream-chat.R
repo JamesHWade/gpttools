@@ -47,8 +47,8 @@ stream_chat <- function(prompt,
 create_handler <- function(service = "openai",
                            r = NULL,
                            output_id = "streaming",
-                           where = "console") {
-  env <- rlang::env()
+                           where = "console",
+                           env = env()) {
   env$resp <- NULL
   env$full_resp <- ""
 

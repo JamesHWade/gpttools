@@ -1,4 +1,4 @@
-chat_openai <- function(prompt = "Tell me a joke about R.",
+chat_openai <- function(prompt = "Tell me a joke about the R language.",
                         model = "gpt-3.5-turbo",
                         history = NULL,
                         temperature = NULL,
@@ -11,7 +11,7 @@ chat_openai <- function(prompt = "Tell me a joke about R.",
       temperature = temperature,
       stream = is_true(stream)
     ) |>
-    resp_chat()
+    resp_chat(stream = is_true(stream))
 
   class(response) <- c("chat_tibble", class(response))
 
@@ -26,10 +26,11 @@ print.chat_tibble <- function(x, ...) {
     print_role <- rule(stringr::str_to_title(x$role[i]))
     print_role <-
       switch(x$role[i],
-        "assistant" = col_green(print_role),
-        "system"    = col_silver(print_role),
-        "user"      = col_blue(print_role)
+             "assistant" = col_green(print_role),
+             "system"    = col_silver(print_role),
+             "user"      = col_blue(print_role)
       )
+    writeLines("\n")
     writeLines(print_role)
     writeLines(x$content[i])
   }
@@ -50,7 +51,7 @@ req_auth_openai <- function(request) {
 }
 
 req_body_openai <- function(request,
-                            prompt = "Tell me a joke about R.",
+                            prompt = "Tell me a joke about the R language.",
                             model = "gpt-4-turbo-preview",
                             history = NULL,
                             temperature = 0.7,
@@ -108,32 +109,54 @@ req_chat <- function(prompt, model, history, temperature, stream = FALSE) {
     env <- caller_env()
     req |>
       req_perform_stream(
-        callback = create_handler("openai"),
-        buffer_kb = 0.01
+        callback = \(x) stream_callback(x, env),
+        buffer_kb = 0.01,
+        round = "line"
       )
+    tibble::tibble(role = "assistant", content = env$response)
   } else {
     req |>
-      req_perform()
+      req_perform(verbosity = 3)
   }
 }
+
+#' @importFrom jsonlite fromJSON
+stream_callback <- function(x, env) {
+  txt <- rawToChar(x)
+
+  lines <- str_split(txt, "\n")[[1]]
+  lines <- lines[lines != ""]
+  lines <- str_replace_all(lines, "^data: ", "")
+  lines <- lines[!str_detect(lines, "\"finish_reason\":\"stop\"")]
+  lines <- lines[lines != "[DONE]"]
+
+  tokens <- map_chr(lines, \(line) {
+    chunk <- jsonlite::fromJSON(line)
+    chunk$choices$delta$content
+  })
+
+  env$response <- paste0(env$response, tokens)
+
+  cat(tokens)
+
+  TRUE
+}
+
 
 
 # Process API Response ----------------------------------------------------
 
 resp_chat <- function(response, stream) {
-  resp <- response |>
-    resp_chat_error() |>
-    resp_body_json(simplifyVector = TRUE)
+  resp <- response
 
   if (is_true(stream)) {
-    resp |>
-      pluck("delta", "message") |>
-      tibble::as_tibble()
+    resp
   } else {
     resp |>
+      resp_chat_error() |>
+      resp_body_json(simplifyVector = TRUE) |>
       pluck("choices", "message") |>
       tibble::as_tibble()
-    resp_chat_normal(response)
   }
 }
 

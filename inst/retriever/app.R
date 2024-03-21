@@ -12,6 +12,7 @@ library(bslib)
 library(bsicons)
 library(waiter)
 library(reprex)
+library(purrr)
 
 window_height_ui <- function(id) {
   ns <- NS(id)
