@@ -28,7 +28,9 @@ check_url <- function(url) {
       TRUE
     )
 
-  if (inherits(status, "try-error")) return(invisible(FALSE))
+  if (inherits(status, "try-error")) {
+    return(invisible(FALSE))
+  }
   status
 }
 
