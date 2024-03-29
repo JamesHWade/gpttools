@@ -10,15 +10,16 @@ stream_chat_ollama <- function(prompt,
   # ollama_is_available()
   url <- Sys.getenv("OLLAMA_HOST", "http://localhost:11434")
   response <-
-    httr2::request(url) |>
-    httr2::req_url_path_append("api") |>
-    httr2::req_url_path_append("generate") |>
-    httr2::req_body_json(data = body) |>
-    httr2::req_perform_stream(callback = element_callback, buffer_kb = 0.01)
+    request(url) |>
+    req_url_path_append("v1") |>
+    req_url_path_append("api") |>
+    req_url_path_append("generate") |>
+    req_body_json(data = body) |>
+    req_perform_stream(callback = element_callback, buffer_kb = 0.01)
 
-  if (httr2::resp_is_error(response)) {
-    status <- httr2::resp_status(response)
-    description <- httr2::resp_status_desc(response)
+  if (resp_is_error(response)) {
+    status <- resp_status(response)
+    description <- resp_status_desc(response)
 
     cli::cli_abort(message = c(
       "x" = glue::glue("Ollama API request failed. Error {status} - {description}"),
@@ -29,14 +30,14 @@ stream_chat_ollama <- function(prompt,
 
 ollama_is_available <- function(verbose = FALSE) {
   request <- Sys.getenv("OLLAMA_HOST", "http://localhost:11434") |>
-    httr2::request()
+    request()
 
   check_value <- logical(1)
 
   rlang::try_fetch(
     {
-      response <- httr2::req_perform(request) |>
-        httr2::resp_body_string()
+      response <- req_perform(request) |>
+        resp_body_string()
 
       if (verbose) cli::cli_alert_success(response)
       check_value <- TRUE

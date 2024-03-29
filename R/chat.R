@@ -165,6 +165,46 @@ ghost_chat <- function(service = getOption("gpttools.service", "openai"),
   )
 }
 
+#' Writing Assistant
+#'
+#' @inheritParams chat
+#' @export
+ghost_writer <- function(service = getOption("gpttools.service", "openai"),
+                         stream = TRUE,
+                         where = "source") {
+  context <- get_cursor_context()
+  instructions <- glue::glue(
+    "You are an expert writing assistant that provides brief suggestions and
+    improvements directly into the text. Your response will go directly into the
+    document. You should only provide text or comments related to the writing.
+    Do not add any code. You are given context above and below the current
+    cursor position.
+
+    Here is an example:
+
+    The quick brown fox jumps over the lazy dog. The dog, startled by the
+    fox's sudden movement, [[start here]] barks loudly and chases after the fox.
+
+    The fox, being much quicker and more agile, easily outmaneuvers the dog and
+    disappears into the dense forest.
+
+    Your response begins at the placeholder [[start_here]].
+
+    Here is the context:
+
+    {context$above}
+
+    {context$below}"
+  )
+  stream_chat(
+    prompt = instructions,
+    service = service,
+    r = NULL,
+    output_id = NULL,
+    where = where
+  )
+}
+
 get_cursor_context <- function(context_lines = 20,
                                placeholder = "[[start_here]]") {
   doc <- rstudioapi::getSourceEditorContext()

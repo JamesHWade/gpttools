@@ -5,9 +5,9 @@
 #' @import cli
 #' @import rlang
 #' @importFrom glue glue
+#' @import httr2
 #' @importFrom utils globalVariables head installed.packages old.packages
 #' packageDescription packageVersion
 #' @importFrom graphics text
-#' @importFrom glue glue
 ## usethis namespace: end
 NULL
