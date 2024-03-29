@@ -108,8 +108,8 @@ get_stream_pattern <- function(service) {
       pluck <- c("choices", "delta", "content")
     },
     "anthropic" = {
-      pattern <- "\\{\"type\":\"completion\",.*\"log_id\":\"compl_[^\"]*\"\\}"
-      pluck <- "completion"
+      pattern <- "\\{\"type\":\"content_block_delta\",.*\\}.*\\}"
+      pluck <- c("delta", "text")
     },
     "perplexity" = {
       pattern <- '\\{"id".*?\\}\\}\\]\\}'

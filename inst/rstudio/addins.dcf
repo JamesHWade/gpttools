@@ -8,6 +8,11 @@ Description: Generate code suggestions in source docs like .R, .Rmd, and .qmd
 Binding: copilot_addin
 Interactive: true
 
+Name: Ghost Writer
+Description: Generate prose suggestions in docs like .Rmd and .qmd
+Binding: ghost_writer_addin
+Interactive: true
+
 Name: Settings for gpttools
 Description: Customize gpttools settings
 Binding: launch_settings

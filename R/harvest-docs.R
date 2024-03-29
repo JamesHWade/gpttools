@@ -20,15 +20,17 @@ check_url <- function(url) {
   status <-
     try(
       {
-        httr2::request(url) |>
-          httr2::req_error(is_error = \(resp) FALSE) |>
-          httr2::req_perform() |>
-          httr2::resp_status()
+        request(url) |>
+          req_error(is_error = \(resp) FALSE) |>
+          req_perform() |>
+          resp_status()
       },
       TRUE
     )
 
-  if (inherits(status, "try-error")) return(invisible(FALSE))
+  if (inherits(status, "try-error")) {
+    return(invisible(FALSE))
+  }
   status
 }
 

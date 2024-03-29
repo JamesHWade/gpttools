@@ -62,7 +62,7 @@ query_openai <- function(task = "chat/completions",
                          model = "gpt-3.5-turbo") {
   arg_match(task, c("chat/completions", "embeddings"))
 
-  req <- httr2::request(base_url)
+  req <- request(base_url)
 
   if (task == "chat/completions") {
     body <- list(
@@ -73,16 +73,16 @@ query_openai <- function(task = "chat/completions",
 
   resp <-
     req |>
-    httr2::req_url_path_append(task) |>
-    httr2::req_user_agent("gpttools: https://github.com/jameshwade/gpttools") |>
-    httr2::req_headers(
+    req_url_path_append(task) |>
+    req_user_agent("gpttools: https://github.com/jameshwade/gpttools") |>
+    req_headers(
       "Authorization" = glue("Bearer {api_key}"),
       "Content-Type" = "application/json"
     ) |>
-    httr2::req_body_json(body) |>
-    httr2::req_retry() |>
-    httr2::req_throttle(4) |>
-    httr2::req_perform()
+    req_body_json(body) |>
+    req_retry() |>
+    req_throttle(4) |>
+    req_perform()
 
-  resp |> httr2::resp_body_json(simplifyVector = TRUE)
+  resp |> resp_body_json(simplifyVector = TRUE)
 }
