@@ -76,7 +76,7 @@ req_body_openai <- function(request,
 
 add_history <- function(prompt, history) {
   history <-
-    pmap(history, \(x) {
+    map(history, \(x) {
       list(
         role = history$role,
         content = history$content
@@ -141,8 +141,6 @@ stream_callback <- function(x, env) {
 
   TRUE
 }
-
-
 
 # Process API Response ----------------------------------------------------
 
