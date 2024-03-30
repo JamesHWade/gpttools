@@ -12,10 +12,6 @@ stream_chat_perplexity <- function(prompt,
 
   response <-
     request("https://api.perplexity.ai/chat/completions") |>
-<<<<<<< HEAD
-=======
-    req_method("POST") |>
->>>>>>> 997b9a4 (import httr2, cli, and rlang)
     req_headers(
       accept = "application/json",
       "Content-Type" = "application/json",
