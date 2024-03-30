@@ -1,6 +1,6 @@
 stream_chat_perplexity <- function(prompt,
                                    element_callback = create_handler("perplexity"),
-                                   model = getOption("gpttools.model", "sonar-small-chat"),
+                                   model = "sonar-small-chat",
                                    api_key = Sys.getenv("PERPLEXITY_API_KEY")) {
   request_body <- list(
     model = model,

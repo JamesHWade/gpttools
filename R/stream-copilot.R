@@ -21,5 +21,5 @@ chat_copilot <- function() {
         ),
         model = "copilot")) |>
     req_perform() |>
-    resp_chat(stream = FALSE)
+    resp_chat_openai(stream = FALSE)
 }

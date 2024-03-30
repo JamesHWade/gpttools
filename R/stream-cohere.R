@@ -1,5 +1,5 @@
 stream_chat_cohere <- function(prompt,
-                               model = getOption("gpttools.model", "command"),
+                               model = "command"),
                                element_callback = create_handler("cohere"),
                                key = Sys.getenv("COHERE_API_KEY")) {
   request_body <- list(

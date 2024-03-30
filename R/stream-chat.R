@@ -48,7 +48,7 @@ create_handler <- function(service = "openai",
                            r = NULL,
                            output_id = "streaming",
                            where = "console",
-                           env = env()) {
+                           env = caller_env()) {
   env$resp <- NULL
   env$full_resp <- ""
 
