@@ -3,7 +3,6 @@ chat_openai <- function(prompt = "Tell me a joke about the R language.",
                         history = NULL,
                         temperature = NULL,
                         stream = FALSE) {
-
   prompt <- prompt |> add_history(history)
 
   response <-
@@ -15,13 +14,14 @@ chat_openai <- function(prompt = "Tell me a joke about the R language.",
     ) |>
     resp_chat_openai(stream = is_true(stream))
 
-  response <- c(prompt,
-                list(list(role = response$role, content = response$content)))
+  response <- c(
+    prompt,
+    list(list(role = response$role, content = response$content))
+  )
 
   class(response) <- c("chat_list", class(response))
 
   response
-
 }
 
 #' @export
@@ -34,9 +34,9 @@ print.chat_list <- function(x, ...) {
     print_role <- rule(stringr::str_to_title(x[[i]]$role))
     print_role <-
       switch(x[[i]]$role,
-             "assistant" = col_green(print_role),
-             "system"    = col_silver(print_role),
-             "user"      = col_blue(print_role)
+        "assistant" = col_green(print_role),
+        "system"    = col_silver(print_role),
+        "user"      = col_blue(print_role)
       )
     writeLines(print_role)
     writeLines(x[[i]]$content)

@@ -16,10 +16,14 @@ chat_copilot <- function() {
     req_body_json(
       data = list(
         messages = list(
-          list(role = "user",
-               content = "Tell me a joke about the R language.")
+          list(
+            role = "user",
+            content = "Tell me a joke about the R language."
+          )
         ),
-        model = "copilot")) |>
+        model = "copilot"
+      )
+    ) |>
     req_perform() |>
     resp_chat_openai(stream = FALSE)
 }
