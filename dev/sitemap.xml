@@ -1,201 +1,69 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/SUPPORT.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/anthropic.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/azure.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/google.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/huggingface.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/chat-with-retrieval.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/ollama.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/other-addins.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/scrape-pkgs.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/openai.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/perplexity.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/articles/retriever.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/index.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/add_roxygen_addin.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/addin_run_scrape_pkgs.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/addin_run_select_pkgs.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/chat.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/chat_with_context.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/chat_with_retrieval.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/collect_dataframes.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/copilot_addin.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/crawl.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/create_index_from_audio.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/create_index_from_pdf.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/create_transcript.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/delete_history.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/delete_index.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/document_data.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/extract_code_chunks.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/get_selection.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/get_transformer_model.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/ghost_chat.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/ghost_writer.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/gpt_sitrep.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/gpttools-package.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/gpttools_index_all_scraped_data.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/ingest_pdf.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/insert_text.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/install_sentence_transformers.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/launch_settings.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/list_index.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/load_index.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/prep_data_prompt.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/read_history.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/remove_lines_and_spaces.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/repair_index_names.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/run_document_data.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/run_extracted_code.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/run_select_pkgs_app.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/save_user_config.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/scrape_pkg_sites.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/scrape_url.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/script_to_function_addin.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/set_user_config.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/suggest_code_improvements.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/suggest_unit_test_addin.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/summarize_data.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshwade.github.io/gpttools/dev/reference/transcribe_audio.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://jameshwade.github.io/gpttools/dev/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/CONTRIBUTING.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/LICENSE-text.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/LICENSE.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/SUPPORT.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/anthropic.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/azure.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/google.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/huggingface.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/index.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/chat-with-retrieval.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/ollama.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/other-addins.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/no-build/scrape-pkgs.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/openai.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/perplexity.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/articles/retriever.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/authors.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/index.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/news/index.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/add_roxygen_addin.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/addin_run_scrape_pkgs.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/addin_run_select_pkgs.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/chat.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/chat_with_context.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/chat_with_retrieval.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/collect_dataframes.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/copilot_addin.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/crawl.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/create_index_from_audio.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/create_index_from_pdf.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/create_transcript.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/delete_history.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/delete_index.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/document_data.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/extract_code_chunks.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/get_selection.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/get_transformer_model.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/ghost_chat.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/ghost_writer.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/gpt_sitrep.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/gpttools-package.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/gpttools_index_all_scraped_data.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/index.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/ingest_pdf.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/insert_text.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/install_sentence_transformers.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/launch_settings.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/list_index.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/load_index.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/prep_data_prompt.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/read_history.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/remove_lines_and_spaces.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/repair_index_names.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/run_document_data.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/run_extracted_code.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/run_select_pkgs_app.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/save_user_config.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/scrape_pkg_sites.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/scrape_url.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/script_to_function_addin.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/set_user_config.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/suggest_code_improvements.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/suggest_unit_test_addin.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/summarize_data.html</loc></url>
+<url><loc>https://jameshwade.github.io/gpttools/dev/reference/transcribe_audio.html</loc></url>
 </urlset>
+

@@ -1,20 +1,19 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   anthropic: anthropic.html
   azure: azure.html
+  no-build/chat-with-retrieval: no-build/chat-with-retrieval.html
   google: google.html
   huggingface: huggingface.html
-  chat-with-retrieval: no-build/chat-with-retrieval.html
-  ollama: no-build/ollama.html
-  other-addins: no-build/other-addins.html
-  scrape-pkgs: no-build/scrape-pkgs.html
+  no-build/ollama: no-build/ollama.html
   openai: openai.html
+  no-build/other-addins: no-build/other-addins.html
   perplexity: perplexity.html
   retriever: retriever.html
-last_built: 2024-03-29T01:38Z
+  no-build/scrape-pkgs: no-build/scrape-pkgs.html
+last_built: 2024-08-21T00:45Z
 urls:
   reference: https://jameshwade.github.io/gpttools/reference
   article: https://jameshwade.github.io/gpttools/articles
-
