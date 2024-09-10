@@ -56,7 +56,7 @@ get_pkgs_to_scrape <- function(local = TRUE,
       installed_version = Version
     ) |>
     dplyr::filter(name %in% pkgs) |>
-    dplyr::mutate(url = purrr::map_chr(name, get_pkg_doc_page)) |>
+    dplyr::mutate(url = map_chr(name, get_pkg_doc_page)) |>
     tidyr::drop_na(url) |>
     dplyr::mutate(source = urltools::domain(url)) |>
     dplyr::left_join(get_outdated_pkgs(), by = "name") |>
@@ -140,7 +140,7 @@ scrape_pkg_sites <- function(sites = get_pkgs_to_scrape(local = TRUE),
   } else {
     sites |>
       dplyr::select(url, version, name) |>
-      purrr::pmap(.f = \(url, version, name) {
+      pmap(.f = \(url, version, name) {
         crawl(
           url = url,
           index_create = index_create,

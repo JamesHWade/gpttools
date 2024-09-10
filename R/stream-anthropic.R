@@ -23,7 +23,8 @@ stream_chat_anthropic <- function(prompt,
     req_error(is_error = function(resp) FALSE) |>
     req_perform_stream(
       callback = element_callback,
-      buffer_kb = 0.01
+      buffer_kb = 0.01,
+      round = "line"
     )
 
   # error handling
@@ -31,9 +32,10 @@ stream_chat_anthropic <- function(prompt,
     status <- resp_status(response)
     description <- resp_status_desc(response)
 
-    cli::cli_abort(message = c(
+    cli_abort(message = c(
       "x" = "Anthropic API request failed. Error {status} - {description}",
       "i" = "Visit the Anthropic API documentation for more details"
     ))
   }
+  invisible(response)
 }

@@ -1,6 +1,6 @@
 stream_chat_perplexity <- function(prompt,
                                    element_callback = create_handler("perplexity"),
-                                   model = getOption("gpttools.model", "sonar-small-chat"),
+                                   model = "sonar-small-chat",
                                    api_key = Sys.getenv("PERPLEXITY_API_KEY")) {
   request_body <- list(
     model = model,
@@ -19,11 +19,19 @@ stream_chat_perplexity <- function(prompt,
     ) |>
     req_body_json(data = request_body) |>
     req_retry(max_tries = 3) |>
-    req_perform_stream(callback = element_callback, buffer_kb = 0.01)
+    req_perform_stream(
+      callback = element_callback,
+      buffer_kb = 0.01,
+      round = "line"
+    )
 
   if (resp_is_error(response)) {
     status <- resp_status(response)
     description <- resp_status_desc(response)
-    stop("Perplexity API request failed with error ", status, ": ", description, call. = FALSE)
+
+    cli_abort(message = c(
+      "x" = glue::glue("Perplexity API request failed. Error {status} - {description}"),
+      "i" = "Visit the Perplexity API documentation for more details"
+    ))
   }
 }

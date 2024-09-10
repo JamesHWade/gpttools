@@ -38,7 +38,8 @@ stream_chat_azure_openai <- function(prompt = NULL,
     req_error(is_error = function(resp) FALSE) |>
     req_perform_stream(
       callback = element_callback,
-      buffer_kb = 0.01
+      buffer_kb = 0.01,
+      round = "line"
     )
 
   invisible(response)

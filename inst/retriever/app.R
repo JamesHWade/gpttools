@@ -12,6 +12,7 @@ library(bslib)
 library(bsicons)
 library(waiter)
 library(reprex)
+library(purrr)
 
 window_height_ui <- function(id) {
   ns <- NS(id)
@@ -45,14 +46,14 @@ window_height_server <- function(id) {
 
 make_chat_history <- function(chats) {
   history <-
-    purrr::discard(chats, \(x) x$role == "system") |>
-    purrr::map(\(x) {
+    discard(chats, \(x) x$role == "system") |>
+    map(\(x) {
       list(
         strong(stringr::str_to_title(x$role)),
         markdown(x$content)
       )
     }) |>
-    purrr::list_flatten()
+    list_flatten()
   history
 }
 
@@ -61,7 +62,7 @@ api_services <-
   stringr::str_remove(
     pattern = "gptstudio_request_perform.gptstudio_request_"
   ) |>
-  purrr::discard(~ .x == "gptstudio_request_perform.default")
+  discard(~ .x == "gptstudio_request_perform.default")
 
 ui <- page_fillable(
   useWaiter(),
@@ -255,7 +256,7 @@ server <- function(input, output, session) {
       if ("All" %in% input$source) {
         load_index(domain = "All", local_embeddings = TRUE)
       } else {
-        purrr::map(input$source, \(x) {
+        map(input$source, \(x) {
           load_index(x, local_embeddings = TRUE) |>
             tibble::as_tibble()
         }) |>
@@ -264,7 +265,7 @@ server <- function(input, output, session) {
     } else if ("All" %in% input$source) {
       load_index(domain = "All", local_embeddings = FALSE)
     } else {
-      purrr::map(input$source, \(x) {
+      map(input$source, \(x) {
         load_index(x, local_embeddings = FALSE) |>
           tibble::as_tibble()
       }) |>

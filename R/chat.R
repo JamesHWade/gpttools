@@ -240,7 +240,6 @@ get_cursor_context <- function(context_lines = 20,
   } else {
     file_ext <- doc$path |> tools::file_ext()
   }
-
   list(
     above    = context_above,
     below    = context_below,

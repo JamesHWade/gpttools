@@ -41,15 +41,16 @@ stream_chat <- function(prompt,
       )
     }
   )
+  invisible(response)
 }
 
 create_handler <- function(service = "openai",
                            r = NULL,
                            output_id = "streaming",
-                           where = "console") {
-  env <- rlang::env()
+                           where = "console",
+                           env = caller_env()) {
   env$resp <- NULL
-  env$full_resp <- NULL
+  env$full_resp <- ""
 
   stream_details <- get_stream_pattern(service)
   new_pattern <- stream_details$pattern
@@ -73,7 +74,7 @@ create_handler <- function(service = "openai",
     if (stringr::str_detect(env$resp, pattern)) {
       parsed <- stringr::str_extract(env$resp, pattern) |>
         jsonlite::fromJSON() |>
-        purrr::pluck(!!!new_pluck)
+        pluck(!!!new_pluck)
       env$full_resp <- paste0(env$full_resp, parsed)
 
       if (where == "shiny") {
@@ -121,8 +122,8 @@ get_stream_pattern <- function(service) {
       pluck <- "text"
     },
     "ollama" = {
-      pattern <- '\\{"model":.*"done":false\\}'
-      pluck <- "response"
+      pattern <- '\\{"id":.*?\\}\\]\\}'
+      pluck <- c("choices", "delta", "content")
     },
     "azure_openai" = {
       pattern <- '\\{"id":.*?\\}\\]\\}'
